@@ -15,7 +15,7 @@ def centrar_ventana(ventana):
     x = (ventana.winfo_screenwidth() // 2) - (ancho // 2) # winfo_screenwidth() obtiene el ancho de la pantalla
     y = (ventana.winfo_screenheight() // 2) - (alto // 2)  # winfo_screenheight() obtiene el alto de la pantalla
     ventana.geometry(f'{ancho}x{alto}+{x}+{y}') # resposiciona la venrana
-    print(f'{ancho}x{alto}+{x}+{y}')
+
 
 
 """
@@ -24,14 +24,16 @@ Entraeda: Ninguna
 Salida: La ventana inicial, iniciara el juego o finalizara el programa
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def ventada_inicio():
-    ventana_inicial = Tk()
+def ventana_inicio():
+    ventana_inicial = Tk()   
     ventana_inicial.geometry("500x300")
     ventana_inicial.resizable(0,0)
     centrar_ventana(ventana_inicial)
     
-    boton_jugar = Button(ventana_inicial, text="Jugar", 
-                         font=("Arial", 25, "bold")).pack()
+    boton_jugar = Button(ventana_inicial, 
+                         text="Jugar", 
+                         font=("Arial", 25, "bold"), 
+                         command= lambda arg =ventana_inicial: interfaz(ventana_inicial)).pack()
     
     boton_salir = Button(ventana_inicial, 
                          text="Salir", 
@@ -39,6 +41,48 @@ def ventada_inicio():
                          command= lambda arg = ventana_inicial: salir(ventana_inicial)).pack()
     
     ventana_inicial.mainloop()
+
+
+"""
+Nombre: 
+Entrada:
+Salida:
+Restricciones:
+"""
+def interfaz(ventana):
+
+    # Creacion de ventana principal
+    ventana.destroy()
+    consola = Tk()
+    consola.geometry("600x800")
+    consola.resizable(0,0)
+    centrar_ventana(consola)
+    ############################### 
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    consola.mainloop() # bucle
+
+
+
 
 
 """
@@ -51,4 +95,4 @@ def salir(ventana):
     ventana.destroy()
 
 
-ventada_inicio()
+ventana_inicio()
