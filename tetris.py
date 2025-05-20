@@ -16,31 +16,6 @@ def centrar_ventana(ventana):
     y = (ventana.winfo_screenheight() // 2) - (alto // 2)  # winfo_screenheight() obtiene el alto de la pantalla
     ventana.geometry(f'{ancho}x{alto}+{x}+{y}') # resposiciona la venrana
 
-########################################################################################################################
-
-"""
-Nombre: ventana_usuario
-Entrada: Ninguna
-Salida: Obtiene los datos del jugador
-Restricciones: Las necesarias para el correcto funcionamiento
-"""
-def ventana_usuario(): # se convertira en el apartado de estadisticas
-    ventana = Tk()
-    ventana.geometry("500x500")
-    ventana.resizable(0,0)
-    centrar_ventana(ventana)
-
-
-
-
-
-
-
-
-    ventana.mainloop()
-
-
-
 
 """
 Nombre: ventana_inicio
@@ -68,13 +43,14 @@ def ventana_inicio(): # Tal vez cambien los nombres de las variables
 
 
 """
-Nombre: 
-Entrada:
-Salida:
-Restricciones:
+Nombre: interfaz 
+Entrada: ventana
+Salida: La creacion de nuevas ventanas(una matriz interactiva y una ventana de demostracion) junto con sus respectivos widgets
+Restricciones: Las necesarias para el correcto funcionamiento
 """
 def interfaz(ventana):
-    # Creacion de ventana principal 
+
+    #                        Creacion de ventana principal 
     ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
@@ -88,47 +64,33 @@ def interfaz(ventana):
     canvas_gameboy = Canvas(consola, width=300, height=300, bg="pink")
     canvas_gameboy.pack(fill="both", expand=True)
     canvas_gameboy.create_image(0, 0, anchor="nw", image=imagen_tk)
-    ###############################
+    ###########################################################################
 
     canvas_pantalla = Canvas(canvas_gameboy, width=465, height=366, bg="pink")
     canvas_pantalla.place(x=67, y=47)
 
-    canvas_pantalla.create_rectangle(0, 0, 46, 18, outline="blue", fill="") # cuadro
-    
+
+    x1 = 0
+    x2 = 38.75
+
+    y1 = 0
+    y2 = 16.6363
+
+    cordenada_x = 0,0
+    cordenada_y = 0,0
 
 
-    
+    for fila in range(13):
+        for columna in range(23): 
+            cordenada_x = (fila * x1, columna * y1)
+            cordenada_y = (fila * x2, columna * y2)
 
+            canvas_pantalla.create_rectangle(cordenada_x, cordenada_y, outline="blue", fill="")
+    
+    canva_demostrativo = Canvas()
 
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     consola.mainloop() # bucle
-
-
-
 
 
 """
