@@ -1,6 +1,7 @@
 from tkinter import  *
 from PIL import Image, ImageTk
 
+
 """
 Nombre: centrar_ventana
 Entrada: ventana
