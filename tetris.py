@@ -87,7 +87,8 @@ def interfaz(ventana):
 
             canvas_pantalla.create_rectangle(cordenada_x, cordenada_y, outline="blue", fill="")
     
-    canva_demostrativo = Canvas()
+    canva_demostrativo = Canvas(canvas_gameboy, width=225, height=178, bg="pink")
+    canva_demostrativo.place(x=318, y=545)
 
     
     consola.mainloop() # bucle
