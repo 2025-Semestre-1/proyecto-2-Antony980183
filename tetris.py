@@ -93,6 +93,10 @@ def interfaz(ventana):
     canvas_pantalla = Canvas(canvas_gameboy, width=465, height=366, bg="pink")
     canvas_pantalla.place(x=67, y=47)
 
+    canvas_pantalla.create_rectangle(0, 0, 46, 18, outline="blue", fill="") # cuadro
+    
+
+
     
 
 
