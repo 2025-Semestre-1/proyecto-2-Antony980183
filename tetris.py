@@ -144,7 +144,6 @@ def interfaz(ventana):
                     paredId = canvas_pantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagen_paredTk)
                     listaParedesIds += [paredId]
                 else:
-                    contador += 1
                     area_fondo = canvas_pantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagen_fondoTk)
                     
                     canvas_pantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionar_obstaculo(canvas_pantalla, evento, fondo_seleccionadoTk, listaParedesIds))
