@@ -44,12 +44,12 @@ Salida: La ventana reposicionada en el 'centro' de la pantalla
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def centrar_ventana(ventana):
-    ventana.update_idletasks()# realiza todos los ewventos pendientes
-    ancho = ventana.winfo_width()# saca el ancho  (x)
-    alto = ventana.winfo_height()# saca el alto (y)
-    x = (ventana.winfo_screenwidth() // 2) - (ancho // 2) # winfo_screenwidth() obtiene el ancho de la pantalla
-    y = (ventana.winfo_screenheight() // 2) - (alto // 2)  # winfo_screenheight() obtiene el alto de la pantalla
-    ventana.geometry(f'{ancho}x{alto}+{x}+{y}') # resposiciona la venrana
+    ventana.update_idletasks()
+    ancho = ventana.winfo_width()
+    alto = ventana.winfo_height()
+    x = (ventana.winfo_screenwidth() // 2) - (ancho // 2)
+    y = (ventana.winfo_screenheight() // 2) - (alto // 2)
+    ventana.geometry(f'{ancho}x{alto}+{x}+{y}') 
 
 
 """
