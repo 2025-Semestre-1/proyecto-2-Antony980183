@@ -45,7 +45,72 @@ def crearArchivoJuegoXXAux(identidicador):
 
     archivo = open(juegoXX, "x")
     archivo.close()
-    
+
+    return juegoXX
+
+
+"""
+Nombre: crearMatrizArchivoJuegoXX
+Entrada: nombreArchivo
+Salida: La matriz agregada en el archivo
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def crearMatrizArchivoJuegoXX(nombreArchivo):
+    contenido = crearMatriz()
+    contenido = listaATexto(contenido)
+
+    archivo = open(nombreArchivo, "w")
+    archivo.write(contenido)
+    archivo.close()
+
+
+"""
+Nombre: listaATexto
+Entrada: lista
+Salida: La lista con formato archivo de texto
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def listaATexto(lista):
+    if not isinstance(lista, list):
+        print("Error: Debe ingresar una lista!")
+    elif lista == []:
+        print("Error: La lista esta vacia!")
+    else:
+        return listaATextoAux(lista)
+def listaATextoAux(lista):
+    texto = ""
+    for i in range(largoLista(lista)):
+        for j in range(largoLista(lista[0])):
+            if j == largoLista(lista[0]) - 1:
+                texto += lista[i][j] + "\n"
+            else:
+                texto += lista[i][j] + ","
+    print(texto)
+    return texto
+
+"""
+Nombre: crearMatriz
+Entrada: ninguna
+Salida: Una matriz
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def crearMatriz():
+    matriz = []
+    for i in range(22):
+        vector = []
+        for j in range(12):
+            if i == 0 or i == 21:
+                vector += ["+"]
+            else:
+                if j == 0 or j == 11:
+                    vector += ["+"]
+                else:
+                    vector += ["0"]
+        matriz += [vector]
+    return matriz
+
+
+
 
 """
 Nombre: archivoALista
@@ -73,7 +138,8 @@ def archivoAListaAux(nombreArchivo):
     archivo.close()
     for contenido in contenidoArchivo:
         resultado = resultado + [contenido.split(",")]
-    print(resultado)
+        print( [contenido.split(",")])
+    #print(resultado)
     return resultado
 
 
@@ -96,70 +162,6 @@ def leerArchivoAux(nombreArchivo):
     archivo.close()
 
     return contenido
-
-def seleccionarObstaculo(canva, evento, imagen, matrizIds):
-    imagenId = canva.find_closest(evento.x, evento.y)
-    canva.itemconfig(imagenId[0], image=imagen)
-
-    cordenadas = buscarObstaculo(matrizIds, imagenId[0])
-    
-
-def quitarObstaculo(canva, evento, imagen, matrizIds):
-    imagenId = canva.find_closest(evento.x, evento.y)
-    canva.itemconfig(imagenId[0], image=imagen)
-
-    cordenadas = buscarObstaculo(matrizIds, imagenId[0])
-
-"""
-Nombre: buscarObstaculo
-Entrada: matrizIds y indice
-Salida: Las coordenadas del obstaculo
-Restricciones: Las necesarias para el correcto funcionamiento
-"""
-def buscarObstaculo(matrizIds, indice):
-    for i in range(20):
-        for j in range(10):
-            if matrizIds[i][j] == indice:
-                cordenadas = [i,j]
-                return cordenadas
-
-
-
-"""
-Nombre: crearMatriz
-Entrada: ninguna
-Salida: Una matriz
-Restricciones: Las necesarias para el correcto funcionamiento
-"""
-def crearMatriz():
-    matriz = []
-    for i in range(22):
-        vector = []
-        for j in range(12):
-            if i == 0 or i == 21:
-                vector += ["+"]
-            else:
-                if j == 0 or j == 11:
-                    vector += ["+"]
-                else:
-                    vector += ["0"]
-        matriz += [vector]
-
-
-"""
-Nombre: crearMatrizSeleccionObstaculos
-Entrada: ninguna
-Salida: Una matriz donde se seleccionaran los obstaculos
-Restricciones: Las necesarias para el correcto funcionamiento
-"""
-def crearMatrizSeleccionObstaculos():
-    matrizObstaculos = []
-    for i in range(20):
-        vectorObstaculos = []
-        for j in range(10):
-            vector_obstaculos += ["0"]
-        matrizObstaculos += [vectorObstaculos]
-        print(vectorObstaculos)
 
 
 """
@@ -186,8 +188,6 @@ Restricciones: Las necesarias para el correcto funcionamiento
 def sobreBotonJugar(canvasInicio, identificador, nuevaImagen):
     canvasInicio.itemconfig(identificador, image=nuevaImagen)
     #ventanaInicial.update_idletasks()
-
-
 
 
 
@@ -244,7 +244,7 @@ Entrada:
 Salida: Crea una 'matriz' donde el ususario seleccionara los osbtaculos del tetriz
 Restricciones: Las necesarias paraa el correcto funcionamiento
 """
-def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk):
+def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo):
     contante_x = 39
     contante_y = 16.68
 
@@ -266,13 +266,76 @@ def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFond
                 else:
                     area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenFondoTk)
             
-                    canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionadoTk, matrizIdentificadores))
-                    canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondoTk, matrizIdentificadores))
+                    canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionadoTk, matrizIdentificadores, nombreArchivo))
+                    canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondoTk, matrizIdentificadores, nombreArchivo))
         
                     vectorIdentificadores += [area_fondo]
 
         if vectorIdentificadores != []:
             matrizIdentificadores += [vectorIdentificadores]
+
+
+def seleccionarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
+    imagenId = canva.find_closest(evento.x, evento.y)
+    canva.itemconfig(imagenId[0], image=imagen)
+    coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
+
+
+    # listaArchivo = archivoALista(nombreArchivo)
+    # listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    # resultado = []
+    # for i in range(largoLista(listaArchivo)):
+    #     contenido = []
+    #     for j in range(largoLista(listaArchivo[0])):
+    #         if i == coordenadas[0] and j == coordenadas[1]:
+    #             contenido += ["+"]
+    #         else:
+    #             contenido += ["0"]
+    #     resultado += [contenido]
+    
+    #modificarArchivoJuegoXX(nombreArchivo, resultado)
+
+def quitarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
+    imagenId = canva.find_closest(evento.x, evento.y)
+    canva.itemconfig(imagenId[0], image=imagen)
+
+    cordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
+    
+def modificarArchivoJuegoXX(nombreArchivo, contenido):
+    contenido = listaATexto(contenido)
+
+    archivo = open(nombreArchivo, "w")
+    archivo.write(contenido)
+    archivo.close()
+
+
+def eliminarSaltosDeLinea(matriz):
+    resultado = []
+    for i in range(largoLista(matriz)):
+        contenido = []
+        for j in range(largoLista(matriz[0])):
+            if j == largoLista(matriz[0]) - 1:
+                contenido += [matriz[i][j][:-1]]
+            else:
+                contenido += [matriz[1][j]]
+        resultado += [contenido]
+    return resultado
+
+
+"""
+Nombre: buscarObstaculo
+Entrada: matrizIds y indice
+Salida: Las coordenadas del obstaculo
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def buscarObstaculo(matrizIdentificadores, elemento):
+    print(elemento)
+    for i in range(largoLista(matrizIdentificadores)):
+        for j in range(largoLista(matrizIdentificadores[0])):
+            if matrizIdentificadores[i][j] == elemento:
+                coordenadas = [i,j]
+                print(coordenadas)
+                return coordenadas
 
 
 """
@@ -282,7 +345,8 @@ Salida: La creacion de nuevas ventanas(una matriz interactiva y una ventana de d
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def interfaz(ventana):
-    crearArchivoJuegoXX()
+    nombreArchivo = crearArchivoJuegoXX()
+    crearMatrizArchivoJuegoXX(nombreArchivo)
     
     ventana.destroy()
     consola = Tk()
@@ -314,7 +378,7 @@ def interfaz(ventana):
     imagenFondoSeleccionado = imagenFondoSeleccionado.resize((39, 17))
     imagenFondoSeleccionadoTk = ImageTk.PhotoImage(imagenFondoSeleccionado)
 
-    seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk)
+    seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo)
 
     canva_demostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
     canva_demostrativo.place(x=305, y=567)
