@@ -1,3 +1,4 @@
+import os
 from tkinter import  *
 from PIL import Image, ImageTk
 
@@ -239,6 +240,19 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
 
 
 """
+Nombre: borrarArchivo
+Entrada: nombreArchivo
+Salida: Elimina un archivo de texto
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def borrarArchivo(nombreArchivo, ventana):
+    os.remove(nombreArchivo)
+    ventana.destroy()
+
+
+
+
+"""
 Nombre:
 Entrada:
 Salida: Crea una 'matriz' donde el ususario seleccionara los osbtaculos del tetriz
@@ -259,47 +273,75 @@ def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFond
             y2 = y1 + contante_y
 
             if fila == 0 or fila == 21:
-                canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
+                area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
             else:
                 if columna == 0 or columna == 11:
-                    canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
+                    area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
                 else:
                     area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenFondoTk)
             
                     canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionadoTk, matrizIdentificadores, nombreArchivo))
                     canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondoTk, matrizIdentificadores, nombreArchivo))
         
-                    vectorIdentificadores += [area_fondo]
+            vectorIdentificadores += [area_fondo]
+                
 
-        if vectorIdentificadores != []:
-            matrizIdentificadores += [vectorIdentificadores]
+        matrizIdentificadores += [vectorIdentificadores]
 
 
+"""
+Nombre: seleccionarObstaculo
+Entrada: canva, evento, imagen, matrizIdentificadores, nombreArchivo
+Salida: Cambia el contenido del archivo por un caracter de '+' segun la posicion indicada
+Restriccioene: Las necesarias para el correceto funcionamiento
+"""
 def seleccionarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
     imagenId = canva.find_closest(evento.x, evento.y)
     canva.itemconfig(imagenId[0], image=imagen)
     coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
 
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    resultado = []
 
-    # listaArchivo = archivoALista(nombreArchivo)
-    # listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    # resultado = []
-    # for i in range(largoLista(listaArchivo)):
-    #     contenido = []
-    #     for j in range(largoLista(listaArchivo[0])):
-    #         if i == coordenadas[0] and j == coordenadas[1]:
-    #             contenido += ["+"]
-    #         else:
-    #             contenido += ["0"]
-    #     resultado += [contenido]
+    for i in range(largoLista(listaArchivo)):
+        vector = []
+        for j in range(largoLista(listaArchivo[0])):
+            if i == coordenadas[0] and j == coordenadas[1]:
+                vector += ["+"]
+            else:
+                vector += [listaArchivo[i][j]]
+        resultado += [vector]
     
-    #modificarArchivoJuegoXX(nombreArchivo, resultado)
+    modificarArchivoJuegoXX(nombreArchivo, resultado)
 
+
+"""
+Nombre: quitarObstaculo
+Entrada: canva, evento, imagen, matrizIdentificadores, nombreArchivo
+Salida: Cambia el contenido del archivo por un caracter de '0' segun la posicion indicada
+Restriccioene: Las necesarias para el correceto funcionamiento
+"""                      
 def quitarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
     imagenId = canva.find_closest(evento.x, evento.y)
     canva.itemconfig(imagenId[0], image=imagen)
+    coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
 
-    cordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    resultado = []
+
+    for i in range(largoLista(listaArchivo)):
+        vector = []
+        for j in range(largoLista(listaArchivo[0])):
+            if i == coordenadas[0] and j == coordenadas[1]:
+                vector += ["0"]
+            else:
+                vector += [listaArchivo[i][j]]
+        resultado += [vector]
+    
+    modificarArchivoJuegoXX(nombreArchivo, resultado)
+
     
 def modificarArchivoJuegoXX(nombreArchivo, contenido):
     contenido = listaATexto(contenido)
@@ -317,7 +359,7 @@ def eliminarSaltosDeLinea(matriz):
             if j == largoLista(matriz[0]) - 1:
                 contenido += [matriz[i][j][:-1]]
             else:
-                contenido += [matriz[1][j]]
+                contenido += [matriz[i][j]]
         resultado += [contenido]
     return resultado
 
@@ -380,9 +422,15 @@ def interfaz(ventana):
 
     seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo)
 
-    canva_demostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
-    canva_demostrativo.place(x=305, y=567)
+    canvaConfirmacion = Canvas(canvasGameboy, width=235, height=178, bg="pink")
+    canvaConfirmacion.place(x=305, y=567)
+
     
+    
+    
+    
+    
+    consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
 
 
