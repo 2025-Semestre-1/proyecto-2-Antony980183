@@ -2,27 +2,136 @@ from tkinter import  *
 from PIL import Image, ImageTk
 
 
-def seleccionar_obstaculo(canva, evento, imagen, paredes):
-    imagenId = canva.find_closest(evento.x, evento.y)
-    for pared in paredes:
-        if imagenId[0] != pared:
-            canva.itemconfig(imagenId[0], image=imagen)
-    
-
-def quitar_obstaculo(canva, evento, imagen, paredes):
-    imagenId = canva.find_closest(evento.x, evento.y)
-    for pared in paredes:
-        if imagenId[0] != pared:
-            canva.itemconfig(imagenId[0], image=imagen)
+"""
+Nombre: largoLista
+Entrada: lista
+Salida: La cantidad de elementos que contiene la lista
+Restricciones:
+        El parametro 'lista' debe ser del tipo lista
+        El parametro 'lista' no debe estar vacio
+"""
+def largoLista(lista):
+    if not isinstance(lista, list):
+        print("Error: Debe ingresar una lista!")
+    elif lista == []:
+        print("Error: La lista esta vacia!")
+    else:
+        return largoListaAux(lista)
+def largoListaAux(lista):
+    contador = 0
+    for i in lista:
+        contador += 1
+    return contador
 
 
 """
-Nombre: crear_matriz
+Nombre: crearArchivoJuegoXX
+Entrada: niguna
+Salida: Un archivo juegoXX donde 'XX' representa un numero consecutivo
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def crearArchivoJuegoXX():
+    if leerArchivo("JuegosGuardados.txt") == "":
+        return crearArchivoJuegoXXAux(1)
+    else:
+        return crearArchivoJuegoXXAux(largoLista(archivoALista("JuegosGuardados.txt")))
+def crearArchivoJuegoXXAux(identidicador):
+    if identidicador <= 9:
+        juegoXX = f"juego0{str(identidicador)}.txt"
+    else: 
+        juegoXX = f"juego{str(identidicador)}.txt"
+    
+    print(juegoXX)
+
+    archivo = open(juegoXX, "x")
+    archivo.close()
+    
+
+"""
+Nombre: archivoALista
+Entrada: nombreArchivo
+Salida: El archivo convertido a lista
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def archivoALista(nombreArchivo):
+    if not isinstance(nombreArchivo, str):
+        print("Error: El parametro debe ser tipo string!")
+    elif nombreArchivo == "":
+        print("Error: La cadena de texto esta vacia!")
+    else:
+        try:
+            archivo = open(nombreArchivo, "r")
+            archivo.close()
+        except:
+            print("Error: El nombre del archivo ingresado no existe!")
+        else:
+            return archivoAListaAux(nombreArchivo)
+def archivoAListaAux(nombreArchivo):
+    resultado = []
+    archivo = open(nombreArchivo, "r")
+    contenidoArchivo = archivo.readlines()
+    archivo.close()
+    for contenido in contenidoArchivo:
+        resultado = resultado + [contenido.split(",")]
+    print(resultado)
+    return resultado
+
+
+"""
+Nombre: leerArchivo
+Entrada: nombreArchivo
+Salida: El contenido del archivo
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def leerArchivo(nombreArchivo):
+    if not isinstance(nombreArchivo, str):
+        print("Error: Debe ingresar una cadena de texto!")
+    elif nombreArchivo == "":
+        print("Error: El nombre del archivo esta vacio!")
+    else:
+        return leerArchivoAux(nombreArchivo)
+def leerArchivoAux(nombreArchivo):
+    archivo = open(nombreArchivo, "r")
+    contenido = archivo.read()
+    archivo.close()
+
+    return contenido
+
+def seleccionarObstaculo(canva, evento, imagen, matrizIds):
+    imagenId = canva.find_closest(evento.x, evento.y)
+    canva.itemconfig(imagenId[0], image=imagen)
+
+    cordenadas = buscarObstaculo(matrizIds, imagenId[0])
+    
+
+def quitarObstaculo(canva, evento, imagen, matrizIds):
+    imagenId = canva.find_closest(evento.x, evento.y)
+    canva.itemconfig(imagenId[0], image=imagen)
+
+    cordenadas = buscarObstaculo(matrizIds, imagenId[0])
+
+"""
+Nombre: buscarObstaculo
+Entrada: matrizIds y indice
+Salida: Las coordenadas del obstaculo
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def buscarObstaculo(matrizIds, indice):
+    for i in range(20):
+        for j in range(10):
+            if matrizIds[i][j] == indice:
+                cordenadas = [i,j]
+                return cordenadas
+
+
+
+"""
+Nombre: crearMatriz
 Entrada: ninguna
 Salida: Una matriz
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def crear_matriz():
+def crearMatriz():
     matriz = []
     for i in range(22):
         vector = []
@@ -38,12 +147,28 @@ def crear_matriz():
 
 
 """
+Nombre: crearMatrizSeleccionObstaculos
+Entrada: ninguna
+Salida: Una matriz donde se seleccionaran los obstaculos
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def crearMatrizSeleccionObstaculos():
+    matrizObstaculos = []
+    for i in range(20):
+        vectorObstaculos = []
+        for j in range(10):
+            vector_obstaculos += ["0"]
+        matrizObstaculos += [vectorObstaculos]
+        print(vectorObstaculos)
+
+
+"""
 Nombre: centrar_ventana
 Entrada: ventana
 Salida: La ventana reposicionada en el 'centro' de la pantalla
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def centrar_ventana(ventana):
+def centrarVentana(ventana):
     ventana.update_idletasks()
     ancho = ventana.winfo_width()
     alto = ventana.winfo_height()
@@ -53,28 +178,101 @@ def centrar_ventana(ventana):
 
 
 """
+Nombre: sobreBotonJugar
+Entrada: evento
+Salida: Cambia la imgen del 'boton jugar'
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def sobreBotonJugar(canvasInicio, identificador, nuevaImagen):
+    canvasInicio.itemconfig(identificador, image=nuevaImagen)
+    #ventanaInicial.update_idletasks()
+
+
+
+
+
+"""
 Nombre: ventana_inicio
 Entraeda: Ninguna
 Salida: La ventana inicial, iniciara el juego o finalizara el programa
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def ventana_inicio(): # Tal vez cambien los nombres de las variables
-    ventana_inicial = Tk()   
-    ventana_inicial.geometry("500x300")
-    ventana_inicial.resizable(0,0)
-    centrar_ventana(ventana_inicial)
+def ventanaInicio(): # Tal vez cambien los nombres de las variables
+    ventanaInicial = Tk()   
+    ventanaInicial.geometry("500x300")
+    ventanaInicial.resizable(0,0)
+    centrarVentana(ventanaInicial)
+
+    canvasInicio = Canvas(ventanaInicial, width=500, height=300, bg="pink")
+    canvasInicio.pack()
+
+    imagenJugar = Image.open("jugar.png")
+    imagenJugar = ImageTk.PhotoImage(imagenJugar)
+
+    imagenJugarSeleccionada = Image.open("jugarSeleccionado.png")
+    imagenJugarSeleccionada = ImageTk.PhotoImage(imagenJugarSeleccionada)
     
-    boton_jugar = Button(ventana_inicial, 
-                         text="Jugar", 
-                         font=("Arial", 25, "bold"), 
-                         command= lambda arg =ventana_inicial: interfaz(ventana_inicial)).pack()
+    imagenSalir = Image.open("salir.png")
+    imagenSalir = ImageTk.PhotoImage(imagenSalir)
+
+    imagenSalirSeleccionada = Image.open("salirSeleccionado.png")
+    imagenSalirSeleccionada = ImageTk.PhotoImage(imagenSalirSeleccionada)
+     
+    botonJugar = canvasInicio.create_image(40, 30, anchor="nw", image=imagenJugar)
+    botonSalir = canvasInicio.create_image(40, 90, anchor="nw", image=imagenSalir)
+
+
+    canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBotonJugar(canvasInicio, botonJugar, imagenJugarSeleccionada))
+    canvasInicio.tag_bind(botonJugar, "<Leave>", lambda evento: sobreBotonJugar(canvasInicio, botonJugar, imagenJugar))
+    canvasInicio.tag_bind(botonJugar, "<Button-1>", lambda evento: interfaz(ventanaInicial))
+
+
+
+    canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBotonJugar(canvasInicio, botonSalir, imagenSalirSeleccionada))
+    canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBotonJugar(canvasInicio, botonSalir, imagenSalir))
+    canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
     
-    boton_salir = Button(ventana_inicial, 
-                         text="Salir", 
-                         font=("Arial", 25, "bold"), 
-                         command= lambda arg = ventana_inicial: salir(ventana_inicial)).pack()
     
-    ventana_inicial.mainloop()
+    #90x70
+
+    ventanaInicial.mainloop()
+
+
+"""
+Nombre:
+Entrada:
+Salida: Crea una 'matriz' donde el ususario seleccionara los osbtaculos del tetriz
+Restricciones: Las necesarias paraa el correcto funcionamiento
+"""
+def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk):
+    contante_x = 39
+    contante_y = 16.68
+
+    matrizIdentificadores =  []
+    
+    for fila in range(22):
+        vectorIdentificadores = []  
+        for columna in range(12):
+            x1 = columna * contante_x
+            y1 = fila * contante_y
+            x2 = x1 + contante_x
+            y2 = y1 + contante_y
+
+            if fila == 0 or fila == 21:
+                canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
+            else:
+                if columna == 0 or columna == 11:
+                    canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
+                else:
+                    area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenFondoTk)
+            
+                    canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionadoTk, matrizIdentificadores))
+                    canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondoTk, matrizIdentificadores))
+        
+                    vectorIdentificadores += [area_fondo]
+
+        if vectorIdentificadores != []:
+            matrizIdentificadores += [vectorIdentificadores]
 
 
 """
@@ -84,77 +282,44 @@ Salida: La creacion de nuevas ventanas(una matriz interactiva y una ventana de d
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def interfaz(ventana):
-    #                        Creacion de ventana principal 
+    crearArchivoJuegoXX()
+    
     ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
     consola.resizable(0,0)
     consola.config(bg="#A9A9A9")
-    centrar_ventana(consola)
+    centrarVentana(consola)
 
-    imagen = Image.open("gameboyBase.png")
-    imagen_tk = ImageTk.PhotoImage(imagen)
+    imagenGameboy = Image.open("gameboyBase.png")
+    imagenGameboy = ImageTk.PhotoImage(imagenGameboy)
 
-    canvas_gameboy = Canvas(consola, width=300, height=300, bg="pink")
-    canvas_gameboy.pack(fill="both", expand=True)
-    canvas_gameboy.create_image(0, 0, anchor="nw", image=imagen_tk)
-    ###########################################################################
-
-
-    canvas_pantalla = Canvas(canvas_gameboy, width=465, height=366, bg="pink")
-    canvas_pantalla.place(x=67, y=85)
+    canvasGameboy = Canvas(consola, width=300, height=300)
+    canvasGameboy.pack(fill="both", expand=True)
+    canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
+   
+    canvasPantalla = Canvas(canvasGameboy, width=465, height=366, bg="pink")
+    canvasPantalla.place(x=67, y=85)
 
     
-    contante_x = 39
-    contante_y = 16.68
+    imagenPared = Image.open("bloqueGris.png")
+    imagenPared = imagenPared.resize((39, 17))
+    imagenParedTk = ImageTk.PhotoImage(imagenPared)
 
-    
-    matriz_obstaculos = []
+    imagenFondo= Image.open("fondo.png")
+    imagenFondo = imagenFondo.resize((39, 17))
+    imagenFondoTk = ImageTk.PhotoImage(imagenFondo)
 
-    
-    imagen_pared = Image.open("bloqueGris.png")
-    imagen_pared = imagen_pared.resize((39, 17))
-    imagen_paredTk = ImageTk.PhotoImage(imagen_pared)
+    imagenFondoSeleccionado = Image.open("fondoSeleccionado.png")
+    imagenFondoSeleccionado = imagenFondoSeleccionado.resize((39, 17))
+    imagenFondoSeleccionadoTk = ImageTk.PhotoImage(imagenFondoSeleccionado)
 
+    seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk)
 
-    imagen_fondo = Image.open("fondo.png")
-    imagen_fondo = imagen_fondo.resize((39, 17))
-    imagen_fondoTk = ImageTk.PhotoImage(imagen_fondo)
-
-
-    imagen_fondo_seleccioando = Image.open("fondoSeleccionado.png")
-    imagen_fondo_seleccioando = imagen_fondo_seleccioando.resize((39, 17))
-    fondo_seleccionadoTk = ImageTk.PhotoImage(imagen_fondo_seleccioando)
-
-
-    listaParedesIds = []
-    for fila in range(22):  
-        for columna in range(12):
-            x1 = columna * contante_x
-            y1 = fila * contante_y
-            x2 = x1 + contante_x
-            y2 = y1 + contante_y
-
-            
-            if fila == 0 or fila == 21:
-                paredId = canvas_pantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagen_paredTk)
-                listaParedesIds += [paredId]
-            else:
-                if columna == 0 or columna == 11:
-                    paredId = canvas_pantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagen_paredTk)
-                    listaParedesIds += [paredId]
-                else:
-                    area_fondo = canvas_pantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagen_fondoTk)
-                    
-                    canvas_pantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionar_obstaculo(canvas_pantalla, evento, fondo_seleccionadoTk, listaParedesIds))
-                    canvas_pantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitar_obstaculo(canvas_pantalla, evento, imagen_fondoTk, listaParedesIds))
-
-            
-    canva_demostrativo = Canvas(canvas_gameboy, width=235, height=178, bg="pink")
+    canva_demostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
     canva_demostrativo.place(x=305, y=567)
-
     
-    consola.mainloop() # bucle
+    consola.mainloop()
 
 
 """
@@ -167,4 +332,4 @@ def salir(ventana):
     ventana.destroy()
 
 
-ventana_inicio()
+ventanaInicio()
