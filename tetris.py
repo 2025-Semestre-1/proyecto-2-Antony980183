@@ -1,6 +1,7 @@
-import os
 from tkinter import  *
 from PIL import Image, ImageTk
+import random
+import os
 
 
 """
@@ -139,8 +140,6 @@ def archivoAListaAux(nombreArchivo):
     archivo.close()
     for contenido in contenidoArchivo:
         resultado = resultado + [contenido.split(",")]
-        print( [contenido.split(",")])
-    #print(resultado)
     return resultado
 
 
@@ -186,10 +185,8 @@ Entrada: evento
 Salida: Cambia la imgen del 'boton jugar'
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def sobreBotonJugar(canvasInicio, identificador, nuevaImagen):
-    canvasInicio.itemconfig(identificador, image=nuevaImagen)
-    #ventanaInicial.update_idletasks()
-
+def sobreBoton(canvas, identificador, nuevaImagen):
+    canvas.itemconfig(identificador, image=nuevaImagen)
 
 
 """
@@ -223,14 +220,14 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
     botonSalir = canvasInicio.create_image(40, 90, anchor="nw", image=imagenSalir)
 
 
-    canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBotonJugar(canvasInicio, botonJugar, imagenJugarSeleccionada))
-    canvasInicio.tag_bind(botonJugar, "<Leave>", lambda evento: sobreBotonJugar(canvasInicio, botonJugar, imagenJugar))
+    canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugarSeleccionada))
+    canvasInicio.tag_bind(botonJugar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugar))
     canvasInicio.tag_bind(botonJugar, "<Button-1>", lambda evento: interfaz(ventanaInicial))
 
 
 
-    canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBotonJugar(canvasInicio, botonSalir, imagenSalirSeleccionada))
-    canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBotonJugar(canvasInicio, botonSalir, imagenSalir))
+    canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalirSeleccionada))
+    canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalir))
     canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
     
     
@@ -250,35 +247,25 @@ def borrarArchivo(nombreArchivo, ventana):
     ventana.destroy()
 
 
-
-
 """
-Nombre:
-Entrada:
+Nombre: seleccionDeObstaculos
+Entrada: canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo
 Salida: Crea una 'matriz' donde el ususario seleccionara los osbtaculos del tetriz
 Restricciones: Las necesarias paraa el correcto funcionamiento
 """
 def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo):
-    contante_x = 39
-    contante_y = 16.68
-
-    matrizIdentificadores =  []
-    
-    for fila in range(22):
-        vectorIdentificadores = []  
+    coordenadas = posicionImagenes()
+    matrizIdentificadores = []
+    for fila in range (22):
+        vectorIdentificadores = []
         for columna in range(12):
-            x1 = columna * contante_x
-            y1 = fila * contante_y
-            x2 = x1 + contante_x
-            y2 = y1 + contante_y
-
             if fila == 0 or fila == 21:
-                area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
+                area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0] / 2, coordenadas[fila][columna][1] / 2, anchor="center", image=imagenParedTk)
             else:
                 if columna == 0 or columna == 11:
-                    area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenParedTk)
+                    area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0] / 2, coordenadas[fila][columna][1] / 2, anchor="center", image=imagenParedTk)
                 else:
-                    area_fondo = canvasPantalla.create_image((x1 + x2) / 2, (y1 + y2) / 2, anchor="center", image=imagenFondoTk)
+                    area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0] / 2, coordenadas[fila][columna][1] / 2, anchor="center", image=imagenFondoTk)
             
                     canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionadoTk, matrizIdentificadores, nombreArchivo))
                     canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondoTk, matrizIdentificadores, nombreArchivo))
@@ -289,6 +276,29 @@ def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFond
         matrizIdentificadores += [vectorIdentificadores]
 
 
+def posicionImagenes():
+    contante_x = 39
+    contante_y = 16.68
+
+    coordenadas = []
+    for fila in range(22):
+        posiciones = [] 
+        for columna in range(12):
+            x1 = columna * contante_x
+            y1 = fila * contante_y
+            x2 = x1 + contante_x
+            y2 = y1 + contante_y
+            posiciones += [[x1 + x2, y1 + y2]]
+            prueba = posiciones
+        #print(posiciones)
+        coordenadas += [posiciones]
+    # print(coordenadas[21])
+    # print(prueba)
+    # print(prueba[4][0] - prueba[3][0])
+    # print(prueba[4][1] - prueba[3][1])
+    return coordenadas
+
+
 """
 Nombre: seleccionarObstaculo
 Entrada: canva, evento, imagen, matrizIdentificadores, nombreArchivo
@@ -296,6 +306,7 @@ Salida: Cambia el contenido del archivo por un caracter de '+' segun la posicion
 Restriccioene: Las necesarias para el correceto funcionamiento
 """
 def seleccionarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
+    print(evento.x, evento.y)
     imagenId = canva.find_closest(evento.x, evento.y)
     canva.itemconfig(imagenId[0], image=imagen)
     coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
@@ -323,6 +334,7 @@ Salida: Cambia el contenido del archivo por un caracter de '0' segun la posicion
 Restriccioene: Las necesarias para el correceto funcionamiento
 """                      
 def quitarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
+    print(evento.x, evento.y)
     imagenId = canva.find_closest(evento.x, evento.y)
     canva.itemconfig(imagenId[0], image=imagen)
     coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
@@ -342,7 +354,13 @@ def quitarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo)
     
     modificarArchivoJuegoXX(nombreArchivo, resultado)
 
-    
+
+"""
+Nombre: modificarArchivoJuegoXX
+Entrada: nombreArchivo y contenido
+Salida: Sobre escribe el contenido del archivo indicado
+Restricciones: Las necesarias para el correcto funcionamiento
+""" 
 def modificarArchivoJuegoXX(nombreArchivo, contenido):
     contenido = listaATexto(contenido)
 
@@ -351,6 +369,12 @@ def modificarArchivoJuegoXX(nombreArchivo, contenido):
     archivo.close()
 
 
+"""
+Nombre: eliminarSaltosDeLinea
+Entrada: matriz
+Salida: Una matriz sin los caracteres de salto de linea
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
 def eliminarSaltosDeLinea(matriz):
     resultado = []
     for i in range(largoLista(matriz)):
@@ -422,14 +446,215 @@ def interfaz(ventana):
 
     seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo)
 
-    canvaConfirmacion = Canvas(canvasGameboy, width=235, height=178, bg="pink")
-    canvaConfirmacion.place(x=305, y=567)
+    canvasConfirmacion = Canvas(canvasGameboy, width=235, height=178, bg="pink")
+    canvasConfirmacion.place(x=305, y=567)
 
     
+    consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
+    consola.mainloop()
+
+
+
+
+
+
+
+
+
+
+########################
+
+
+def imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk):
+    coordenadas = posicionImagenes()
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+
+    for i in range(largoLista(listaArchivo)):
+        for j in range(largoLista(listaArchivo[0])):
+            if listaArchivo[i][j] == "+":
+                canvasPantalla.create_image(coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2, anchor="center", image=imagenParedTk)
+            else:
+                canvasPantalla.create_image(coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2, anchor="center", image=imagenFondoTk)
+
+
+def crearListatetrominos():
+    listatetrominos = []
+    for i in range(30):
+        listatetrominos += [random.randint(1,8)]
+    return listatetrominos
+
+def crearTetromino(canvasPantalla, imagenes, tetromino):
+    coordenadas = posicionImagenes()
+    if tetromino == 1:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[0])
+        bloque2 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[0])
+        bloque3 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[0])
+        bloque4 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[0])
+    elif tetromino == 2:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[1])
+        bloque2 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[1])
+        bloque3 = canvasPantalla.create_image(coordenadas[3][6][0]/ 2, coordenadas[3][6][1] / 2, anchor="center", image=imagenes[1])
+        bloque4 = canvasPantalla.create_image(coordenadas[3][6][0]/ 2, coordenadas[4][6][1] / 2, anchor="center", image=imagenes[1])
+    elif tetromino == 3:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[2])
+        bloque2 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[2])
+        bloque3 = canvasPantalla.create_image(coordenadas[3][5][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[2])
+        bloque4 = canvasPantalla.create_image(coordenadas[3][6][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[2])
+    elif tetromino == 4:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[3])
+        bloque2 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[3])
+        bloque3 = canvasPantalla.create_image(coordenadas[3][6][0]/ 2, coordenadas[3][6][1] / 2, anchor="center", image=imagenes[3])
+        bloque4 = canvasPantalla.create_image(coordenadas[3][5][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[3])
+    elif tetromino == 5:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][4][0]/ 2, coordenadas[1][4][1]/ 2, anchor="center", image=imagenes[4])
+        bloque2 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1]/ 2, anchor="center", image=imagenes[4])
+        bloque3 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1]/ 2, anchor="center", image=imagenes[4])
+        bloque4 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1]/ 2, anchor="center", image=imagenes[4])
+    elif tetromino == 6:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[5])
+        bloque2 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[5])
+        bloque3 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[5])
+        bloque4 = canvasPantalla.create_image(coordenadas[2][7][0]/ 2, coordenadas[2][7][1] / 2, anchor="center", image=imagenes[5])
+    elif tetromino == 7:
+        bloque1 = canvasPantalla.create_image(coordenadas[1][4][0]/ 2, coordenadas[1][4][1] / 2, anchor="center", image=imagenes[6])
+        bloque2 = canvasPantalla.create_image(coordenadas[2][4][0]/ 2, coordenadas[2][4][1] / 2, anchor="center", image=imagenes[6])
+        bloque3 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[6])
+        bloque4 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[6])
+        bloque5 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[6])
+    else:
+        bloque1 = canvasPantalla.create_image(coordenadas[2][4][0]/ 2, coordenadas[2][4][1] / 2, anchor="center", image=imagenes[7])
+        bloque2 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[7])
+        bloque3 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[7])
+        bloque4 = canvasPantalla.create_image(coordenadas[3][5][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[7])
+        bloque5 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[7])
     
+    if tetromino == 7 or tetromino == 8:
+        return  [tetromino, bloque1, bloque2, bloque3, bloque4, bloque5]
+    else:
+        return  [tetromino, bloque1, bloque2, bloque3, bloque4]
+
+
+
+
+# def moverTetromino(tetromino):
+#     if tetromino[0] == 7 or tetromino[0] == 8:
+
+
+
+def moverAbajo(canvasPantalla, tetromino):
+    x = 0 
+    y = 20 
+    if tetromino[0] >= 1 and tetromino[0] <= 6: 
+        canvasPantalla.move(tetromino[1], x, y)
+        canvasPantalla.move(tetromino[2], x, y) 
+        canvasPantalla.move(tetromino[3], x, y)  
+        canvasPantalla.move(tetromino[4], x, y)
+    else:
+        canvasPantalla.move(tetromino[1], x, y)
+        canvasPantalla.move(tetromino[2], x, y) 
+        canvasPantalla.move(tetromino[3], x, y)  
+        canvasPantalla.move(tetromino[4], x, y)
+        canvasPantalla.move(tetromino[5], x, y)
+      
+    print(canvasPantalla.coords(tetromino[1]))
+
+
+def moverDerecha(canvasPantalla, tetromino): 
+    x = 20 
+    y = 0 
+    if tetromino[0] >= 1 and tetromino[0] <= 6: 
+        canvasPantalla.move(tetromino[1], x, y)
+        canvasPantalla.move(tetromino[2], x, y) 
+        canvasPantalla.move(tetromino[3], x, y)  
+        canvasPantalla.move(tetromino[4], x, y)
+    else:
+        canvasPantalla.move(tetromino[1], x, y)
+        canvasPantalla.move(tetromino[2], x, y) 
+        canvasPantalla.move(tetromino[3], x, y)  
+        canvasPantalla.move(tetromino[4], x, y)
+        canvasPantalla.move(tetromino[5], x, y)
+
+def moverIzquierda(canvasPantalla, tetromino): 
+    x = -20 
+    y = 0 
+    if tetromino[0] >= 1 and tetromino[0] <= 6: 
+        canvasPantalla.move(tetromino[1], x, y)
+        canvasPantalla.move(tetromino[2], x, y) 
+        canvasPantalla.move(tetromino[3], x, y)  
+        canvasPantalla.move(tetromino[4], x, y)
+    else:
+        canvasPantalla.move(tetromino[1], x, y)
+        canvasPantalla.move(tetromino[2], x, y) 
+        canvasPantalla.move(tetromino[3], x, y)  
+        canvasPantalla.move(tetromino[4], x, y)
+        canvasPantalla.move(tetromino[5], x, y)
+
     
+def tetris(ventana, nombreArchivo):
+    #ventana.destroy()
+    consola = Tk()
+    consola.geometry("600x800")
+    consola.resizable(0,0)
+    consola.config(bg="#A9A9A9")
+    centrarVentana(consola)
+
+    imagenGameboy = Image.open("gameboyBase.png")
+    imagenGameboy = ImageTk.PhotoImage(imagenGameboy)
+
+    canvasGameboy = Canvas(consola, width=300, height=300)
+    canvasGameboy.pack(fill="both", expand=True)
+    canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
+
+
+    imagenPared = Image.open("bloqueGris.png")
+    imagenPared = imagenPared.resize((39, 17))
+    imagenParedTk = ImageTk.PhotoImage(imagenPared)
+
+    imagenFondo= Image.open("fondo.png")
+    imagenFondo = imagenFondo.resize((39, 17))
+    imagenFondoTk = ImageTk.PhotoImage(imagenFondo)
+
+   
+    canvasPantalla = Canvas(canvasGameboy, width=465, height=366, bg="pink")
+    canvasPantalla.place(x=67, y=85)
+
+    listaNombreBloques = ["bloqueAmarillo.png", "bloqueAzul.png", "bloqueNaranja.png", "bloqueRosa.png", "bloqueMorado.png", "bloqueVerde.png", "bloqueCafe.png", "bloqueRojo.png"]
+    listaImagenesBloques = []
+    for i in range(largoLista(listaNombreBloques)):
+        imagen = Image.open(listaNombreBloques[i])
+        imagen = imagen.resize((39, 17))
+        imagenTk = ImageTk.PhotoImage(imagen)
+        listaImagenesBloques += [imagenTk]
+    imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk)
+
     
-    
+    listatetrominos = []
+    # 'empiza' el juego
+    #while True:
+    if listatetrominos == []:
+        listatetrominos = crearListatetrominos()
+    tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listatetrominos[0])
+    print(listatetrominos)
+
+
+
+
+    #canvasPantalla.bind("<KeyPress-w>", rotar) 
+    consola.bind("<KeyPress-s>", lambda evento: moverAbajo(canvasPantalla, tetromino))
+    consola.bind("<KeyPress-d>", lambda evento: moverDerecha(canvasPantalla, tetromino)) 
+    consola.bind("<KeyPress-a>", lambda evento: moverIzquierda(canvasPantalla, tetromino))
+
+
+
+    canvasDemostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
+    canvasDemostrativo.place(x=305, y=567)
+
+
+
+
+
+
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
 
@@ -443,5 +668,44 @@ Restricciones: Las necesarias para el correcto funcionamiento
 def salir(ventana):
     ventana.destroy()
 
+#ventanaInicio()
+#tetris(1,"juego01.txt")
 
-ventanaInicio()
+    # imagenPared = Image.open("bloqueGris.png")
+    # imagenPared = imagenPared.resize((39, 17))
+    # imagenParedTk = ImageTk.PhotoImage(imagenPared)
+
+    # imagenFondo= Image.open("fondo.png")
+    # imagenFondo = imagenFondo.resize((39, 17))
+    # imagenFondoTk = ImageTk.PhotoImage(imagenFondo)
+
+    # imagenBloqueAmarillo = Image.open("bloqueAmarillo.png")
+    # imagenBloqueAmarillo = imagenBloqueAmarillo.resize((39, 17))
+    # imagenBloqueAmarilloTk = ImageTk.PhotoImage(imagenBloqueAmarillo)
+
+    # imagenBloqueAzul = Image.open("bloqueAzul.png")
+    # imagenBloqueAzul = imagenBloqueAzul.resize((39, 17))
+    # imagenBloqueAzulTk = ImageTk.PhotoImage(imagenBloqueAzul)
+
+    # imagenBloqueMorado = Image.open("bloqueMorado.png")
+    # imaenBloqueMorado = imagenBloqueMorado.resize((39, 17))
+    # imagenBloqueMoradoTk = ImageTk.PhotoImage(imaenBloqueMorado)
+
+    # imagenBloqueNaranja = Image.open("bloqueNaranja.png")
+    # imagenBloqueNaranja = imagenBloqueNaranja.resize((39, 17))
+    # imagenBloqueNaranjaTk = ImageTk.PhotoImage(imagenBloqueNaranja)
+
+    # imagenBloqueRojo = Image.open("bloqueRojo.png")
+    # imagenBloqueRojo = imagenBloqueRojo.resize((39, 17))
+    # imagenBloqueRojoTk = ImageTk.PhotoImage(imagenBloqueRojo)
+
+    # imagenBloqueRosa = Image.open("bloqueRosa.png")
+    # imagenBloqueRosa = imagenBloqueRosa.resize((39, 17))
+    # imagenBloqueRosaTk = ImageTk.PhotoImage(imagenBloqueRosa)
+    
+    # imgaenBloqueVerde =  Image.open("bloqueVerde.png")
+    # imgaenBloqueVerde = imgaenBloqueVerde.resize((39, 17))
+    # imgaenBloqueVerdeTk = ImageTk.PhotoImage(imgaenBloqueVerde)
+#ventanaInicio()
+
+tetris(1, "juego01.txt")
