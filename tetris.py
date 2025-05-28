@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 import random
 import os
 
+rotaciones = 0
 
 """
 Nombre: largoLista
@@ -536,12 +537,6 @@ def crearTetromino(canvasPantalla, imagenes, tetromino):
 
 
 
-
-# def moverTetromino(tetromino):
-#     if tetromino[0] == 7 or tetromino[0] == 8:
-
-
-
 def moverAbajo(canvasPantalla, tetromino):
     x = 0 
     y = 20 
@@ -557,8 +552,6 @@ def moverAbajo(canvasPantalla, tetromino):
         canvasPantalla.move(tetromino[4], x, y)
         canvasPantalla.move(tetromino[5], x, y)
       
-    print(canvasPantalla.coords(tetromino[1]))
-
 
 def moverDerecha(canvasPantalla, tetromino): 
     x = 20 
@@ -590,8 +583,22 @@ def moverIzquierda(canvasPantalla, tetromino):
         canvasPantalla.move(tetromino[4], x, y)
         canvasPantalla.move(tetromino[5], x, y)
 
+
+def rotar(canvasPantalla, tetromino):
+    global rotaciones
     
+    if tetromino[0] == 2:
+        canvasPantalla.coords(tetromino[1])
+
+        
+
+
+
+    rotaciones += 1
+    print(rotaciones)
+
 def tetris(ventana, nombreArchivo):
+
     #ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
@@ -630,21 +637,16 @@ def tetris(ventana, nombreArchivo):
 
     
     listatetrominos = []
-    # 'empiza' el juego
-    #while True:
     if listatetrominos == []:
         listatetrominos = crearListatetrominos()
-    tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listatetrominos[0])
-    print(listatetrominos)
+    tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,2)
+    #print(listatetrominos)
 
 
-
-
-    #canvasPantalla.bind("<KeyPress-w>", rotar) 
+    consola.bind("<KeyPress-w>", lambda evento: rotar(canvasPantalla, tetromino))
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo(canvasPantalla, tetromino))
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha(canvasPantalla, tetromino)) 
     consola.bind("<KeyPress-a>", lambda evento: moverIzquierda(canvasPantalla, tetromino))
-
 
 
     canvasDemostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
@@ -667,45 +669,5 @@ Restricciones: Las necesarias para el correcto funcionamiento
 """
 def salir(ventana):
     ventana.destroy()
-
-#ventanaInicio()
-#tetris(1,"juego01.txt")
-
-    # imagenPared = Image.open("bloqueGris.png")
-    # imagenPared = imagenPared.resize((39, 17))
-    # imagenParedTk = ImageTk.PhotoImage(imagenPared)
-
-    # imagenFondo= Image.open("fondo.png")
-    # imagenFondo = imagenFondo.resize((39, 17))
-    # imagenFondoTk = ImageTk.PhotoImage(imagenFondo)
-
-    # imagenBloqueAmarillo = Image.open("bloqueAmarillo.png")
-    # imagenBloqueAmarillo = imagenBloqueAmarillo.resize((39, 17))
-    # imagenBloqueAmarilloTk = ImageTk.PhotoImage(imagenBloqueAmarillo)
-
-    # imagenBloqueAzul = Image.open("bloqueAzul.png")
-    # imagenBloqueAzul = imagenBloqueAzul.resize((39, 17))
-    # imagenBloqueAzulTk = ImageTk.PhotoImage(imagenBloqueAzul)
-
-    # imagenBloqueMorado = Image.open("bloqueMorado.png")
-    # imaenBloqueMorado = imagenBloqueMorado.resize((39, 17))
-    # imagenBloqueMoradoTk = ImageTk.PhotoImage(imaenBloqueMorado)
-
-    # imagenBloqueNaranja = Image.open("bloqueNaranja.png")
-    # imagenBloqueNaranja = imagenBloqueNaranja.resize((39, 17))
-    # imagenBloqueNaranjaTk = ImageTk.PhotoImage(imagenBloqueNaranja)
-
-    # imagenBloqueRojo = Image.open("bloqueRojo.png")
-    # imagenBloqueRojo = imagenBloqueRojo.resize((39, 17))
-    # imagenBloqueRojoTk = ImageTk.PhotoImage(imagenBloqueRojo)
-
-    # imagenBloqueRosa = Image.open("bloqueRosa.png")
-    # imagenBloqueRosa = imagenBloqueRosa.resize((39, 17))
-    # imagenBloqueRosaTk = ImageTk.PhotoImage(imagenBloqueRosa)
-    
-    # imgaenBloqueVerde =  Image.open("bloqueVerde.png")
-    # imgaenBloqueVerde = imgaenBloqueVerde.resize((39, 17))
-    # imgaenBloqueVerdeTk = ImageTk.PhotoImage(imgaenBloqueVerde)
-#ventanaInicio()
 
 tetris(1, "juego01.txt")
