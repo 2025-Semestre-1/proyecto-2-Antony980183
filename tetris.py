@@ -99,7 +99,6 @@ def listaATextoAux(lista):
                 texto += lista[i][j] + "\n"
             else:
                 texto += lista[i][j] + ","
-    print(texto)
     return texto
 
 """
@@ -623,7 +622,6 @@ def crearTetromino(canvasPantalla, imagenes, tetromino):
         y3 = 5
         y4 = 5
         y5 = 6
-    
     if tetromino == 7 or tetromino == 8:
         return  [tetromino, bloque1, bloque2, bloque3, bloque4, bloque5]
     else:
@@ -633,15 +631,20 @@ def crearTetromino(canvasPantalla, imagenes, tetromino):
 
 def moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo):
     global x1, x2,  x3, x4, x5, listatetrominos, tetromino
-
+    eliminarAntiguaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
     x1 +=1
     x2 +=1
     x3 +=1
     x4 +=1
     x5 +=1
-
     coordenadas = posicionImagenes()
     if validarMovimiento(nombreArchivo, tetromino) == False:
+        x1 -=1
+        x2 -=1
+        x3 -=1
+        x4 -=1
+        x5 -=1
+        escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         listatetrominos = listatetrominos[1:]
         tetromino = crearTetromino(canvasPantalla, listaImagenesBloques, listatetrominos[0])
     else:
@@ -687,23 +690,16 @@ def moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo):
             canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
             canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
             canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
+        escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
 
-    
 def moverDerecha(canvasPantalla, nombreArchivo): 
     global y1, y2, y3, y4, y5, tetromino
-    if y1 + 1 == 11 or y2 + 1 == 11 or y3 +1 == 11 or y4 + 1 == 11 or y5 + 1 == 11:
-        y1 = y1
-        y2 = y2
-        y3 = y3
-        y4 = y4
-        y5 = y5
-    else:
-        y1 +=1
-        y2 +=1
-        y3 +=1
-        y4 +=1
-        y5 +=1
-        ddd
+    eliminarAntiguaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
+    y1 +=1
+    y2 +=1
+    y3 +=1
+    y4 +=1
+    y5 +=1
     coordenadas = posicionImagenes()
     if validarMovimiento(nombreArchivo, tetromino) == False:
         y1 -=1
@@ -754,17 +750,17 @@ def moverDerecha(canvasPantalla, nombreArchivo):
             canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
             canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
             canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
+        escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
 
 
 def moverIzquierda(canvasPantalla, nombreArchivo): 
     global y1, y2, y3, y4, y5, tetromino
-
+    eliminarAntiguaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
     y1 -=1
     y2 -=1
     y3 -=1
     y4 -=1
     y5 -=1
-
     coordenadas = posicionImagenes()
     if validarMovimiento(nombreArchivo, tetromino) == False:
         y1 +=1
@@ -815,9 +811,13 @@ def moverIzquierda(canvasPantalla, nombreArchivo):
             canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
             canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
             canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
+        escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
 
-def rotar(canvasPantalla, tetromino):
+
+def rotar(canvasPantalla, tetromino, nombreArchivo):
     global rotaciones, x1, x2, x3, x4, x5, y1, y2, y3, y4, y5
+    eliminarAntiguaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
+
 
     coordenadas = posicionImagenes()
     if tetromino[0] == 2:
@@ -834,7 +834,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 2:
             x1 = x1 - 1
             x2 = x1
@@ -849,7 +849,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 3:
             x1 = x2 + 1
             x3 = x1 + 1
@@ -863,6 +863,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         else:
             x1 = x2
             x3 = x2
@@ -876,7 +877,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
             rotaciones = 0
     elif tetromino[0] == 3: 
         if rotaciones == 1:
@@ -892,6 +893,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 2:
             x2 -=1
             x3 = x2
@@ -905,6 +907,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 3:
             x3 = x2 + 1
             x4 = x3 + 1
@@ -916,6 +919,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2) 
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         else:
             x1 += 1
             x2 += 1
@@ -928,7 +932,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
             rotaciones = 0          
     elif tetromino[0] == 4:
         if rotaciones == 1:
@@ -943,6 +947,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2) 
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 2:
             x2 -= 2
             x3 -= 1
@@ -956,6 +961,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2) 
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 3:
             x1 += 1
             x4 = x1 + 1
@@ -967,6 +973,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 4:
             x1 -= 1
             x2 += 1
@@ -982,7 +989,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
             rotaciones = 0
     elif tetromino[0] == 5:
         if rotaciones == 1:
@@ -993,6 +1000,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 2:
             x4 = x2
             y4 = y2 + 1
@@ -1001,6 +1009,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 3:
             x1 = x2 - 1
             
@@ -1010,6 +1019,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         else:
             x1 = x2
             x3 = x2
@@ -1023,7 +1033,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
             rotaciones = 0
     elif tetromino[0] == 6:
         if rotaciones == 1:
@@ -1039,6 +1049,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 2:
             x2 = x1
             x3 = x2 + 1
@@ -1052,7 +1063,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-    
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 3:
             x1 += 1
             x4 = x3 + 1
@@ -1065,6 +1076,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         else:
             x1 = x2
             x4 = x3
@@ -1077,7 +1089,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
             rotaciones = 0
     elif tetromino[0] == 7:
         if rotaciones == 1:
@@ -1092,6 +1104,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
             canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 2:
             x3 = x1
             x2 = x3 + 1
@@ -1106,6 +1119,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
             canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         elif rotaciones == 3:
             x5 = x2 + 1
             x4 = x5
@@ -1119,6 +1133,7 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
             canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         else:
             x3 = x2
             x4 = x2
@@ -1134,30 +1149,31 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
             canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
-
+            escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
             rotaciones = 0
     
     rotaciones += 1
 
-def  validarMovimiento(nombreArchivo, tetromino):
+def  validarMovimiento(nombreArchivo, tetromino):# mejorar
     global x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5
     listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
     if tetromino[0] >= 1 and tetromino[0] <= 6:
         for i in range(largoLista(listaArchivo)):
             for j in range(largoLista(listaArchivo[0])):
                 if i != 0:
                     if i == x1 and j == y1:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     elif i == x2 and j == y2:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     elif i == x3 and j == y3:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     else:
                         if i == x4 and j == y4:
-                            if listaArchivo[i][j] == "+":
+                            if verificarElementos(listaArchivo[i][j]):
                                 return False
         return True
     else:
@@ -1165,23 +1181,140 @@ def  validarMovimiento(nombreArchivo, tetromino):
             for j in range(largoLista(listaArchivo[0])):
                 if i != 0:
                     if i == x1 and j == y1:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     elif i == x2 and j == y2:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     elif i == x3 and j == y3:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     elif i == x4 and j == y4:
-                        if listaArchivo[i][j] == "+":
+                        if verificarElementos(listaArchivo[i][j]):
                             return False
                     else:
                         if i == x5 and j == y5:
-                            if listaArchivo[i][j] == "+":
+                            if verificarElementos(listaArchivo[i][j]):
                                 return False
         return True
+
+def verificarElementos(elemento):
+    listaElementos = ["+","1","2","3","4","5","6","7","8"]
+    for i in listaElementos:
+        if i == elemento:
+            return True
+    return False
+
+
+def escribirNuevaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5):
+    print(x1,x2,x3,x4,x5)
+    print(y1,y2,y3,y4,y5)
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    nuevoContenido = []
     
+    if tetrimino[0] == 1:
+        imagen = "1"
+    elif tetrimino[0] == 2:
+        imagen = "2"
+    elif tetrimino[0] == 3:
+        imagen = "3"
+    elif tetrimino[0] == 4:
+        imagen = "4"
+    elif tetrimino[0] == 5:
+        imagen = "5"
+    elif tetrimino[0] == 6:
+        imagen = "6"
+    elif tetrimino[0] == 7:
+        imagen = "7"
+    else:
+        imagen = "8"
+
+
+    if tetrimino[0] >= 1 and tetrimino[0] <= 6:
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == x1 and j == y1:
+                    contenido += [imagen]
+                elif i == x2 and j == y2:
+                    contenido += [imagen]
+                elif i == x3 and j == y3:
+                    contenido += [imagen]
+                elif i == x4 and j == y4:
+                    contenido += [imagen]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+    else:
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == x1 and j == y1:
+                    contenido += [imagen]
+                elif i == x2 and j == y2:
+                    contenido += [imagen]
+                elif i == x3 and j == y3:
+                    contenido += [imagen]
+                elif i == x4 and j == y4:
+                    contenido += [imagen]
+                elif i == x5 and j == y5:
+                    contenido += [imagen]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+    
+    
+    modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+
+
+
+
+def eliminarAntiguaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5):
+    print(x1,x2,x3,x4,x5)
+    print(y1,y2,y3,y4,y5)
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    nuevoContenido = []
+    
+    if tetrimino[0] >= 1 and tetrimino[0] <= 6:
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == x1 and j == y1:
+                    contenido += ["0"]
+                elif i == x2 and j == y2:
+                    contenido += ["0"]
+                elif i == x3 and j == y3:
+                    contenido += ["0"]
+                elif i == x4 and j == y4:
+                    contenido += ["0"]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+    else:
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == x1 and j == y1:
+                    contenido += ["0"]
+                elif i == x2 and j == y2:
+                    contenido += ["0"]
+                elif i == x3 and j == y3:
+                    contenido += ["0"]
+                elif i == x4 and j == y4:
+                    contenido += ["0"]
+                elif i == x5 and j == y5:
+                    contenido += ["0"]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+    
+    modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+
+
+
+
 def ventanaTetris(ventana, nombreArchivo):
     global listatetrominos, tetromino
     #ventana.destroy()
@@ -1233,8 +1366,9 @@ def ventanaTetris(ventana, nombreArchivo):
     
     listatetrominos = crearListatetrominos()
     tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listatetrominos[0])
+    escribirNuevaPosicionArchivo("juego01.txt", tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
 
-    consola.bind("<KeyPress-w>", lambda evento: rotar(canvasPantalla, tetromino))
+    consola.bind("<KeyPress-w>", lambda evento: rotar(canvasPantalla, tetromino, nombreArchivo))
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo))
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha(canvasPantalla, nombreArchivo)) 
     consola.bind("<KeyPress-a>", lambda evento: moverIzquierda(canvasPantalla, nombreArchivo))
