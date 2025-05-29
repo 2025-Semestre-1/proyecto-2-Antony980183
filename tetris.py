@@ -14,6 +14,7 @@ y2 = 0
 y3 = 0
 y4 = 0
 y5 = 0
+moviendo = True
 
 """
 Nombre: largoLista
@@ -630,8 +631,8 @@ def crearTetromino(canvasPantalla, imagenes, tetromino):
 
 
 
-def moverAbajo(canvasPantalla, tetromino):
-    global rotaciones, x1, x2,  x3, x4, x5
+def moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo):
+    global x1, x2,  x3, x4, x5, listatetrominos, tetromino
 
     x1 +=1
     x2 +=1
@@ -640,107 +641,123 @@ def moverAbajo(canvasPantalla, tetromino):
     x5 +=1
 
     coordenadas = posicionImagenes()
-    if tetromino[0] == 1:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 2:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 3:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 4:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 5:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 6:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 7:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-        canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))        
+    if validarMovimiento(nombreArchivo, tetromino) == False:
+        listatetrominos = listatetrominos[1:]
+        tetromino = crearTetromino(canvasPantalla, listaImagenesBloques, listatetrominos[0])
     else:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-        canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
+        if tetromino[0] == 1:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 2:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 3:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 4:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 5:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 6:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 7:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+            canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))        
+        else:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+            canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
 
     
-def moverDerecha(canvasPantalla, tetromino): 
-    global y1, y2, y3, y4, y5
-
-    y1 +=1
-    y2 +=1
-    y3 +=1
-    y4 +=1
-    y5 +=1
-
-
-    coordenadas = posicionImagenes()
-    if tetromino[0] == 1:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 2:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 3:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 4:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 5:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 6:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 7:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-        canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))        
+def moverDerecha(canvasPantalla, nombreArchivo): 
+    global y1, y2, y3, y4, y5, tetromino
+    if y1 + 1 == 11 or y2 + 1 == 11 or y3 +1 == 11 or y4 + 1 == 11 or y5 + 1 == 11:
+        y1 = y1
+        y2 = y2
+        y3 = y3
+        y4 = y4
+        y5 = y5
     else:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-        canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
+        y1 +=1
+        y2 +=1
+        y3 +=1
+        y4 +=1
+        y5 +=1
+        ddd
+    coordenadas = posicionImagenes()
+    if validarMovimiento(nombreArchivo, tetromino) == False:
+        y1 -=1
+        y2 -=1
+        y3 -=1
+        y4 -=1
+        y5 -=1
+    else:
+        if tetromino[0] == 1:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 2:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 3:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 4:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 5:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 6:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 7:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+            canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))        
+        else:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+            canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
 
 
-def moverIzquierda(canvasPantalla, tetromino): 
-    global y1, y2, y3, y4, y5
+def moverIzquierda(canvasPantalla, nombreArchivo): 
+    global y1, y2, y3, y4, y5, tetromino
 
     y1 -=1
     y2 -=1
@@ -748,50 +765,56 @@ def moverIzquierda(canvasPantalla, tetromino):
     y4 -=1
     y5 -=1
 
-
     coordenadas = posicionImagenes()
-    if tetromino[0] == 1:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 2:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 3:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 4:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 5:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 6:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-    elif tetromino[0] == 7:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-        canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))        
+    if validarMovimiento(nombreArchivo, tetromino) == False:
+        y1 +=1
+        y2 +=1
+        y3 +=1
+        y4 +=1
+        y5 +=1
     else:
-        canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
-        canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
-        canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
-        canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
-        canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
+        if tetromino[0] == 1:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 2:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 3:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 4:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 5:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 6:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+        elif tetromino[0] == 7:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+            canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))        
+        else:
+            canvasPantalla.coords(tetromino[1],(coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2))
+            canvasPantalla.coords(tetromino[2],(coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2))
+            canvasPantalla.coords(tetromino[3],(coordenadas[x3][y3][0]/ 2, coordenadas[x3][y4][1] / 2))
+            canvasPantalla.coords(tetromino[4],(coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2))
+            canvasPantalla.coords(tetromino[5],(coordenadas[x5][y5][0]/ 2, coordenadas[x5][y5][1] / 2))
 
 def rotar(canvasPantalla, tetromino):
     global rotaciones, x1, x2, x3, x4, x5, y1, y2, y3, y4, y5
@@ -1116,8 +1139,51 @@ def rotar(canvasPantalla, tetromino):
     
     rotaciones += 1
 
-def tetris(ventana, nombreArchivo):
-
+def  validarMovimiento(nombreArchivo, tetromino):
+    global x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5
+    listaArchivo = archivoALista(nombreArchivo)
+    if tetromino[0] >= 1 and tetromino[0] <= 6:
+        for i in range(largoLista(listaArchivo)):
+            for j in range(largoLista(listaArchivo[0])):
+                if i != 0:
+                    if i == x1 and j == y1:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    elif i == x2 and j == y2:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    elif i == x3 and j == y3:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    else:
+                        if i == x4 and j == y4:
+                            if listaArchivo[i][j] == "+":
+                                return False
+        return True
+    else:
+        for i in range(largoLista(listaArchivo)):
+            for j in range(largoLista(listaArchivo[0])):
+                if i != 0:
+                    if i == x1 and j == y1:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    elif i == x2 and j == y2:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    elif i == x3 and j == y3:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    elif i == x4 and j == y4:
+                        if listaArchivo[i][j] == "+":
+                            return False
+                    else:
+                        if i == x5 and j == y5:
+                            if listaArchivo[i][j] == "+":
+                                return False
+        return True
+    
+def ventanaTetris(ventana, nombreArchivo):
+    global listatetrominos, tetromino
     #ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
@@ -1145,27 +1211,33 @@ def tetris(ventana, nombreArchivo):
     canvasPantalla = Canvas(canvasGameboy, width=465, height=366, bg="pink")
     canvasPantalla.place(x=67, y=85)
 
-    listaNombreBloques = ["bloqueAmarillo.png", "bloqueAzul.png", "bloqueNaranja.png", "bloqueRosa.png", "bloqueMorado.png", "bloqueVerde.png", "bloqueCafe.png", "bloqueRojo.png"]
+    listaNombreBloques = ["bloqueAmarillo.png", 
+                          "bloqueAzul.png", 
+                          "bloqueNaranja.png", 
+                          "bloqueRosa.png", 
+                          "bloqueMorado.png", 
+                          "bloqueVerde.png", 
+                          "bloqueCafe.png", 
+                          "bloqueRojo.png"]
+    
     listaImagenesBloques = []
     for i in range(largoLista(listaNombreBloques)):
         imagen = Image.open(listaNombreBloques[i])
         imagen = imagen.resize((39, 17))
         imagenTk = ImageTk.PhotoImage(imagen)
         listaImagenesBloques += [imagenTk]
+
+    
     imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk)
 
     
-    listatetrominos = []
-    if listatetrominos == []:
-        listatetrominos = crearListatetrominos()
+    listatetrominos = crearListatetrominos()
     tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listatetrominos[0])
-    #print(listatetrominos)
-
 
     consola.bind("<KeyPress-w>", lambda evento: rotar(canvasPantalla, tetromino))
-    consola.bind("<KeyPress-s>", lambda evento: moverAbajo(canvasPantalla, tetromino))
-    consola.bind("<KeyPress-d>", lambda evento: moverDerecha(canvasPantalla, tetromino)) 
-    consola.bind("<KeyPress-a>", lambda evento: moverIzquierda(canvasPantalla, tetromino))
+    consola.bind("<KeyPress-s>", lambda evento: moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo))
+    consola.bind("<KeyPress-d>", lambda evento: moverDerecha(canvasPantalla, nombreArchivo)) 
+    consola.bind("<KeyPress-a>", lambda evento: moverIzquierda(canvasPantalla, nombreArchivo))
 
 
     canvasDemostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
@@ -1189,4 +1261,5 @@ Restricciones: Las necesarias para el correcto funcionamiento
 def salir(ventana):
     ventana.destroy()
 
-tetris(1, "juego01.txt")
+ventanaTetris(1, "juego01.txt")
+# pasar nombre aerhccovp como parametro
