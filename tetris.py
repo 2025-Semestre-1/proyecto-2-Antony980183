@@ -505,36 +505,36 @@ def crearTetromino(canvasPantalla, imagenes, tetromino):
         y3 = 5
         y4 = 6
     elif tetromino == 2:
-        bloque1 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[1])
-        bloque2 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[1])
-        bloque3 = canvasPantalla.create_image(coordenadas[3][5][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[1])
-        bloque4 = canvasPantalla.create_image(coordenadas[4][5][0]/ 2, coordenadas[4][5][1] / 2, anchor="center", image=imagenes[1])
+        bloque1 = canvasPantalla.create_image(coordenadas[1][4][0]/ 2, coordenadas[1][4][1] / 2, anchor="center", image=imagenes[1])
+        bloque2 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[1])
+        bloque3 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[1])
+        bloque4 = canvasPantalla.create_image(coordenadas[1][7][0]/ 2, coordenadas[1][7][1] / 2, anchor="center", image=imagenes[1])
     
         x1 = 1
-        x2 = 2
-        x3 = 3
-        x4 = 4
+        x2 = 1
+        x3 = 1
+        x4 = 1
     
     
-        y1 = 5
+        y1 = 4
         y2 = 5
-        y3 = 5
-        y4 = 5
+        y3 = 6
+        y4 = 7
     elif tetromino == 3:
-        bloque1 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[2])
+        bloque1 = canvasPantalla.create_image(coordenadas[2][4][0]/ 2, coordenadas[2][4][1] / 2, anchor="center", image=imagenes[2])
         bloque2 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[2])
-        bloque3 = canvasPantalla.create_image(coordenadas[3][5][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[2])
-        bloque4 = canvasPantalla.create_image(coordenadas[3][6][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=imagenes[2])
+        bloque3 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=imagenes[2])
+        bloque4 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[2])
         
-        x1 = 1
+        x1 = 2
         x2 = 2
-        x3 = 3
-        x4 = 3
+        x3 = 2
+        x4 = 1
     
     
-        y1 = 5
+        y1 = 4
         y2 = 5
-        y3 = 5
+        y3 = 6
         y4 = 6
     elif tetromino == 4:
         bloque1 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=imagenes[3])
@@ -799,12 +799,13 @@ def rotar(canvasPantalla, tetromino):
     coordenadas = posicionImagenes()
     if tetromino[0] == 2:
         if rotaciones == 1:
-            x2 = x1
-            x3 = x1
-            x4 = x1
-            y2 = y1+1
-            y3 = y2+1
-            y4 = y3+1
+            x1 = x3 + 1
+            x2 = x1 + 1
+            x4 = x2 + 1
+
+            y1 = y3
+            y2 = y3
+            y4 = y3
 
             canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
             canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
@@ -812,33 +813,104 @@ def rotar(canvasPantalla, tetromino):
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
 
         elif rotaciones == 2:
+            x1 = x1 - 1
             x2 = x1
-            x3 = x1
+            x3 = x1 
             x4 = x1
-            y2 = y1-1
-            y3 = y2-1
-            y4 = y3-1
+
+            y1 = y3 - 2
+            y2 = y3 - 1
+            y4 = y3  + 1
 
             canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
-            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x3][y2][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+
+        elif rotaciones == 3:
+            x1 = x2 + 1
+            x3 = x1 + 1
+            x4 = x3 + 1
+
+            y1 = y2
+            y3 = y2
+            y4 = y2
+
+            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
             canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
             canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
         else:
-            x2 = x1+1
-            x3 = x2+1
-            x4 = x3+1
-            y2 = y1
-            y3 = y1
+            x1 = x2
+            x3 = x2
+            x4 = x2
+
+            y1 = y2-1
+            y3 = y3 + 1
+            y4 = y3 + 1
+            
+            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+
+            rotaciones = 0
+    elif tetromino[0] == 3: #L
+        if rotaciones == 1:
+            x1 = x2 - 1
+            x3 = x2 + 1
+            x4 = x3
+
+            y1 = y2
+            y3 = y2
+            y4 = y2 + 1
+
+            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+        elif rotaciones == 2:
+            x2 -=1
+            x3 = x2
+            x4 = x3 + 1
+
+            y1 -=1
+            y3 = y2 + 1
             y4 = y1
 
-            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0]/ 2, coordenadas[x1][y1][1] / 2)
-            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0]/ 2, coordenadas[x2][y2][1] / 2)
-            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0]/ 2, coordenadas[x3][y3][1] / 2)
-            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0]/ 2, coordenadas[x4][y4][1] / 2)
-            rotaciones = 0
-    elif tetromino[0] == 3:
-        
-    
+            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+        elif rotaciones == 3:
+            x3 = x2 + 1
+            x4 = x3 + 1
+
+            y3 = y2 
+            y4 = y2
+
+            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2) 
+        else:
+            print(x1,x2,x3,x4)
+            print(y1,y2,y3,y4)
+            x1 += 1
+            x2 += 1
+            x3 = x2 + 1
+            x4 = x1 - 1
+
+
+            y3 = y2  + 1
+            y4 = y2
+                        
+            canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+            canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+            canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+            canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+
+            rotaciones = 0          
 
         
 
@@ -888,7 +960,7 @@ def tetris(ventana, nombreArchivo):
     listatetrominos = []
     if listatetrominos == []:
         listatetrominos = crearListatetrominos()
-    tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,2)
+    tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,3)
     #print(listatetrominos)
 
 
