@@ -1389,7 +1389,6 @@ def reubicarFila(nombreArchivo):
                 contenido += [listaArchivo[i][j]]
             if contenido != []:
                 if largoLista(contenido) == 10:
-                    print(i, "xd")
                     return i
             j -= 1
         i -= 1
@@ -1443,9 +1442,8 @@ def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
         nuevaMatriz += [vector]
     matrizIdentificadores = nuevaMatriz
 
-def eliminarFilaMatrizIdentificadores(nombreArchivo, x):
+def eliminarFilaMatrizIdentificadores(nombreArchivo):
     global matrizIdentificadores
-    matrizIdentificadores = x
 
     fila = retornarFilaArchivoDescendente(nombreArchivo)
     if fila != False: # para la fubncion de validacion
@@ -1511,7 +1509,6 @@ def refrescarPantallaTetris(canvasPantalla):
     for i in range(largoLista(matrizIdentificadores)):
         for j in range(largoLista(matrizIdentificadores[0])):
             if matrizIdentificadores[i][j] != "0" or matrizIdentificadores[i][j] != "+":
-                print(matrizIdentificadores[i][j])
                 canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2)
 
 
@@ -1564,7 +1561,7 @@ def ventanaTetris(ventana, nombreArchivo):
     imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk)
 
     matrizIdentificadores = crearMatriz()
-    listaTetrominos = [2,2,2,2,2,2,2,2,2,2]#crearListatetrominos()
+    listaTetrominos = crearListatetrominos()
     listaImagenes = []
     tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listaTetrominos[0])
     listaImagenes += [tetromino[1:]]
@@ -1596,39 +1593,5 @@ Restricciones: Las necesarias para el correcto funcionamiento
 """
 def salir(ventana):
     ventana.destroy()
-#eliminarFilaMatrizIdentificadores("juego01.txt",[
-# ['+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', 273, 277, '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', 274, 278, '+'],
-# ['+', '0', '0', '0', '0', '0', '0', '0', '0', 275, 279, '+'],
-# ['+', 265, 266, 267, 268, 269, 270, 271, 272, 276, 280, '+'],#
-# ['+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+']])
-ventanaTetris(1, "juego01.txt")
-# pasar nombre aerhccovp como parametro
-# def invetirMatrizArchivo(nombreArchivo):
-#     listaArchivo = archivoALista(nombreArchivo)
-#     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
 
-#     matriz = []
-#     for i in range(largoLista(listaArchivo)):
-#         vector = []
-#         for j in range(largoLista(listaArchivo[0])):
-#             vector += [listaArchivo[i * -1][j * -1]]
-#         matriz += [vector]
-#     return matriz
+ventanaTetris(1, "juego01.txt")
