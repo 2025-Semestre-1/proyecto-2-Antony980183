@@ -520,8 +520,6 @@ def crearTetromino(canvasPantalla, imagenes, tetromino):
         y2 = 5
         y3 = 6
         y4 = 7
-        print(x1,x2,x3,x4,x5)
-        print(y1,y2,y3,y4,y5)
     elif tetromino == 3:
         bloque1 = canvasPantalla.create_image(coordenadas[2][4][0]/ 2, coordenadas[2][4][1] / 2, anchor="center", image=imagenes[2])
         bloque2 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=imagenes[2])
@@ -647,6 +645,7 @@ def moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo):
         x4 -=1
         x5 -=1
         escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
+        modificarMatrizIdentificadores(tetromino,x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
         listaTetrominos = listaTetrominos[1:]
         tetromino = crearTetromino(canvasPantalla, listaImagenesBloques, listaTetrominos[0])
         rotaciones = 1
@@ -1289,7 +1288,6 @@ def escribirNuevaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, 
 
 
 
-
 def eliminarAntiguaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5):
     listaArchivo = archivoALista(nombreArchivo)
     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
@@ -1331,10 +1329,108 @@ def eliminarAntiguaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5
     modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
 
 
+def eliminarFilaArchivo(nombreArchivo):
+    fila = retornarFilaArchivo(nombreArchivo)
+    if fila != False: # para la fubncion de validacion
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        nuevoContenido = []
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == fila:
+                    if j != 0 and j != 11:
+                        contenido += ["0"]
+                    else:
+                       contenido += [listaArchivo[i][j]]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+    
+    modificarArchivoJuegoXX(contenido)
+
+
+def retornarFilaArchivo(nombreArchivo):
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    i = largoLista(listaArchivo) - 2
+
+    while i != 0:
+        contenido = []
+        j = largoLista(listaArchivo[0]) - 2
+        while j != 0:
+            if listaArchivo[i][j] != "0":
+                contenido += [listaArchivo[i][j]]
+            if contenido != []:
+                if largoLista(contenido) == 10:
+                    print(i)
+                    return i
+            j -= 1
+        i -= 1
+    return False
+
+
+def eliminarFilaTetris(canvasPantalla, matrizIdentificadores):
+    for i in range(largoLista(matrizIdentificadores)):
+        for j in range(largoLista(matrizIdentificadores[0])):
+    
+
+# def invetirMatriz(nombreArchivo):
+#     listaArchivo = archivoALista(nombreArchivo)
+#     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+
+#     matriz = []
+#     for i in range(largoLista(listaArchivo)):
+#         vector = []
+#         for j in range(largoLista(listaArchivo[0])):
+#             vector += [listaArchivo[i * -1][j * -1]]
+#         matriz += [vector]
+#     return matriz
+
+# eliminarFilaArchivo("juego01.txt")
+
+def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
+    global matrizIdentificadores
+    nuevaMatriz = []
+    for i in range(largoLista(matrizIdentificadores)):
+        vector = []
+        for j in range(largoLista(matrizIdentificadores[0])):
+            if tetromino[0] >= 1 and tetromino[0] <= 6:
+                if i == x1 and j == y1:
+                    vector += [tetromino[1]]
+                elif i == x2 and j == y2:
+                    vector += [tetromino[2]]
+                elif i == x3 and j == y3:
+                    vector += [tetromino[3]]
+                elif i == x4 and j == y4:
+                    vector += [tetromino[4]]
+                else:
+                    vector += [matrizIdentificadores[i][j]]
+            
+            else:
+                if i == x1 and j == y1:    
+                    vector += [tetromino[1]]
+                elif i == x2 and j == y2:
+                    vector += [tetromino[2]]
+                elif i == x3 and j == y3:
+                    vector += [tetromino[3]]
+                elif i == x4 and j == y4:
+                    vector += [tetromino[4]]
+                elif i == x5 and j == y5:
+                    vector += [tetromino[5]]
+                else:
+                    vector += [matrizIdentificadores[i][j]]
+            
+        print(vector)
+        nuevaMatriz += [vector]
+    
+    matrizIdentificadores = nuevaMatriz
+              
+
 
 
 def ventanaTetris(ventana, nombreArchivo):
-    global listaTetrominos, tetromino
+    global listaTetrominos, tetromino, matrizIdentificadores
     #ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
@@ -1381,9 +1477,12 @@ def ventanaTetris(ventana, nombreArchivo):
     
     imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk)
 
-    
+    matrizIdentificadores = crearMatriz()
+    print(matrizIdentificadores)
     listaTetrominos = crearListatetrominos()
+    listaImagenes = []
     tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listaTetrominos[0])
+    listaImagenes += [tetromino[1:]]
     escribirNuevaPosicionArchivo("juego01.txt", tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
 
     consola.bind("<KeyPress-w>", lambda evento: rotar(canvasPantalla, tetromino, nombreArchivo))
