@@ -1346,8 +1346,9 @@ def eliminarFilaArchivo(nombreArchivo):
                 else:
                     contenido += [listaArchivo[i][j]]
             nuevoContenido += [contenido]
-    
-    modificarArchivoJuegoXX(contenido)
+
+        acomodarFilasArchivo(nombreArchivo)
+        modificarArchivoJuegoXX(contenido)
 
 
 def retornarFilaArchivo(nombreArchivo):
@@ -1369,14 +1370,6 @@ def retornarFilaArchivo(nombreArchivo):
         i -= 1
     return False
 
-
-def eliminarFilaTetris(canvasPantalla, matrizIdentificadores, nombreArchivo):
-    fila = retornarFilaArchivo(nombreArchivo)
-    for i in range(largoLista(matrizIdentificadores)):
-        for j in range(largoLista(matrizIdentificadores[0])):
-            if i == fila and j != 0 and j != 11:
-                canvasPantalla.delete(matrizIdentificadores[i][j])
-
 def acomodarFilasArchivo(nombreArchivo):
     listaArchivo = archivoALista(nombreArchivo)
     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
@@ -1390,9 +1383,8 @@ def acomodarFilasArchivo(nombreArchivo):
             nuevoContenido += [listaArchivo[i]]
     
     nuevoContenido = [primerFila] + [ultimaFila] + nuevoContenido
+    return nuevoContenido
 
-
-# eliminarFilaArchivo("juego01.txt")
 
 def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
     global matrizIdentificadores
@@ -1430,8 +1422,48 @@ def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
         nuevaMatriz += [vector]
     
     matrizIdentificadores = nuevaMatriz
-              
 
+def eliminarFilaMatrizIdentificadores(nombreArchivo):
+    global matrizIdentificadores
+    fila = retornarFilaArchivo(nombreArchivo)
+    if fila != False: # para la fubncion de validacion
+        nuevoContenido = []
+        for i in range(largoLista(matrizIdentificadores)):
+            contenido = []
+            for j in range(largoLista(matrizIdentificadores[0])):
+                if i == fila:
+                    if j != 0 and j != 11:
+                        contenido += ["0"]
+                    else:
+                       contenido += [matrizIdentificadores[i][j]]
+                else:
+                    contenido += [matrizIdentificadores[i][j]]
+            print(contenido)
+            nuevoContenido += [contenido]
+        matrizIdentificadores = nuevoContenido
+
+
+def acomodarFilasMatrizIdentificadores(nombreArchivo):
+    global matrizIdentificadores
+    fila = retornarFilaArchivo(nombreArchivo)
+    primerFila = matrizIdentificadores[0]
+    ultimaFila = matrizIdentificadores[fila]
+    matrizIdentificadores = matrizIdentificadores[1:]
+    nuevoContenido = []
+    for i in range(largoLista(matrizIdentificadores)):
+        if i != fila:
+            nuevoContenido += [matrizIdentificadores[i]]
+    
+    nuevoContenido = [primerFila] + [ultimaFila] + nuevoContenido
+    matrizIdentificadores = nuevoContenido
+
+
+def eliminarFilaTetris(canvasPantalla, matrizIdentificadores, nombreArchivo):
+    fila = retornarFilaArchivo(nombreArchivo)
+    for i in range(largoLista(matrizIdentificadores)):
+        for j in range(largoLista(matrizIdentificadores[0])):
+            if i == fila and j != 0 and j != 11:
+                canvasPantalla.delete(matrizIdentificadores[i][j])
 
 
 def ventanaTetris(ventana, nombreArchivo):
