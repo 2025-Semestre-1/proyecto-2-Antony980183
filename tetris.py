@@ -14,7 +14,6 @@ y2 = 0
 y3 = 0
 y4 = 0
 y5 = 0
-moviendo = True
 
 """
 Nombre: largoLista
@@ -208,41 +207,71 @@ Restricciones: Las necesarias para el correcto funcionamiento
 """
 def ventanaInicio(): # Tal vez cambien los nombres de las variables
     ventanaInicial = Tk()   
-    ventanaInicial.geometry("500x300")
+    ventanaInicial.geometry("900x700")
     ventanaInicial.resizable(0,0)
     centrarVentana(ventanaInicial)
+    
+    imagenInicio = Image.open("fondoInicio.png")
+    imagenInicio = imagenInicio.resize((900,700))
+    imagenInicioTk = ImageTk.PhotoImage(imagenInicio)
 
-    canvasInicio = Canvas(ventanaInicial, width=500, height=300, bg="pink")
-    canvasInicio.pack()
+    canvasInicio = Canvas(ventanaInicial, width=900, height=700)
+    canvasInicio.pack(fill="both", expand=True)
+    canvasInicio.create_image(0, 0, anchor="nw", image=imagenInicioTk)
 
     imagenJugar = Image.open("jugar.png")
+    imagenJugar = imagenJugar.resize((120,120))
     imagenJugar = ImageTk.PhotoImage(imagenJugar)
 
-    imagenJugarSeleccionada = Image.open("jugarSeleccionado.png")
-    imagenJugarSeleccionada = ImageTk.PhotoImage(imagenJugarSeleccionada)
-    
-    imagenSalir = Image.open("salir.png")
-    imagenSalir = ImageTk.PhotoImage(imagenSalir)
+    imagenJugarPresionado = Image.open("jugarPresionado.png")
+    imagenJugarPresionado = imagenJugarPresionado.resize((120,120))
+    imagenJugarPresionado= ImageTk.PhotoImage(imagenJugarPresionado)
 
-    imagenSalirSeleccionada = Image.open("salirSeleccionado.png")
-    imagenSalirSeleccionada = ImageTk.PhotoImage(imagenSalirSeleccionada)
+    imagenCargar = Image.open("cargar.png")
+    imagenCargar = imagenCargar.resize((120,120))
+    imagenCargar = ImageTk.PhotoImage(imagenCargar)
+
+
+    imagenCargarPresionado = Image.open("cargarPresionado.png")
+    imagenCargarPresionado = imagenCargarPresionado.resize((120,120))
+    imagenCargarPresionado= ImageTk.PhotoImage(imagenCargarPresionado)
+    
+    imagenEstadisticas = Image.open("estadisticas.png")
+    imagenEstadisticas = imagenEstadisticas.resize((120,120))
+    imagenEstadisticas = ImageTk.PhotoImage(imagenEstadisticas)
+
+    imagenEstadisticasPresionado = Image.open("estadisticasPresionado.png")
+    imagenEstadisticasPresionado = imagenEstadisticasPresionado.resize((120,120))
+    imagenEstadisticasPresionado = ImageTk.PhotoImage(imagenEstadisticasPresionado)
+    # imagenSalir = Image.open("salir.png")
+    # imagenSalir = ImageTk.PhotoImage(imagenSalir)
+
+    # imagenSalirSeleccionada = Image.open("salir.png")
+    # imagenSalirSeleccionada = ImageTk.PhotoImage(imagenSalirSeleccionada)
      
     botonJugar = canvasInicio.create_image(40, 30, anchor="nw", image=imagenJugar)
-    botonSalir = canvasInicio.create_image(40, 90, anchor="nw", image=imagenSalir)
+    botonCargar =  canvasInicio.create_image(40, 170, anchor="nw", image=imagenCargar)
+    botonCargar =  canvasInicio.create_image(40, 170, anchor="nw", image=imagenCargar)
+    # botonSalir = canvasInicio.create_image(40, 90, anchor="nw", image=imagenSalir)
 
 
-    canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugarSeleccionada))
+    canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugarPresionado))
     canvasInicio.tag_bind(botonJugar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugar))
     canvasInicio.tag_bind(botonJugar, "<Button-1>", lambda evento: interfaz(ventanaInicial))
 
+    canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
+    canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
+    #canvasInicio.tag_bind(botonCargar, "<Button-1>", lambda evento: interfaz(ventanaInicial))  mas adelante
+
+    canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
+    canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
 
 
-    canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalirSeleccionada))
-    canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalir))
-    canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
+
+    # canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalirSeleccionada))
+    # canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalir))
+    # canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
     
-    
-    #90x70
 
     ventanaInicial.mainloop()
 
@@ -1865,4 +1894,4 @@ Restricciones: Las necesarias para el correcto funcionamiento
 def salir(ventana):
     ventana.destroy()
 
-ventanaTetris(1, "juego01.txt")
+ventanaInicio()
