@@ -1370,22 +1370,27 @@ def retornarFilaArchivo(nombreArchivo):
     return False
 
 
-def eliminarFilaTetris(canvasPantalla, matrizIdentificadores):
+def eliminarFilaTetris(canvasPantalla, matrizIdentificadores, nombreArchivo):
+    fila = retornarFilaArchivo(nombreArchivo)
     for i in range(largoLista(matrizIdentificadores)):
         for j in range(largoLista(matrizIdentificadores[0])):
+            if i == fila and j != 0 and j != 11:
+                canvasPantalla.delete(matrizIdentificadores[i][j])
+
+def acomodarFilasArchivo(nombreArchivo):
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+    fila = retornarFilaArchivo(nombreArchivo)
+    primerFila = listaArchivo[0]
+    ultimaFila = listaArchivo[fila]
+    listaArchivo = listaArchivo[1:]
+    nuevoContenido = []
+    for i in range(largoLista(listaArchivo)):
+        if i != fila:
+            nuevoContenido += [listaArchivo[i]]
     
+    nuevoContenido = [primerFila] + [ultimaFila] + nuevoContenido
 
-# def invetirMatriz(nombreArchivo):
-#     listaArchivo = archivoALista(nombreArchivo)
-#     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-
-#     matriz = []
-#     for i in range(largoLista(listaArchivo)):
-#         vector = []
-#         for j in range(largoLista(listaArchivo[0])):
-#             vector += [listaArchivo[i * -1][j * -1]]
-#         matriz += [vector]
-#     return matriz
 
 # eliminarFilaArchivo("juego01.txt")
 
@@ -1514,3 +1519,14 @@ def salir(ventana):
 
 ventanaTetris(1, "juego01.txt")
 # pasar nombre aerhccovp como parametro
+# def invetirMatrizArchivo(nombreArchivo):
+#     listaArchivo = archivoALista(nombreArchivo)
+#     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+
+#     matriz = []
+#     for i in range(largoLista(listaArchivo)):
+#         vector = []
+#         for j in range(largoLista(listaArchivo[0])):
+#             vector += [listaArchivo[i * -1][j * -1]]
+#         matriz += [vector]
+#     return matriz
