@@ -1347,16 +1347,12 @@ def eliminarFilaArchivo(nombreArchivo):
         for i in range(largoLista(listaArchivo)):
             contenido = []
             for j in range(largoLista(listaArchivo[0])):
-                if i == fila:
-                    if j != 0 and j != 11:
-                        contenido += ["0"]
-                    else:
-                       contenido += [listaArchivo[i][j]]
-                else:
+                if i != fila:
                     contenido += [listaArchivo[i][j]]
-            nuevoContenido += [contenido]
-
+            if contenido != []:
+                nuevoContenido += [contenido]
         modificarArchivoJuegoXX(nombreArchivo,nuevoContenido)
+        fila = reubicarFila(nombreArchivo)
         nuevoContenido = acomodarFilasArchivo(nombreArchivo, fila)
         modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
 
@@ -1367,55 +1363,51 @@ def retornarFilaArchivoDescendente(nombreArchivo):
 
     while i != 0:
         contenido = []
-        j = largoLista(listaArchivo[0]) - 2
+        j = largoLista(listaArchivo[0]) - 1
         while j != 0:
             if listaArchivo[i][j] != "0":
+                verificarElementos
                 contenido += [listaArchivo[i][j]]
             if contenido != []:
-                if largoLista(contenido) == 10:
+                if largoLista(contenido) == 11:
                     return i
             j -= 1
         i -= 1
     return False
 
 
-def retornarFilaArchivoAscendente(nombreArchivo):
+def reubicarFila(nombreArchivo):
     listaArchivo = archivoALista(nombreArchivo)
     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    i = 1
-    while i !=  largoLista(listaArchivo) - 2:
+    i = largoLista(listaArchivo) -1
+
+    while i != 0:
         contenido = []
-        j = 0
-        while j !=  largoLista(listaArchivo[0]) - 2:
-            if listaArchivo[i][j] != "0":
+        j = largoLista(listaArchivo[0]) - 1
+        while j != 0:
+            if verificarElementos(listaArchivo[i][j]) == False:
                 contenido += [listaArchivo[i][j]]
             if contenido != []:
                 if largoLista(contenido) == 10:
+                    print(i, "xd")
                     return i
-            j += 1
-        i += 1
+            j -= 1
+        i -= 1
     return False
 
 def acomodarFilasArchivo(nombreArchivo, fila):
     listaArchivo = archivoALista(nombreArchivo)
     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    reubicar = retornarFilaArchivoAscendente(nombreArchivo)
-    filaCeros = listaArchivo[fila]
-    contenido = listaArchivo[reubicar]
-    ultimaFila = listaArchivo[fila-1]
     nuevoContenido = []
     for i in range(largoLista(listaArchivo)):
-        if i == reubicar + 1:
-            nuevoContenido += [contenido]
-        elif i == fila:
-            nuevoContenido += [ultimaFila]
-        elif i == reubicar or i == fila - 1:
-            nuevoContenido += [filaCeros]
+        if i == fila:
+            print([listaArchivo[i],listaArchivo[i]])
+            nuevoContenido += [listaArchivo[i],listaArchivo[i]]
         else:
             nuevoContenido += [listaArchivo[i]]
     return nuevoContenido
 
-eliminarFilaArchivo("juego01.txt")
+
 def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
     global matrizIdentificadores
     nuevaMatriz = []
@@ -1448,53 +1440,58 @@ def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
                 else:
                     vector += [matrizIdentificadores[i][j]]
             
-        print(vector)
         nuevaMatriz += [vector]
-    print('')
-    
     matrizIdentificadores = nuevaMatriz
 
 def eliminarFilaMatrizIdentificadores(nombreArchivo, x):
     global matrizIdentificadores
     matrizIdentificadores = x
+
     fila = retornarFilaArchivoDescendente(nombreArchivo)
     if fila != False: # para la fubncion de validacion
         nuevoContenido = []
         for i in range(largoLista(matrizIdentificadores)):
             contenido = []
             for j in range(largoLista(matrizIdentificadores[0])):
-                if i == fila:
-                    if j != 0 and j != 11:
-                        contenido += ["0"]
-                    else:
-                       contenido += [matrizIdentificadores[i][j]]
-                else:
+                if i != fila:
                     contenido += [matrizIdentificadores[i][j]]
-            nuevoContenido += [contenido]
-
+            if contenido != []:
+                nuevoContenido += [contenido]
         matrizIdentificadores = nuevoContenido
-        acomodarFilasMatrizIdentificadores(nombreArchivo,fila)
+        fila = reubicarFilaMatrizIdentificadores()
+        acomodarFilasMatrizIdentificadores(fila)
+        reubicarFilaMatrizIdentificadores()
         return True    
 
-
-def acomodarFilasMatrizIdentificadores(nombreArchivo,fila):
+def reubicarFilaMatrizIdentificadores():
     global matrizIdentificadores
-    reubicar = retornarFilaArchivoAscendente(nombreArchivo)
+    i = largoLista(matrizIdentificadores) -1
+
+    while i != 0:
+        contenido = []
+        j = largoLista(matrizIdentificadores[0]) - 1
+        while j != 0:
+            if verificarElementos(matrizIdentificadores[i][j]) == False and not isinstance(matrizIdentificadores[i][j], int):
+                contenido += [matrizIdentificadores[i][j]]
+            if contenido != []:
+                if largoLista(contenido) == 10:
+                    return i
+            j -= 1
+        i -= 1
+    return False
+
+
+
+def acomodarFilasMatrizIdentificadores(fila):
+    global matrizIdentificadores
     filaCeros = matrizIdentificadores[fila]
-    contenido = matrizIdentificadores[reubicar]
-    ultimaFila = matrizIdentificadores[fila-1]
     nuevoContenido = []
     for i in range(largoLista(matrizIdentificadores)):
-        if i == reubicar + 1:
-            nuevoContenido += [contenido]
-        elif i == fila:
-            nuevoContenido += [ultimaFila]
-        elif i == reubicar or i == fila - 1:
-            nuevoContenido += [filaCeros]
+        if i == fila:
+            nuevoContenido += [matrizIdentificadores[i],matrizIdentificadores[i]]
         else:
             nuevoContenido += [matrizIdentificadores[i]]
 
-        print(matrizIdentificadores[i])
     matrizIdentificadores = nuevoContenido
 
 
@@ -1517,29 +1514,6 @@ def refrescarPantallaTetris(canvasPantalla):
                 print(matrizIdentificadores[i][j])
                 canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2)
 
-eliminarFilaMatrizIdentificadores("juego01.txt",[
-['+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', 273, 277, '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', 274, 278, '+'],
-['+', '0', '0', '0', '0', '0', '0', '0', '0', 275, 279, '+'],
-['+', 265, 266, 267, 268, 269, 270, 271, 272, 276, 280, '+'],
-['+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+']])
 
 def ventanaTetris(ventana, nombreArchivo):
     global listaTetrominos, tetromino, matrizIdentificadores
@@ -1622,8 +1596,30 @@ Restricciones: Las necesarias para el correcto funcionamiento
 """
 def salir(ventana):
     ventana.destroy()
-
-#ventanaTetris(1, "juego01.txt")
+#eliminarFilaMatrizIdentificadores("juego01.txt",[
+# ['+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', 273, 277, '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', 274, 278, '+'],
+# ['+', '0', '0', '0', '0', '0', '0', '0', '0', 275, 279, '+'],
+# ['+', 265, 266, 267, 268, 269, 270, 271, 272, 276, 280, '+'],#
+# ['+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+', '+']])
+ventanaTetris(1, "juego01.txt")
 # pasar nombre aerhccovp como parametro
 # def invetirMatrizArchivo(nombreArchivo):
 #     listaArchivo = archivoALista(nombreArchivo)
