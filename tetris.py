@@ -805,7 +805,7 @@ def ventanaTetris(ventana, nombreArchivo):
     canvasDemostrativo.place(x=305, y=567)
 
     coordenadas = posicionImagenes()
-    listaTetrominos = [7]#crearListaTetrominos()
+    listaTetrominos = crearListaTetrominos()
 
     """
     Nombre: crearListaImagenesBloque
@@ -1209,7 +1209,13 @@ def ventanaTetris(ventana, nombreArchivo):
                 return True
         return False
     
-    
+
+    """
+    Nombre: rotar
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotar
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotar():
         if listaTetrominos[0] == 2:
             return rotarI()
@@ -1225,6 +1231,12 @@ def ventanaTetris(ventana, nombreArchivo):
             return rotarU()
     
 
+    """
+    Nombre: rotarI
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotarI():
         global tetromino, rotaciones
         if rotaciones == 1:
@@ -1249,6 +1261,13 @@ def ventanaTetris(ventana, nombreArchivo):
         else:
             rotaciones = 1
 
+
+    """
+    Nombre: rotarL
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotarL():
         global tetromino, rotaciones
         if rotaciones == 1:
@@ -1274,6 +1293,12 @@ def ventanaTetris(ventana, nombreArchivo):
             rotaciones = 1
 
 
+    """
+    Nombre: rotarJ
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotarJ():
         global tetromino, rotaciones
         if rotaciones == 1:
@@ -1299,6 +1324,12 @@ def ventanaTetris(ventana, nombreArchivo):
             rotaciones = 1
 
 
+    """
+    Nombre: rotarT
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotarT():
         global tetromino, rotaciones
         if rotaciones == 1:
@@ -1323,6 +1354,13 @@ def ventanaTetris(ventana, nombreArchivo):
         else:
             rotaciones = 1
 
+
+    """
+    Nombre: rotarZ
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotarZ():
         global tetromino, rotaciones
         if rotaciones == 1:
@@ -1347,26 +1385,28 @@ def ventanaTetris(ventana, nombreArchivo):
         else:
             rotaciones = 1
 
+
+    """
+    Nombre: rotarU
+    Entrada: ninguna
+    Salida: Retorna la pieza a rotada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
     def rotarU():
         global tetromino, rotaciones
         print(tetromino)
         if rotaciones == 1:
-                #             x2 += 1
-    #             x4 = x2
-
-    #             y1 = y3
-    #             y2 = y3
-            posicionX = [tetromino[0][0]+ 1, tetromino[0][1] + 1, tetromino[0][2] + 1, tetromino[0][1] + 1, tetromino[0][4]]
-            posicionY = [tetromino[1][2], tetromino[1][2], tetromino[1][2], tetromino[1][3] - 1, tetromino[1][4] + 1]
+            posicionX = [tetromino[0][0], tetromino[0][1] + 1, tetromino[0][2], tetromino[0][1] + 1, tetromino[0][4]]
+            posicionY = [tetromino[1][2], tetromino[1][2], tetromino[1][2], tetromino[1][3], tetromino[1][4]]
         elif rotaciones == 2:
-            posicionX = [tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0] + 1, tetromino[0][0] + 2, tetromino[0][4]]
-            posicionY = [tetromino[1][0], tetromino[1][0], tetromino[1][0] - 1, tetromino[1][0] - 1, tetromino[1][4]]
-        elif rotaciones == 3:     
-            posicionX = [tetromino[0][0] + 1, tetromino[0][1], tetromino[0][2], tetromino[0][2] + 1, tetromino[0][4]]
-            posicionY = [tetromino[1][1] + 1, tetromino[1][1] + 1, tetromino[1][2], tetromino[1][2], tetromino[1][4]]
+            posicionX = [tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0], tetromino[0][0] + 1, tetromino[0][4]]
+            posicionY = [tetromino[1][0] - 1, tetromino[1][0] - 1, tetromino[1][2], tetromino[1][3], tetromino[1][4]]
+        elif rotaciones == 3:    
+            posicionX = [tetromino[0][0], tetromino[0][1], tetromino[0][2], tetromino[0][1] + 1, tetromino[0][1] + 1]
+            posicionY = [tetromino[1][0], tetromino[1][2], tetromino[1][2], tetromino[1][2] - 1, tetromino[1][2]]
         else:
-            posicionX = [tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0] + 1, tetromino[0][0] + 2, tetromino[0][4]]
-            posicionY = [tetromino[1][0], tetromino[1][0], tetromino[1][0] - 1, tetromino[1][0] - 1, tetromino[1][4]]
+            posicionX = [tetromino[0][0], tetromino[0][1], tetromino[0][1], tetromino[0][1], tetromino[0][0]]
+            posicionY = [tetromino[1][0], tetromino[1][0], tetromino[1][0] + 1, tetromino[1][0] + 2, tetromino[1][0] + 2]
             rotaciones = 0
         verificador = [posicionX] + [posicionY] + tetromino[2:]
         print(verificador)
@@ -1376,6 +1416,8 @@ def ventanaTetris(ventana, nombreArchivo):
             return imprimirMovimientoAux(tetromino)
         else:
             rotaciones = 1
+
+
     consola.bind("<KeyPress-w>", lambda evento: rotar())
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo())
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha()) 
@@ -1384,177 +1426,6 @@ def ventanaTetris(ventana, nombreArchivo):
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
        
-    #     elif tetromino[0] == 7:
-    #         if rotaciones == 1:
-    #             x2 += 1
-    #             x4 = x2
-
-    #             y1 = y3
-    #             y2 = y3
-                
-    #             if validarMovimiento(nombreArchivo,tetromino):
-    #                 canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
-    #                 canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
-    #                 canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
-    #                 canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-    #                 canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
-    #             else:
-    #                 x1 = posicionesX[0]
-    #                 x2 = posicionesX[1]
-    #                 x3 = posicionesX[2]
-    #                 x4 = posicionesX[3]
-    #                 x5 = posicionesX[4]
-
-    #                 y1 = posicionesY[0]
-    #                 y2 = posicionesY[1]
-    #                 y3 = posicionesY[2]
-    #                 y4 = posicionesY[3]
-    #                 y5 = posicionesY[4]
-    #                 rotaciones = 0
-
-    #         elif rotaciones == 2:
-    #             x3 = x1
-    #             x2 = x3 + 1
-    #             x4 = x2
-
-    #             y1 -= 1
-    #             y2 = y1
-
-
-    #             if validarMovimiento(nombreArchivo,tetromino):
-    #                 canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
-    #                 canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
-    #                 canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
-    #                 canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-    #                 canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
-    #             else:
-    #                 x1 = posicionesX[0]
-    #                 x2 = posicionesX[1]
-    #                 x3 = posicionesX[2]
-    #                 x4 = posicionesX[3]
-    #                 x5 = posicionesX[4]
-
-    #                 y1 = posicionesY[0]
-    #                 y2 = posicionesY[1]
-    #                 y3 = posicionesY[2]
-    #                 y4 = posicionesY[3]
-    #                 y5 = posicionesY[4]
-    #                 rotaciones = 0
-    #         elif rotaciones == 3:
-    #             x5 = x2 + 1
-    #             x4 = x5
-
-    #             y2 = y3
-    #             y5 = y3
-    #             y4 = y5 - 1
-    #             if validarMovimiento(nombreArchivo,tetromino):
-    #                 canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
-    #                 canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
-    #                 canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
-    #                 canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-    #                 canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
-    #             else:
-    #                 x1 = posicionesX[0]
-    #                 x2 = posicionesX[1]
-    #                 x3 = posicionesX[2]
-    #                 x4 = posicionesX[3]
-    #                 x5 = posicionesX[4]
-
-    #                 y1 = posicionesY[0]
-    #                 y2 = posicionesY[1]
-    #                 y3 = posicionesY[2]
-    #                 y4 = posicionesY[3]
-    #                 y5 = posicionesY[4]
-    #                 rotaciones = 0
-    #         else:
-    #             x3 = x2
-    #             x4 = x2
-    #             x5 = x1
-
-    #             y2 = y1
-    #             y3 = y2 + 1
-    #             y4 = y3 + 1
-    #             y5 = y4
-                
-    #             if validarMovimiento(nombreArchivo,tetromino):
-    #                 canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
-    #                 canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
-    #                 canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
-    #                 canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
-    #                 canvasPantalla.coords(tetromino[5], coordenadas[x5][y5][0] / 2, coordenadas[x5][y5][1] / 2)
-    #             else:
-    #                 x1 = posicionesX[0]
-    #                 x2 = posicionesX[1]
-    #                 x3 = posicionesX[2]
-    #                 x4 = posicionesX[3]
-    #                 x5 = posicionesX[4]
-
-    #                 y1 = posicionesY[0]
-    #                 y2 = posicionesY[1]
-    #                 y3 = posicionesY[2]
-    #                 y4 = posicionesY[3]
-    #                 y5 = posicionesY[4]
-
-    #             rotaciones = 0
-    #     rotaciones += 1
-
-
-    # def  validarMovimiento(tetromino):# mejorar
-    #     [tetromino[0][0] + 1, tetromino[0][1] + 1, tetromino[0][2] + 1, tetromino[0][3] + 1, tetromino[0][4] + 1]
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
-    #         for i in range(largoLista(listaArchivo)):
-    #             for j in range(largoLista(listaArchivo[0])):
-    #                 if i != 0:
-    #                     if i == tetromino[0][0] and j == tetromino[1][0]:
-    #                         if verificarElementos(listaArchivo[i][j]):
-    #                             return False
-    #                     elif i == tetromino[0][1] and j == tetromino[1][1]:
-    #                         if verificarElementos(listaArchivo[i][j]):
-    #                             return False
-    #                     elif i == tetromino[0][2] and j == tetromino[1][2]:
-    #                         if verificarElementos(listaArchivo[i][j]):
-    #                             return False
-    #                     else:
-    #                         if  i == tetromino[0][3] and j == tetromino[1][3]:
-    #                             if verificarElementos(listaArchivo[i][j]):
-    #                                 return False
-    #         return True
-    #     else:
-    #         return validarMovimientoAux(tetromino)
-    
-    # def validarMovimientoAux(tetromino):
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     for i in range(largoLista(listaArchivo)):
-    #         for j in range(largoLista(listaArchivo[0])):
-    #             if i != 0:
-    #                 if  i == tetromino[0][0] and j == tetromino[1][0]:
-    #                     if verificarElementos(listaArchivo[i][j]):
-    #                         return False
-    #                 elif i == tetromino[0][1] and j == tetromino[1][1]:
-    #                     if verificarElementos(listaArchivo[i][j]):
-    #                         return False
-    #                 elif i == tetromino[0][2] and j == tetromino[1][2]:
-    #                     if verificarElementos(listaArchivo[i][j]):
-    #                         return False
-    #                 elif  i == tetromino[0][3] and j == tetromino[1][3]:
-    #                     if verificarElementos(listaArchivo[i][j]):
-    #                         return False
-    #                 else:
-    #                     if  i == tetromino[0][4] and j == tetromino[1][4]:
-    #                         if verificarElementos(listaArchivo[i][j]):
-    #                             return False
-    #     return True
-
-    # def verificarElementos(elemento):
-    #     listaElementos = ["+","1","2","3","4","5","6","7","8"]
-    #     for i in listaElementos:
-    #         if i == elemento:
-    #             return True
-    #     return False
-
 
     # def escribirNuevaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5):
     #     listaArchivo = archivoALista(nombreArchivo)
