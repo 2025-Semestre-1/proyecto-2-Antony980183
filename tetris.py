@@ -374,6 +374,13 @@ def ventanaInformacion(ventana):
     imagenComoSelecconarObstaculos = ImageTk.PhotoImage(imagenComoSelecconarObstaculos)
     canvasImagenes.create_image(465, 0, anchor="nw", image=imagenComoSelecconarObstaculos)
 
+    imagenCreditos = Image.open("creditos.png")
+    imagenCreditos = imagenCreditos.resize((900,432))
+    imagenCreditos = ImageTk.PhotoImage(imagenCreditos)
+    canvasImagenes.create_image(0, 366, anchor="nw", image=imagenCreditos)
+
+
+
     imagenVolver = Image.open("volver.png")
     imagenVolver = imagenVolver.resize((120,120))
     imagenVolver = ImageTk.PhotoImage(imagenVolver)
@@ -412,24 +419,27 @@ def ventanaEstadisticas(ventana):
     canvasGameboy.pack(fill="both", expand=True)
     canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
    
-    framePantalla = Frame(canvasGameboy, bg="lightblue", bd= 5,relief="ridge",width=470, height=368)
+    framePantalla = Frame(canvasGameboy, bg="gray26", bd= 10,relief="ridge",width=470, height=368)
     framePantalla.pack_propagate(False)
-    framePantalla.place(x=67, y=85)
+    framePantalla.place(x=67, y=80)
 
-    listaMejoresJugadoes = [[1, "AntonyMaria", 1500], [2, "Carlos Rojas", 1400], [3, "María", 1300],
-               [4, "Antony", 1500], [5, "Carlos", 1400], [6, "María", 1300],
-               [7, "Antony", 1500], [8, "Carlos", 1400], [8, "María", 1300],
-               [10,"PEpe",100]]
-
-    Label(framePantalla, text="Puesto", font=("Arial", 15, "bold"),bg="lightblue", relief="ridge").grid(row=0,column=0, padx=28, pady=5)
-    Label(framePantalla, text="Jugador", font=("Arial", 15, "bold"),bg="lightblue").grid(row=0,column=1, padx=28, pady=5)
-    Label(framePantalla, text="Puntaje Total", font=("Arial", 15, "bold"),bg="lightblue").grid(row=0,column=2, padx=28, pady=5)
+    listaMejoresJugadores = []
+    for i in range(10):
+        contenido = []
+        for j in range(3):
+            contenido += ["vacio!"]
+        listaMejoresJugadores += [contenido]
 
 
-    for i  in range(1,len(lista)):
-        Label(framePantalla, text=lista[i][0],font=("Arial",13,"bold")).grid(row=i, column=0, padx=10, pady=5)
-        Label(framePantalla, text=lista[i][1],font=("Arial",13,"bold")).grid(row=i, column=1, padx=10, pady=5)
-        Label(framePantalla, text=lista[i][2],font=("Arial",13,"bold")).grid(row=i, column=2, padx=10, pady=5)
+    Label(framePantalla, text="Puesto", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=24, pady=3)
+    Label(framePantalla, text="Jugador", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=1, padx=24, pady=3)
+    Label(framePantalla, text="Puntaje Total", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=2, padx=24, pady=3)
+
+
+    for i  in range(largoLista(listaMejoresJugadores)):
+        Label(framePantalla, text=listaMejoresJugadores[i][0], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=0, padx=10, pady=5)
+        Label(framePantalla, text=listaMejoresJugadores[i][1], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=1, padx=10, pady=5)
+        Label(framePantalla, text=listaMejoresJugadores[i][2], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=2, padx=10, pady=5)
 
 
 
