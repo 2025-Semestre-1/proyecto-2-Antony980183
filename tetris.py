@@ -786,6 +786,9 @@ def ventanaTetris(ventana, nombreArchivo):
     canvasDemostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
     canvasDemostrativo.place(x=305, y=567)
 
+    #globales
+    coordenadas = posicionImagenes()
+    listaTetrominos = crearListaTetrominos()
 
     """
     Nombre: crearListaImagenesBloque
@@ -845,10 +848,7 @@ def ventanaTetris(ventana, nombreArchivo):
                 elif listaArchivo[i][j] == "8": 
                      canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[7])
     imprimirArchivoTetris()
-    matrizIdentificadores = crearMatriz()
-    coordenadas = posicionImagenes()
-    posicionesX = []
-    posicionesY = []
+    # matrizIdentificadores = crearMatriz()
 
 
     """
@@ -863,16 +863,15 @@ def ventanaTetris(ventana, nombreArchivo):
             listatetrominos += [random.randint(1,8)]
         return listatetrominos
     
-    listaTetrominos = crearListaTetrominos()
 
-    consola.bind("<KeyPress-w>", lambda evento: rotar())
-    consola.bind("<KeyPress-s>", lambda evento: moverAbajo(canvasPantalla, listaImagenesBloques, nombreArchivo, consola))
-    consola.bind("<KeyPress-d>", lambda evento: moverDerecha(canvasPantalla, nombreArchivo)) 
-    consola.bind("<KeyPress-a>", lambda evento: moverIzquierda(canvasPantalla, nombreArchivo))
-
-
+    """
+    Nombre: crearTetromino
+    Entrada: ninguna
+    Salida: Una lista tetromino
+    Restricciones: LAs necesarias para el correcto funcionamiento
+    """
     def crearTetromino():
-        if 1 == 1:
+        if listaTetrominos[0] == 1:
             return crearTetrominoO()
         elif listaTetrominos[0] == 2:
             return crearTetrominoI()
@@ -888,6 +887,14 @@ def ventanaTetris(ventana, nombreArchivo):
             return crearTetrominoU()
         else:
             return crearTetrominoCruz()
+        
+
+    """
+    Nombre: crearTetrominoO
+    Entrada: ninguna
+    Salida: El tetromino 'O' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """    
     def crearTetrominoO():
         bloque1 = canvasPantalla.create_image(coordenadas[1][5][0], coordenadas[1][5][1], anchor="center", image=listaImagenesBloques[0])
         bloque2 = canvasPantalla.create_image(coordenadas[1][6][0], coordenadas[1][6][1], anchor="center", image=listaImagenesBloques[0])
@@ -897,8 +904,15 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [1, 1, 2, 2, 0]
         posicionesY = [5, 6, 5, 6, 0]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4]
-        print(tetromino)
         return tetromino
+    
+    
+    """
+    Nombre: crearTetrominoI
+    Entrada: ninguna
+    Salida: El tetromino 'I' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """      
     def crearTetrominoI():
         bloque1 = canvasPantalla.create_image(coordenadas[1][4][0], coordenadas[1][4][1], anchor="center", image=listaImagenesBloques[1])
         bloque2 = canvasPantalla.create_image(coordenadas[1][5][0], coordenadas[1][5][1], anchor="center", image=listaImagenesBloques[1])
@@ -908,8 +922,15 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [1, 1, 1, 1, 0]
         posicionesY = [4, 5, 6, 7, 0]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4]
-        print(tetromino)
         return tetromino
+    
+
+    """
+    Nombre: crearTetrominoL
+    Entrada: ninguna
+    Salida: El tetromino 'L' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """     
     def crearTetrominoL():
         bloque1 = canvasPantalla.create_image(coordenadas[2][4][0], coordenadas[2][4][1], anchor="center", image=listaImagenesBloques[2])
         bloque2 = canvasPantalla.create_image(coordenadas[2][5][0], coordenadas[2][5][1], anchor="center", image=listaImagenesBloques[2])
@@ -919,8 +940,15 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [2, 2, 2, 1, 0]
         posicionesY = [4, 5, 6, 6, 0]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4]
-        print(tetromino)
         return tetromino
+    
+
+    """
+    Nombre: crearTetrominoJ
+    Entrada: ninguna
+    Salida: El tetromino 'J' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """      
     def crearTetrominoJ():
         bloque1 = canvasPantalla.create_image(coordenadas[1][4][0], coordenadas[1][4][1], anchor="center", image=listaImagenesBloques[3])
         bloque2 = canvasPantalla.create_image(coordenadas[2][4][0], coordenadas[2][4][1], anchor="center", image=listaImagenesBloques[3])
@@ -930,8 +958,15 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [1, 2, 2, 2, 0]
         posicionesY = [4, 4, 5, 6, 0]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4]
-        print(tetromino)
         return tetromino       
+    
+
+    """
+    Nombre: crearTetrominoT
+    Entrada: ninguna
+    Salida: El tetromino 'T' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """  
     def crearTetrominoT():
         bloque1 = canvasPantalla.create_image(coordenadas[2][4][0], coordenadas[2][4][1], anchor="center", image=listaImagenesBloques[4])
         bloque2 = canvasPantalla.create_image(coordenadas[2][5][0], coordenadas[2][5][1], anchor="center", image=listaImagenesBloques[4])
@@ -941,8 +976,15 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [2, 2, 2, 1, 0]
         posicionesY = [4, 5, 6, 5, 0]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4]
-        print(tetromino)
         return tetromino
+    
+
+    """
+    Nombre: crearTetrominoZ
+    Entrada: ninguna
+    Salida: El tetromino 'Z' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """  
     def crearTetrominoZ():
         bloque1 = canvasPantalla.create_image(coordenadas[1][5][0], coordenadas[1][5][1], anchor="center", image=listaImagenesBloques[5])
         bloque2 = canvasPantalla.create_image(coordenadas[1][6][0], coordenadas[1][6][1], anchor="center", image=listaImagenesBloques[5])
@@ -952,27 +994,34 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [1, 1, 2, 2, 0]
         posicionesY = [5, 6, 6, 7, 0]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4]
-        print(tetromino)
         return tetromino
-    def crearTetrominoU():
-        bloque1 = canvasPantalla.create_image(coordenadas[1][4][0]/ 2, coordenadas[1][4][1] / 2, anchor="center", image=listaImagenesBloques[6])
-        bloque2 = canvasPantalla.create_image(coordenadas[2][4][0]/ 2, coordenadas[2][4][1] / 2, anchor="center", image=listaImagenesBloques[6])
-        bloque3 = canvasPantalla.create_image(coordenadas[2][5][0]/ 2, coordenadas[2][5][1] / 2, anchor="center", image=listaImagenesBloques[6])
-        bloque4 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=listaImagenesBloques[6])
-        bloque5 = canvasPantalla.create_image(coordenadas[1][6][0]/ 2, coordenadas[1][6][1] / 2, anchor="center", image=listaImagenesBloques[6])
+    
 
-        x1 = 1
-        x2 = 2
-        x3 = 2
-        x4 = 2
-        x5 = 1
+    """
+    Nombre: crearTetrominoU
+    Entrada: ninguna
+    Salida: El tetromino 'U' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """  
+    def crearTetrominoU():
+        bloque1 = canvasPantalla.create_image(coordenadas[1][4][0], coordenadas[1][4][1], anchor="center", image=listaImagenesBloques[6])
+        bloque2 = canvasPantalla.create_image(coordenadas[2][4][0], coordenadas[2][4][1], anchor="center", image=listaImagenesBloques[6])
+        bloque3 = canvasPantalla.create_image(coordenadas[2][5][0], coordenadas[2][5][1], anchor="center", image=listaImagenesBloques[6])
+        bloque4 = canvasPantalla.create_image(coordenadas[2][6][0], coordenadas[2][6][1], anchor="center", image=listaImagenesBloques[6])
+        bloque5 = canvasPantalla.create_image(coordenadas[1][6][0], coordenadas[1][6][1], anchor="center", image=listaImagenesBloques[6])
+
+        posicionesX = [1, 2, 2, 2, 1]
+        posicionesY = [4, 4, 5, 6, 6]
+        tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4, bloque5]
+        return tetromino
     
-    
-        y1 = 4
-        y2 = 4
-        y3 = 5
-        y4 = 6
-        y5 = 6
+
+    """
+    Nombre: crearTetrominoCruz
+    Entrada: ninguna
+    Salida: El tetromino '+' mostrado en pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """  
     def crearTetrominoCruz():
         bloque1 = canvasPantalla.create_image(coordenadas[2][4][0]/ 2, coordenadas[2][4][1] / 2, anchor="center", image=listaImagenesBloques[7])
         bloque2 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=listaImagenesBloques[7])
@@ -980,27 +1029,19 @@ def ventanaTetris(ventana, nombreArchivo):
         bloque4 = canvasPantalla.create_image(coordenadas[3][5][0]/ 2, coordenadas[3][5][1] / 2, anchor="center", image=listaImagenesBloques[7])
         bloque5 = canvasPantalla.create_image(coordenadas[2][6][0]/ 2, coordenadas[2][6][1] / 2, anchor="center", image=listaImagenesBloques[7])
 
-        x1 = 2
-        x2 = 1
-        x3 = 2
-        x4 = 3
-        x5 = 2
-    
-    
-        y1 = 4
-        y2 = 5
-        y3 = 5
-        y4 = 5
-        y5 = 6
-    # if tetromino == 7 or tetromino == 8:
-    #     return  [tetromino, bloque1, bloque2, bloque3, bloque4, bloque5]
-    # else:
-    #     return  [tetromino, bloque1, bloque2, bloque3, bloque4]
+        posicionesX = [2, 1, 2, 3, 2]
+        posicionesY = [4, 5, 5, 5, 6]
+        tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4, bloque5]
+        return tetromino
 
 
-
+    consola.bind("<KeyPress-w>", lambda evento: rotar())
+    consola.bind("<KeyPress-s>", lambda evento: moverAbajo())
+    consola.bind("<KeyPress-d>", lambda evento: moverDerecha()) 
+    consola.bind("<KeyPress-a>", lambda evento: moverIzquierda())
  #escribirNuevaPosicionArchivo("juego01.txt", tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
-    tetromino = crearTetromino()
+    tetrmino = crearTetromino()
+    print(tetrmino)
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
 
