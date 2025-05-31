@@ -204,6 +204,7 @@ Salida: La ventana inicial, iniciara el juego o finalizara el programa
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def ventanaInicio():
+    global imagenInicio
     ventanaInicial = Tk()   
     ventanaInicial.geometry("900x700")
     ventanaInicial.resizable(0,0)
@@ -211,11 +212,11 @@ def ventanaInicio():
     
     imagenInicio = Image.open("fondoInicio.png")
     imagenInicio = imagenInicio.resize((900,700))
-    imagenInicioTk = ImageTk.PhotoImage(imagenInicio)
+    imagenInicio = ImageTk.PhotoImage(imagenInicio)
 
     canvasInicio = Canvas(ventanaInicial, width=900, height=700)
     canvasInicio.pack(fill="both", expand=True)
-    canvasInicio.create_image(0, 0, anchor="nw", image=imagenInicioTk)
+    canvasInicio.create_image(0, 0, anchor="nw", image=imagenInicio)
 
     imagenJugar = Image.open("jugar.png")
     imagenJugar = imagenJugar.resize((120,120))
@@ -269,13 +270,17 @@ def ventanaInicio():
 
     canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
     canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
+    canvasInicio.tag_bind(botonCargar, "<Button-1>", lambda evento: ventanaJuegosGuardados())
 
 
     canvasInicio.tag_bind(botonEstadisticas, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonEstadisticas, imagenEstadisticasPresionado))
     canvasInicio.tag_bind(botonEstadisticas, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonEstadisticas, imagenEstadisticas))
+    canvasInicio.tag_bind(botonEstadisticas, "<Button-1>", lambda evento: ventanaEstadisticas())
+
 
     canvasInicio.tag_bind(botonInformacion, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonInformacion, imagenInformacionPresionado))
     canvasInicio.tag_bind(botonInformacion, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonInformacion, imagenInformacion))
+    canvasInicio.tag_bind(botonInformacion, "<Button-1>", lambda evento: ventanaInformacion(ventanaInicial))
 
 
     canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalirPresionado))
@@ -298,7 +303,10 @@ def borrarArchivo(nombreArchivo, ventana):
 
 
 """
-
+Nombre: comoSeleecionar
+Entrada: ventana
+Salida: Una ventana explicando como seleccionar los obstaculos
+Restricciones: Las necesarias para el correcto funcionamiento
 """
 def comoSeleccionar(ventana):
     ventana.destroy()
@@ -341,6 +349,58 @@ def comoSeleccionar(ventana):
     consola.mainloop()
 
 
+"""
+Nombre: ventanaInformacion
+Entrada: ventana
+Salida: Muestra distintas imagenes
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def ventanaInformacion(ventana):
+
+    ventana.destroy()
+
+    ventanaPrincipal = Tk()
+    ventanaPrincipal.geometry("900x800")
+    ventanaPrincipal.resizable(0,0)
+    centrarVentana(ventanaPrincipal)
+
+    canvasImagenes = Canvas(ventanaPrincipal, width=300, height=300, bg='pink')
+    canvasImagenes.pack(fill="both", expand=True)
+
+    imagenComoMoverse = Image.open("comoMoverse.png")
+    imagenComoMoverse = ImageTk.PhotoImage(imagenComoMoverse)
+    canvasImagenes.create_image(0, 0, anchor="nw", image=imagenComoMoverse)
+
+    imagenComoSelecconarObstaculos = Image.open("comoSeleccionarObstaculos.png")
+    imagenComoSelecconarObstaculos = ImageTk.PhotoImage(imagenComoSelecconarObstaculos)
+    canvasImagenes.create_image(465, 0, anchor="nw", image=imagenComoSelecconarObstaculos)
+
+    imagenVolver = Image.open("volver.png")
+    imagenVolver = imagenVolver.resize((120,120))
+    imagenVolver = ImageTk.PhotoImage(imagenVolver)
+
+    imagenVolverPresionado = Image.open("volverPresionado.png")
+    imagenVolverPresionado = imagenVolverPresionado.resize((120,120))
+    imagenVolverPresionado = ImageTk.PhotoImage(imagenVolverPresionado)
+
+    botonVolver = canvasImagenes.create_image(780,680, anchor="nw", image=imagenVolver)
+
+    canvasImagenes.tag_bind(botonVolver, "<Enter>", lambda evento: sobreBoton(canvasImagenes, botonVolver, imagenVolverPresionado))
+    canvasImagenes.tag_bind(botonVolver, "<Leave>", lambda evento: sobreBoton(canvasImagenes, botonVolver, imagenVolver))
+    canvasImagenes.tag_bind(botonVolver, "<Button-1>", lambda evento: volverInicio(ventanaPrincipal))
+
+    ventanaPrincipal.mainloop()
+
+
+"""
+Nombre: volverInicio
+Entrada: ventana
+Salida: Retorna la ventana principal
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def volverInicio(ventana):
+    ventana.destroy()
+    return ventanaInicio()
 
 
 
