@@ -55,12 +55,9 @@ def crearArchivoJuegoXXAux(identidicador):
         juegoXX = f"juego0{str(identidicador)}.txt"
     else: 
         juegoXX = f"juego{str(identidicador)}.txt"
-    
-    print(juegoXX)
 
     archivo = open(juegoXX, "x")
     archivo.close()
-
     return juegoXX
 
 
@@ -259,7 +256,7 @@ def ventanaInicio():
     imagenSalirPresionado = Image.open("salirPresionado.png")
     imagenSalirPresionado = imagenSalirPresionado.resize((120,120))
     imagenSalirPresionado = ImageTk.PhotoImage(imagenSalirPresionado)
-     
+
     botonJugar = canvasInicio.create_image(30, 15, anchor="nw", image=imagenJugar)
     botonCargar =  canvasInicio.create_image(30, 150, anchor="nw", image=imagenCargar)
     botonEstadisticas =  canvasInicio.create_image(30, 285, anchor="nw", image=imagenEstadisticas) 
@@ -268,7 +265,7 @@ def ventanaInicio():
 
     canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugarPresionado))
     canvasInicio.tag_bind(botonJugar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugar))
-    canvasInicio.tag_bind(botonJugar, "<Button-1>", lambda evento: interfaz(ventanaInicial))
+    canvasInicio.tag_bind(botonJugar, "<Button-1>", lambda evento: comoSeleccionar(ventanaInicial))
 
     canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
     canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
@@ -298,6 +295,53 @@ Restricciones: Las necesarias para el correcto funcionamiento
 def borrarArchivo(nombreArchivo, ventana):
     os.remove(nombreArchivo)
     ventana.destroy()
+
+
+"""
+
+"""
+def comoSeleccionar(ventana):
+    ventana.destroy()
+
+    consola = Tk()
+    consola.geometry("600x800")
+    consola.resizable(0,0)
+    centrarVentana(consola)
+
+    imagenGameboy = Image.open("gameboyBase.png")
+    imagenGameboy = ImageTk.PhotoImage(imagenGameboy)
+
+    canvasGameboy = Canvas(consola, width=300, height=300)
+    canvasGameboy.pack(fill="both", expand=True)
+    canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
+
+    canvasPantalla = Canvas(canvasGameboy, width=465, height=366)
+    canvasPantalla.place(x=67, y=85)
+
+    imagenSeleccionObstaculo = Image.open("comoSeleccionarObstaculos.png")
+    imagenSeleccionObstaculo = ImageTk.PhotoImage(imagenSeleccionObstaculo)
+    canvasPantalla.create_image(0, 0, anchor="nw", image=imagenSeleccionObstaculo)
+
+    imagenConfirmar = Image.open("confirmar.png")
+    imagenConfirmar = ImageTk.PhotoImage(imagenConfirmar)
+
+    imagenConfirmarPresionado = Image.open("confirmarPresionado.png")
+    imagenConfirmarPresionado = ImageTk.PhotoImage(imagenConfirmarPresionado)
+
+    canvasConfirmacion = Canvas(canvasGameboy, width=235, height=178)
+    canvasConfirmacion.place(x=305, y=567)
+
+    
+    botonConfirmar = canvasConfirmacion.create_image(0, 0, anchor="nw", image=imagenConfirmar)
+
+    canvasConfirmacion.tag_bind(botonConfirmar, "<Enter>", lambda evento: sobreBoton(canvasConfirmacion, botonConfirmar, imagenConfirmarPresionado))
+    canvasConfirmacion.tag_bind(botonConfirmar, "<Leave>", lambda evento: sobreBoton(canvasConfirmacion, botonConfirmar, imagenConfirmar))
+    canvasConfirmacion.tag_bind(botonConfirmar, "<Button-1>", lambda evento: interfaz(consola))
+
+    consola.mainloop()
+
+
+
 
 
 """
@@ -461,7 +505,6 @@ def buscarObstaculo(matrizIdentificadores, elemento):
         for j in range(largoLista(matrizIdentificadores[0])):
             if matrizIdentificadores[i][j] == elemento:
                 coordenadas = [i,j]
-                print(coordenadas)
                 return coordenadas
 
 
@@ -524,16 +567,15 @@ def interfaz(ventana):
     consola.mainloop()
 
 
+    
 """
 Nombre: imprimirArchivoTetris
 Entrada: cnavasPantalla, nombreArchivo
 Salida:
 Restricciones:
 """
-    # imagenFondoTetris = Image.open("fondoTetris.png")
-    # imagenFondoTetris = imagenFondoTetris.resize((465,366))
-    # imagenFondoTetris = ImageTk.PhotoImage(imagenFondoTetris)
-def imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk):
+
+def imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenPared, imagenFondo):
     coordenadas = posicionImagenes()
     listaArchivo = archivoALista(nombreArchivo)
     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
@@ -541,9 +583,9 @@ def imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFo
     for i in range(largoLista(listaArchivo)):
         for j in range(largoLista(listaArchivo[0])):
             if listaArchivo[i][j] == "+":
-                canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenParedTk)
+                canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenPared)
             else:
-                canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenFondoTk)
+                canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenFondo)
 
 
 def crearListatetrominos():
