@@ -430,20 +430,14 @@ def ventanaEstadisticas(ventana):
             contenido += ["vacio!"]
         listaMejoresJugadores += [contenido]
 
-
     Label(framePantalla, text="Puesto", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=24, pady=3)
     Label(framePantalla, text="Jugador", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=1, padx=24, pady=3)
     Label(framePantalla, text="Puntaje Total", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=2, padx=24, pady=3)
-
 
     for i  in range(largoLista(listaMejoresJugadores)):
         Label(framePantalla, text=listaMejoresJugadores[i][0], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=0, padx=10, pady=5)
         Label(framePantalla, text=listaMejoresJugadores[i][1], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=1, padx=10, pady=5)
         Label(framePantalla, text=listaMejoresJugadores[i][2], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=2, padx=10, pady=5)
-
-
-
-
 
     imagenVolver = Image.open("volver.png")
     imagenVolver = ImageTk.PhotoImage(imagenVolver)
@@ -502,10 +496,6 @@ def ventanaJuegosGuardados(ventana):
         for j in range(largoLista(listaMejoresJugadores[0])):
             Button(framePantalla, text=listaMejoresJugadores[i][j], font=("Arial",13,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=j, padx=10, pady=6)
 
-
-
-
-
     imagenVolver = Image.open("volver.png")
     imagenVolver = ImageTk.PhotoImage(imagenVolver)
 
@@ -514,7 +504,6 @@ def ventanaJuegosGuardados(ventana):
 
     canvasVolver = Canvas(canvasGameboy, width=235, height=178)
     canvasVolver.place(x=305, y=567)
-
 
     botonVolver = canvasVolver.create_image(0, 0, anchor="nw", image=imagenVolver)
 
@@ -534,8 +523,7 @@ def volverInicio(ventana):
     ventana.destroy()
     return ventanaInicio()
 
-
-
+#logiva # game
 """
 Nombre: seleccionDeObstaculos
 Entrada: canvasPantalla,imagenPared, imagenFondo, imagenFondoSeleccionado, nombreArchivo
