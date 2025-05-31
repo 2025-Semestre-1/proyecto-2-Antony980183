@@ -490,22 +490,17 @@ def ventanaJuegosGuardados(ventana):
     framePantalla.place(x=67, y=80)
 
     listaMejoresJugadores = []
-    for i in range(10):
+    for i in range(7):
         contenido = []
         for j in range(3):
             contenido += ["vacio!"]
         listaMejoresJugadores += [contenido]
 
-
-    Label(framePantalla, text="Puesto", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=24, pady=3)
-    Label(framePantalla, text="Jugador", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=1, padx=24, pady=3)
-    Label(framePantalla, text="Puntaje Total", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=2, padx=24, pady=3)
-
+    Label(framePantalla, text="Juegos Guardados", font=("Arial", 17, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=111, pady=3,columnspan=3)
 
     for i  in range(largoLista(listaMejoresJugadores)):
-        Label(framePantalla, text=listaMejoresJugadores[i][0], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=0, padx=10, pady=5)
-        Label(framePantalla, text=listaMejoresJugadores[i][1], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=1, padx=10, pady=5)
-        Label(framePantalla, text=listaMejoresJugadores[i][2], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=2, padx=10, pady=5)
+        for j in range(largoLista(listaMejoresJugadores[0])):
+            Button(framePantalla, text=listaMejoresJugadores[i][j], font=("Arial",13,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=j, padx=10, pady=6)
 
 
 
