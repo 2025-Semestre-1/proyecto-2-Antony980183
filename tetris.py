@@ -805,7 +805,7 @@ def ventanaTetris(ventana, nombreArchivo):
     canvasDemostrativo.place(x=305, y=567)
 
     coordenadas = posicionImagenes()
-    listaTetrominos = [6]#crearListaTetrominos()
+    listaTetrominos = [7]#crearListaTetrominos()
 
     """
     Nombre: crearListaImagenesBloque
@@ -1326,17 +1326,41 @@ def ventanaTetris(ventana, nombreArchivo):
     def rotarZ():
         global tetromino, rotaciones
         if rotaciones == 1:
-            posicionX = [tetromino[0][0], tetromino[0][1], tetromino[0][1] + 1, tetromino[0][3], tetromino[0][4]]
-            posicionY = [tetromino[1][0], tetromino[1][1], tetromino[1][1], tetromino[1][3], tetromino[1][4]]
+            posicionX = [tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0] + 1, tetromino[0][0] + 2, tetromino[0][4]]
+            posicionY = [tetromino[1][0], tetromino[1][0], tetromino[1][0] - 1, tetromino[1][0] - 1, tetromino[1][4]]
         elif rotaciones == 2:
-            posicionX = [tetromino[0][0], tetromino[0][1], tetromino[0][2], tetromino[0][1] ,0]
-            posicionY = [tetromino[1][0], tetromino[1][1] , tetromino[1][2], tetromino[1][1] + 1, 0]
-        elif rotaciones == 3:         
-            posicionX = [tetromino[0][1] - 1, tetromino[0][1], tetromino[0][2], tetromino[0][3], tetromino[0][4]]
-            posicionY = [tetromino[1][1], tetromino[1][1], tetromino[1][2], tetromino[1][3], tetromino[1][4]]
+            posicionX = [tetromino[0][0], tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0] + 1 ,0]
+            posicionY = [tetromino[1][0], tetromino[1][0] + 1 , tetromino[1][0] + 1, tetromino[1][0] + 2, 0]
+        elif rotaciones == 3:     
+            posicionX = [tetromino[0][0] + 1, tetromino[0][1], tetromino[0][2], tetromino[0][2] + 1, tetromino[0][4]]
+            posicionY = [tetromino[1][1] + 1, tetromino[1][1] + 1, tetromino[1][2], tetromino[1][2], tetromino[1][4]]
         else:
-            posicionX = [tetromino[0][1], tetromino[0][1], tetromino[0][1], tetromino[0][1] - 1,  0]
-            posicionY = [tetromino[1][1] - 1, tetromino[1][0], tetromino[1][1]+ 1, tetromino[1][1], 0]
+            posicionX = [tetromino[0][1], tetromino[0][1], tetromino[0][2], tetromino[0][2],  0]
+            posicionY = [tetromino[1][1] - 2, tetromino[1][1] - 1, tetromino[1][2], tetromino[1][2] + 1, 0]
+            rotaciones = 0
+        verificador = [posicionX] + [posicionY] + tetromino[2:]
+
+        if validarMovimiento(verificador):
+            tetromino = verificador
+            rotaciones += 1
+            return imprimirMovimiento(tetromino)
+        else:
+            rotaciones = 1
+
+    def rotarU():
+        global tetromino, rotaciones
+        if rotaciones == 1:
+            posicionX = [tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0] + 1, tetromino[0][0] + 2, tetromino[0][4]]
+            posicionY = [tetromino[1][0], tetromino[1][0], tetromino[1][0] - 1, tetromino[1][0] - 1, tetromino[1][4]]
+        elif rotaciones == 2:
+            posicionX = [tetromino[0][0], tetromino[0][0], tetromino[0][0] + 1, tetromino[0][0] + 1 ,0]
+            posicionY = [tetromino[1][0], tetromino[1][0] + 1 , tetromino[1][0] + 1, tetromino[1][0] + 2, 0]
+        elif rotaciones == 3:     
+            posicionX = [tetromino[0][0] + 1, tetromino[0][1], tetromino[0][2], tetromino[0][2] + 1, tetromino[0][4]]
+            posicionY = [tetromino[1][1] + 1, tetromino[1][1] + 1, tetromino[1][2], tetromino[1][2], tetromino[1][4]]
+        else:
+            posicionX = [tetromino[0][1], tetromino[0][1], tetromino[0][2], tetromino[0][2],  0]
+            posicionY = [tetromino[1][1] - 2, tetromino[1][1] - 1, tetromino[1][2], tetromino[1][2] + 1, 0]
             rotaciones = 0
         verificador = [posicionX] + [posicionY] + tetromino[2:]
 
