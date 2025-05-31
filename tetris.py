@@ -770,7 +770,7 @@ Salida: El juego tetris de forma 'funcional'
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def ventanaTetris(ventana, nombreArchivo):
-    global tetromino, listaTetrominos
+    global tetromino, listaTetrominos, rotaciones
 
     ventana.destroy()
     consola = Tk()
@@ -795,7 +795,7 @@ def ventanaTetris(ventana, nombreArchivo):
     imagenFondo = ImageTk.PhotoImage(imagenFondo)
 
     imagenFondoTetris = Image.open("fondoTetris.png")
-    imagenFondoTetris = imagenFondoTetris.resize((446, 358))
+    imagenFondoTetris = imagenFondoTetris.resize((446, 335))
     imagenFondoTetris = ImageTk.PhotoImage(imagenFondoTetris)
 
     canvasPantalla = Canvas(canvasGameboy, width=465, height=366, bg="pink")
@@ -842,7 +842,7 @@ def ventanaTetris(ventana, nombreArchivo):
         coordenadas = posicionImagenes()
         listaArchivo = archivoALista(nombreArchivo)
         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-        canvasPantalla.create_image(19, 8, anchor="nw", image=imagenFondoTetris)
+        canvasPantalla.create_image(19, 16, anchor="nw", image=imagenFondoTetris)
         print(coordenadas[0][0])
         for i in range(largoLista(listaArchivo)):
             for j in range(largoLista(listaArchivo[0])):
@@ -865,7 +865,7 @@ def ventanaTetris(ventana, nombreArchivo):
                 elif listaArchivo[i][j] == "8": 
                      canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[7])
     imprimirArchivoTetris()
-    # matrizIdentificadores = crearMatriz()
+
 
     """
     Nombre: crearTetromino
@@ -1209,6 +1209,38 @@ def ventanaTetris(ventana, nombreArchivo):
                 return True
         return False
     
+    
+    def rotar():
+        if listaTetrominos[0] == 2:
+            return rotarI()
+        elif listaTetrominos[0] == 3:
+            return rotarL()
+        elif listaTetrominos[0] == 4:
+            return rotarJ()
+        elif listaTetrominos[0] == 5:
+            return rotarT()
+        elif listaTetrominos[0] == 6:
+            return rotarZ()
+        else:
+            return rotarU()
+    
+
+    def rotarI():
+                        x2 = x1 + 1
+                x3 = x2  + 1
+                x4 = x3 + 1
+
+                y1 += 2
+                y2 = y1
+                y3 = y1
+                y4 = y1
+                if validarMovimiento(nombreArchivo,tetromino):
+                    canvasPantalla.coords(tetromino[1], coordenadas[x1][y1][0] / 2, coordenadas[x1][y1][1] / 2)
+                    canvasPantalla.coords(tetromino[2], coordenadas[x2][y2][0] / 2, coordenadas[x2][y2][1] / 2)
+                    canvasPantalla.coords(tetromino[3], coordenadas[x3][y3][0] / 2, coordenadas[x3][y3][1] / 2)
+                    canvasPantalla.coords(tetromino[4], coordenadas[x4][y4][0] / 2, coordenadas[x4][y4][1] / 2)
+
+
     consola.bind("<KeyPress-w>", lambda evento: rotar())
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo())
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha()) 
@@ -1216,15 +1248,6 @@ def ventanaTetris(ventana, nombreArchivo):
 
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
-
-    # def rotar(canvasPantalla, tetromino, nombreArchivo): # mejorar
-    #     global rotaciones, x1, x2, x3, x4, x5, y1, y2, y3, y4, y5
-    #     eliminarAntiguaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
-        
-    #     posicionesX = [x1,x2,x3,x4,x5]
-    #     posicionesY = [y1,y2,y3,y4,y5]
-    #     if y1 >= 10 or y2 >= 10 or y3 >= 10 or y4 >= 10 or y5 >= 10:
-    #         return False
     #     coordenadas = posicionImagenes()
     #     if tetromino[0] == 2:
     #         if rotaciones == 1:
