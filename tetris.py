@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 import random
 import os
 
+
 rotaciones = 1
 x1 = 0
 x2 = 0
@@ -14,6 +15,7 @@ y2 = 0
 y3 = 0
 y4 = 0
 y5 = 0
+
 
 """
 Nombre: largoLista
@@ -100,6 +102,7 @@ def listaATextoAux(lista):
                 texto += lista[i][j] + ","
     return texto
 
+
 """
 Nombre: crearMatriz
 Entrada: ninguna
@@ -120,8 +123,6 @@ def crearMatriz():
                     vector += ["0"]
         matriz += [vector]
     return matriz
-
-
 
 
 """
@@ -190,9 +191,9 @@ def centrarVentana(ventana):
 
 
 """
-Nombre: sobreBotonJugar
+Nombre: sobreBoton
 Entrada: evento
-Salida: Cambia la imgen del 'boton jugar'
+Salida: Cambia la imgaen del 'boton'
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def sobreBoton(canvas, identificador, nuevaImagen):
@@ -200,12 +201,12 @@ def sobreBoton(canvas, identificador, nuevaImagen):
 
 
 """
-Nombre: ventana_inicio
+Nombre: ventanaInicio
 Entraeda: Ninguna
 Salida: La ventana inicial, iniciara el juego o finalizara el programa
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def ventanaInicio(): # Tal vez cambien los nombres de las variables
+def ventanaInicio():
     ventanaInicial = Tk()   
     ventanaInicial.geometry("900x700")
     ventanaInicial.resizable(0,0)
@@ -230,7 +231,6 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
     imagenCargar = Image.open("cargar.png")
     imagenCargar = imagenCargar.resize((120,120))
     imagenCargar = ImageTk.PhotoImage(imagenCargar)
-
 
     imagenCargarPresionado = Image.open("cargarPresionado.png")
     imagenCargarPresionado = imagenCargarPresionado.resize((120,120))
@@ -259,16 +259,12 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
     imagenSalirPresionado = Image.open("salirPresionado.png")
     imagenSalirPresionado = imagenSalirPresionado.resize((120,120))
     imagenSalirPresionado = ImageTk.PhotoImage(imagenSalirPresionado)
-
-
      
     botonJugar = canvasInicio.create_image(30, 15, anchor="nw", image=imagenJugar)
     botonCargar =  canvasInicio.create_image(30, 150, anchor="nw", image=imagenCargar)
     botonEstadisticas =  canvasInicio.create_image(30, 285, anchor="nw", image=imagenEstadisticas) 
     botonInformacion =  canvasInicio.create_image(30, 420, anchor="nw", image=imagenInformacion) 
     botonSalir =  canvasInicio.create_image(30, 555, anchor="nw", image=imagenSalir)
-
-
 
     canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugarPresionado))
     canvasInicio.tag_bind(botonJugar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugar))
@@ -290,7 +286,7 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
     canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
     
 
-    ventanaInicial.mainloop()
+    ventanaInicial.mainloop() #                                 Agregar funcionalidades de botones restantes
 
 
 """
@@ -306,33 +302,38 @@ def borrarArchivo(nombreArchivo, ventana):
 
 """
 Nombre: seleccionDeObstaculos
-Entrada: canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo
+Entrada: canvasPantalla,imagenPared, imagenFondo, imagenFondoSeleccionado, nombreArchivo
 Salida: Crea una 'matriz' donde el ususario seleccionara los osbtaculos del tetriz
 Restricciones: Las necesarias paraa el correcto funcionamiento
 """
-def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo):
+def seleccionDeObstaculos(canvasPantalla,imagenPared,imagenFondo, imagenFondoSeleccionado, nombreArchivo):
     coordenadas = posicionImagenes()
     matrizIdentificadores = []
     for fila in range (22):
         vectorIdentificadores = []
         for columna in range(12):
             if fila == 0 or fila == 21:
-                area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0] / 2, coordenadas[fila][columna][1] / 2, anchor="center", image=imagenParedTk)
+                area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0], coordenadas[fila][columna][1], anchor="center", image=imagenPared)
             else:
                 if columna == 0 or columna == 11:
-                    area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0] / 2, coordenadas[fila][columna][1] / 2, anchor="center", image=imagenParedTk)
+                    area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0], coordenadas[fila][columna][1] , anchor="center", image=imagenPared)
                 else:
-                    area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0] / 2, coordenadas[fila][columna][1] / 2, anchor="center", image=imagenFondoTk)
+                    area_fondo = canvasPantalla.create_image(coordenadas[fila][columna][0], coordenadas[fila][columna][1], anchor="center", image=imagenFondo)
             
-                    canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionadoTk, matrizIdentificadores, nombreArchivo))
-                    canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondoTk, matrizIdentificadores, nombreArchivo))
+                    canvasPantalla.tag_bind(area_fondo, "<Button-1>", lambda evento:seleccionarObstaculo(canvasPantalla, evento, imagenFondoSeleccionado, matrizIdentificadores, nombreArchivo))
+                    canvasPantalla.tag_bind(area_fondo, "<Button-3>", lambda evento:quitarObstaculo(canvasPantalla, evento, imagenFondo, matrizIdentificadores, nombreArchivo))
         
             vectorIdentificadores += [area_fondo]
                 
 
         matrizIdentificadores += [vectorIdentificadores]
 
+
 """
+Nombre: posicionImagenes
+Entrada: ninguna
+Salida: Una matriz con las coordenadas donde se ubicaran las imagenes
+Restricciones: Las necesarias para el correcto funcionamiento
 """
 def posicionImagenes():
     contante_x = 39
@@ -346,9 +347,10 @@ def posicionImagenes():
             y1 = fila * contante_y
             x2 = x1 + contante_x
             y2 = y1 + contante_y
-            posiciones += [[x1 + x2, y1 + y2]]
+            posiciones += [[(x1 + x2) / 2, (y1 + y2) / 2]]
         coordenadas += [posiciones]
     return coordenadas
+
 
 """
 Nombre: seleccionarObstaculo
@@ -357,7 +359,6 @@ Salida: Cambia el contenido del archivo por un caracter de '+' segun la posicion
 Restriccioene: Las necesarias para el correceto funcionamiento
 """
 def seleccionarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
-    print(evento.x, evento.y)
     imagenId = canva.find_closest(evento.x, evento.y)
     canva.itemconfig(imagenId[0], image=imagen)
     coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
@@ -385,7 +386,6 @@ Salida: Cambia el contenido del archivo por un caracter de '0' segun la posicion
 Restriccioene: Las necesarias para el correceto funcionamiento
 """                      
 def quitarObstaculo(canva, evento, imagen, matrizIdentificadores, nombreArchivo):
-    print(evento.x, evento.y)
     imagenId = canva.find_closest(evento.x, evento.y)
     canva.itemconfig(imagenId[0], image=imagen)
     coordenadas = buscarObstaculo(matrizIdentificadores, imagenId[0])
@@ -413,6 +413,17 @@ Salida: Sobre escribe el contenido del archivo indicado
 Restricciones: Las necesarias para el correcto funcionamiento
 """ 
 def modificarArchivoJuegoXX(nombreArchivo, contenido):
+    if not isinstance(nombreArchivo, str):
+        print("Error: Debe ingresar una cadena de texto!")
+    elif not isinstance(contenido, list):
+        print("Error: El contenido debe ser del tipo lista!")
+    elif nombreArchivo == "":
+        print("Error: El nombre del archivo esta vacio!")
+    elif contenido == []:
+        print("Error: El contenido de la lista esta vacio!")
+    else:
+        return modificarArchivoJuegoXXAux(nombreArchivo, contenido)
+def modificarArchivoJuegoXXAux(nombreArchivo, contenido):
     contenido = listaATexto(contenido)
 
     archivo = open(nombreArchivo, "w")
@@ -446,7 +457,6 @@ Salida: Las coordenadas del obstaculo
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def buscarObstaculo(matrizIdentificadores, elemento):
-    print(elemento)
     for i in range(largoLista(matrizIdentificadores)):
         for j in range(largoLista(matrizIdentificadores[0])):
             if matrizIdentificadores[i][j] == elemento:
@@ -464,12 +474,11 @@ Restricciones: Las necesarias para el correcto funcionamiento
 def interfaz(ventana):
     nombreArchivo = crearArchivoJuegoXX()
     crearMatrizArchivoJuegoXX(nombreArchivo)
-    
     ventana.destroy()
+    
     consola = Tk()
     consola.geometry("600x800")
     consola.resizable(0,0)
-    consola.config(bg="#A9A9A9")
     centrarVentana(consola)
 
     imagenGameboy = Image.open("gameboyBase.png")
@@ -479,48 +488,62 @@ def interfaz(ventana):
     canvasGameboy.pack(fill="both", expand=True)
     canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
    
-    canvasPantalla = Canvas(canvasGameboy, width=465, height=366, bg="pink")
+    canvasPantalla = Canvas(canvasGameboy, width=465, height=366)
     canvasPantalla.place(x=67, y=85)
 
-    
     imagenPared = Image.open("bloqueGris.png")
     imagenPared = imagenPared.resize((39, 17))
-    imagenParedTk = ImageTk.PhotoImage(imagenPared)
+    imagenPared = ImageTk.PhotoImage(imagenPared)
 
     imagenFondo= Image.open("fondo.png")
     imagenFondo = imagenFondo.resize((39, 17))
-    imagenFondoTk = ImageTk.PhotoImage(imagenFondo)
+    imagenFondo = ImageTk.PhotoImage(imagenFondo)
 
     imagenFondoSeleccionado = Image.open("fondoSeleccionado.png")
     imagenFondoSeleccionado = imagenFondoSeleccionado.resize((39, 17))
-    imagenFondoSeleccionadoTk = ImageTk.PhotoImage(imagenFondoSeleccionado)
+    imagenFondoSeleccionado = ImageTk.PhotoImage(imagenFondoSeleccionado)
 
-    seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFondoSeleccionadoTk, nombreArchivo)
+    imagenConfirmar = Image.open("confirmar.png")
+    imagenConfirmar = ImageTk.PhotoImage(imagenConfirmar)
 
-    canvasConfirmacion = Canvas(canvasGameboy, width=235, height=178, bg="pink")
+    imagenConfirmarPresionado = Image.open("confirmarPresionado.png")
+    imagenConfirmarPresionado = ImageTk.PhotoImage(imagenConfirmarPresionado)
+
+    seleccionDeObstaculos(canvasPantalla,imagenPared,imagenFondo, imagenFondoSeleccionado, nombreArchivo)
+
+    canvasConfirmacion = Canvas(canvasGameboy, width=235, height=178)
     canvasConfirmacion.place(x=305, y=567)
 
-    
+    botonConfirmar = canvasConfirmacion.create_image(0, 0, anchor="nw", image=imagenConfirmar)
+
+    canvasConfirmacion.tag_bind(botonConfirmar, "<Enter>", lambda evento: sobreBoton(canvasConfirmacion, botonConfirmar, imagenConfirmarPresionado))
+    canvasConfirmacion.tag_bind(botonConfirmar, "<Leave>", lambda evento: sobreBoton(canvasConfirmacion, botonConfirmar, imagenConfirmar))
+    canvasConfirmacion.tag_bind(botonConfirmar, "<Button-1>", lambda evento: ventanaTetris(consola,nombreArchivo))
+
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
 
 
-
-
-
-
-
+"""
+Nombre: imprimirArchivoTetris
+Entrada: cnavasPantalla, nombreArchivo
+Salida:
+Restricciones:
+"""
+    # imagenFondoTetris = Image.open("fondoTetris.png")
+    # imagenFondoTetris = imagenFondoTetris.resize((465,366))
+    # imagenFondoTetris = ImageTk.PhotoImage(imagenFondoTetris)
 def imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk):
     coordenadas = posicionImagenes()
     listaArchivo = archivoALista(nombreArchivo)
     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-
+    
     for i in range(largoLista(listaArchivo)):
         for j in range(largoLista(listaArchivo[0])):
             if listaArchivo[i][j] == "+":
-                canvasPantalla.create_image(coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2, anchor="center", image=imagenParedTk)
+                canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenParedTk)
             else:
-                canvasPantalla.create_image(coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2, anchor="center", image=imagenFondoTk)
+                canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenFondoTk)
 
 
 def crearListatetrominos():
@@ -1830,11 +1853,10 @@ def refrescarPantallaTetris(canvasPantalla):
 
 def ventanaTetris(ventana, nombreArchivo):
     global listaTetrominos, tetromino, matrizIdentificadores
-    #ventana.destroy()
+    ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
     consola.resizable(0,0)
-    consola.config(bg="#A9A9A9")
     centrarVentana(consola)
 
     imagenGameboy = Image.open("gameboyBase.png")
