@@ -753,7 +753,7 @@ Salida: El juego tetris de forma 'funcional'
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def ventanaTetris(ventana, nombreArchivo):
-    global listaTetrominos, tetromino, matrizIdentificadores
+    #global listaTetrominos, tetromino, matrizIdentificadores
     ventana.destroy()
     consola = Tk()
     consola.geometry("600x800")
@@ -770,40 +770,95 @@ def ventanaTetris(ventana, nombreArchivo):
 
     imagenPared = Image.open("bloqueGris.png")
     imagenPared = imagenPared.resize((39, 17))
-    imagenParedTk = ImageTk.PhotoImage(imagenPared)
+    imagenPared = ImageTk.PhotoImage(imagenPared)
 
     imagenFondo= Image.open("fondo.png")
     imagenFondo = imagenFondo.resize((39, 17))
-    imagenFondoTk = ImageTk.PhotoImage(imagenFondo)
+    imagenFondo = ImageTk.PhotoImage(imagenFondo)
 
-   
+    imagenFondoTetris = Image.open("fondoTetris.png")
+    imagenFondoTetris = imagenFondoTetris.resize((465, 366))
+    imagenFondoTetris = ImageTk.PhotoImage(imagenFondoTetris)
+
     canvasPantalla = Canvas(canvasGameboy, width=465, height=366, bg="pink")
     canvasPantalla.place(x=67, y=85)
 
-    listaNombreBloques = ["bloqueAmarillo.png", 
-                          "bloqueAzul.png", 
-                          "bloqueNaranja.png", 
-                          "bloqueRosa.png", 
-                          "bloqueMorado.png", 
-                          "bloqueVerde.png", 
-                          "bloqueCafe.png", 
-                          "bloqueRojo.png"]
     
-    listaImagenesBloques = []
-    for i in range(largoLista(listaNombreBloques)):
-        imagen = Image.open(listaNombreBloques[i])
-        imagen = imagen.resize((39, 17))
-        imagenTk = ImageTk.PhotoImage(imagen)
-        listaImagenesBloques += [imagenTk]
-
+    """
+    Nombre: crearListaImagenesBloque
+    Entrada: ninguna
+    Salida: Una lista con los identificadores de las imagenes de bloques
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def crearListaImagenesBloques():
+        listaNombreBloques = ["bloqueAmarillo.png", 
+                              "bloqueAzul.png", 
+                              "bloqueNaranja.png", 
+                              "bloqueRosa.png", 
+                              "bloqueMorado.png", 
+                              "bloqueVerde.png", 
+                              "bloqueCafe.png", 
+                              "bloqueRojo.png"]
+        listaImagenesBloques = []
+        for i in range(largoLista(listaNombreBloques)):
+            imagen = Image.open(listaNombreBloques[i])
+            imagen = imagen.resize((39, 17))
+            imagen = ImageTk.PhotoImage(imagen)
+            listaImagenesBloques += [imagen]
+        return listaImagenesBloques
+    listaImagenesBloques = crearListaImagenesBloques()
+        
     
-    imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenParedTk, imagenFondoTk)
-
+    """
+    Nombre: imprimirArchivoTetris
+    Entrada: ninguna
+    Salida: El contenido del archivo imprimido en la ventana
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def imprimirArchivoTetris():
+        coordenadas = posicionImagenes()
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        canvasPantalla.create_image(0, 0, anchor="nw", image=imagenFondoTetris)
+        for i in range(largoLista(listaArchivo)):
+            for j in range(largoLista(listaArchivo[0])):
+                if listaArchivo[i][j] == "+": 
+                    canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenPared)
+                elif listaArchivo[i][j] == "1": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[0])
+                elif listaArchivo[i][j] == "2": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[1])
+                elif listaArchivo[i][j] == "3": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[2])
+                elif listaArchivo[i][j] == "4": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[3])
+                elif listaArchivo[i][j] == "5": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[4])
+                elif listaArchivo[i][j] == "6": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[5])
+                elif listaArchivo[i][j] == "7": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[6])
+                elif listaArchivo[i][j] == "8": 
+                     canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[7])
+    imprimirArchivoTetris()
     matrizIdentificadores = crearMatriz()
-    listaTetrominos = crearListatetrominos()
-    listaImagenes = []
+
+
+    """
+    Nombre: crearListaTetrominos
+    Entrada: ninguna
+    Salida: Una lista con las primeras 30 piezas del tetris
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def crearListaTetrominos():
+        listatetrominos = []
+        for i in range(30):
+            listatetrominos += [random.randint(1,8)]
+        return listatetrominos
+    listaTetrominos = crearListaTetrominos()
     tetromino = crearTetromino(canvasPantalla, listaImagenesBloques,listaTetrominos[0])
-    listaImagenes += [tetromino[1:]]
+
+    
     escribirNuevaPosicionArchivo("juego01.txt", tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
 
     consola.bind("<KeyPress-w>", lambda evento: rotar(canvasPantalla, tetromino, nombreArchivo))
@@ -815,43 +870,24 @@ def ventanaTetris(ventana, nombreArchivo):
     canvasDemostrativo = Canvas(canvasGameboy, width=235, height=178, bg="pink")
     canvasDemostrativo.place(x=305, y=567)
 
-
-
-
-
-
-    consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
-    consola.mainloop()
-
-
-    """
-    Nombre: imprimirArchivoTetris
-    Entrada: cnavasPantalla, nombreArchivo
-    Salida: El contenido del archivo imprimido en la ventana
-    Restricciones: Las necesarias para el correcto funcionamiento
-    """
-    def imprimirArchivoTetris(canvasPantalla, nombreArchivo, imagenPared, imagenFondo):
-        coordenadas = posicionImagenes()
-        listaArchivo = archivoALista(nombreArchivo)
-        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-        
-        for i in range(largoLista(listaArchivo)):
-            for j in range(largoLista(listaArchivo[0])):
-                if listaArchivo[i][j] == "+":
-                    canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenPared)
-                else:
-                    canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenFondo)
-
-
-    def crearListatetrominos():
-        listatetrominos = []
-        for i in range(30):
-            listatetrominos += [random.randint(1,8)]
-        return listatetrominos
-
     def crearTetromino(canvasPantalla, imagenes, tetromino):
         global x1, x2, x3, x4, x5, y1, y2, y3, y4, y5
-
+        if tetromino[0] == 1:
+            return crearTetrominoO()
+        elif tetromino[0] == 2:
+            return crearTetrominoI()
+        elif tetromino[0] == 3:
+            return crearTetrominoL()
+        elif tetromino[0] == 4:
+            return crearTetrominoJ()
+        elif tetromino[0] == 5:
+            return crearTetrominoT()
+        elif tetromino[0] == 6:
+            return crearTetrominoZ()
+        elif tetromino[0] == 7:
+            return crearTetrominoU()
+        else:
+            #return crearTetrominoCruz()
         coordenadas = posicionImagenes()
         if tetromino == 1:
             bloque1 = canvasPantalla.create_image(coordenadas[1][5][0]/ 2, coordenadas[1][5][1] / 2, anchor="center", image=imagenes[0])
@@ -2146,7 +2182,9 @@ def ventanaTetris(ventana, nombreArchivo):
             for j in range(largoLista(matrizIdentificadores[0])):
                 if matrizIdentificadores[i][j] != "0" or matrizIdentificadores[i][j] != "+":
                     canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2)
-
+    
+    consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
+    consola.mainloop()
 
 
 
