@@ -243,16 +243,31 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
     imagenEstadisticasPresionado = Image.open("estadisticasPresionado.png")
     imagenEstadisticasPresionado = imagenEstadisticasPresionado.resize((120,120))
     imagenEstadisticasPresionado = ImageTk.PhotoImage(imagenEstadisticasPresionado)
-    # imagenSalir = Image.open("salir.png")
-    # imagenSalir = ImageTk.PhotoImage(imagenSalir)
 
-    # imagenSalirSeleccionada = Image.open("salir.png")
-    # imagenSalirSeleccionada = ImageTk.PhotoImage(imagenSalirSeleccionada)
+    imagenInformacion = Image.open("informacion.png")
+    imagenInformacion = imagenInformacion.resize((120,120))
+    imagenInformacion = ImageTk.PhotoImage(imagenInformacion)
+
+    imagenInformacionPresionado = Image.open("informacionPresionado.png")
+    imagenInformacionPresionado = imagenInformacionPresionado.resize((120,120))
+    imagenInformacionPresionado = ImageTk.PhotoImage(imagenInformacionPresionado)
+
+    imagenSalir = Image.open("salir.png")
+    imagenSalir = imagenSalir.resize((120,120))
+    imagenSalir = ImageTk.PhotoImage(imagenSalir)
+
+    imagenSalirPresionado = Image.open("salirPresionado.png")
+    imagenSalirPresionado = imagenSalirPresionado.resize((120,120))
+    imagenSalirPresionado = ImageTk.PhotoImage(imagenSalirPresionado)
+
+
      
-    botonJugar = canvasInicio.create_image(40, 30, anchor="nw", image=imagenJugar)
-    botonCargar =  canvasInicio.create_image(40, 170, anchor="nw", image=imagenCargar)
-    botonCargar =  canvasInicio.create_image(40, 170, anchor="nw", image=imagenCargar)
-    # botonSalir = canvasInicio.create_image(40, 90, anchor="nw", image=imagenSalir)
+    botonJugar = canvasInicio.create_image(30, 15, anchor="nw", image=imagenJugar)
+    botonCargar =  canvasInicio.create_image(30, 150, anchor="nw", image=imagenCargar)
+    botonEstadisticas =  canvasInicio.create_image(30, 285, anchor="nw", image=imagenEstadisticas) 
+    botonInformacion =  canvasInicio.create_image(30, 420, anchor="nw", image=imagenInformacion) 
+    botonSalir =  canvasInicio.create_image(30, 555, anchor="nw", image=imagenSalir)
+
 
 
     canvasInicio.tag_bind(botonJugar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonJugar, imagenJugarPresionado))
@@ -261,16 +276,18 @@ def ventanaInicio(): # Tal vez cambien los nombres de las variables
 
     canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
     canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
-    #canvasInicio.tag_bind(botonCargar, "<Button-1>", lambda evento: interfaz(ventanaInicial))  mas adelante
-
-    canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
-    canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
 
 
+    canvasInicio.tag_bind(botonEstadisticas, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonEstadisticas, imagenEstadisticasPresionado))
+    canvasInicio.tag_bind(botonEstadisticas, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonEstadisticas, imagenEstadisticas))
 
-    # canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalirSeleccionada))
-    # canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalir))
-    # canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
+    canvasInicio.tag_bind(botonInformacion, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonInformacion, imagenInformacionPresionado))
+    canvasInicio.tag_bind(botonInformacion, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonInformacion, imagenInformacion))
+
+
+    canvasInicio.tag_bind(botonSalir, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalirPresionado))
+    canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalir))
+    canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
     
 
     ventanaInicial.mainloop()
@@ -315,7 +332,8 @@ def seleccionDeObstaculos(canvasPantalla,imagenParedTk,imagenFondoTk, imagenFond
 
         matrizIdentificadores += [vectorIdentificadores]
 
-
+"""
+"""
 def posicionImagenes():
     contante_x = 39
     contante_y = 16.68
@@ -329,8 +347,6 @@ def posicionImagenes():
             x2 = x1 + contante_x
             y2 = y1 + contante_y
             posiciones += [[x1 + x2, y1 + y2]]
-            prueba = posiciones
-        #print(posiciones)
         coordenadas += [posiciones]
     return coordenadas
 
