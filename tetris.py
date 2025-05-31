@@ -270,7 +270,7 @@ def ventanaInicio():
 
     canvasInicio.tag_bind(botonCargar, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargarPresionado))
     canvasInicio.tag_bind(botonCargar, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonCargar, imagenCargar))
-    canvasInicio.tag_bind(botonCargar, "<Button-1>", lambda evento: ventanaJuegosGuardados())
+    canvasInicio.tag_bind(botonCargar, "<Button-1>", lambda evento: ventanaJuegosGuardados(ventanaInicial))
 
 
     canvasInicio.tag_bind(botonEstadisticas, "<Enter>", lambda evento: sobreBoton(canvasInicio, botonEstadisticas, imagenEstadisticasPresionado))
@@ -374,10 +374,10 @@ def ventanaInformacion(ventana):
     imagenComoSelecconarObstaculos = ImageTk.PhotoImage(imagenComoSelecconarObstaculos)
     canvasImagenes.create_image(465, 0, anchor="nw", image=imagenComoSelecconarObstaculos)
 
-    imagenCreditos = Image.open("creditos.png")
-    imagenCreditos = imagenCreditos.resize((900,432))
-    imagenCreditos = ImageTk.PhotoImage(imagenCreditos)
-    canvasImagenes.create_image(0, 366, anchor="nw", image=imagenCreditos)
+    imagenComoGuardar = Image.open("comoGuardar.png")
+    imagenComoGuardar = imagenComoGuardar.resize((900,430))
+    imagenComoGuardar = ImageTk.PhotoImage(imagenComoGuardar)
+    canvasImagenes.create_image(0, 366, anchor="nw", image=imagenComoGuardar)
 
 
 
@@ -463,6 +463,71 @@ def ventanaEstadisticas(ventana):
 
     consola.mainloop()
 
+
+"""
+Nombre: ventanaJuegosGuardados
+Entrada: ventana
+Salida: Carga un archivo guardado
+Rsetricciones: Las necesarias para el correcto funcionamiento
+"""
+def ventanaJuegosGuardados(ventana):
+    ventana.destroy()
+    
+    consola = Tk()
+    consola.geometry("600x800")
+    consola.resizable(0,0)
+    centrarVentana(consola)
+
+    imagenGameboy = Image.open("gameboyBase.png")
+    imagenGameboy = ImageTk.PhotoImage(imagenGameboy)
+
+    canvasGameboy = Canvas(consola, width=300, height=300)
+    canvasGameboy.pack(fill="both", expand=True)
+    canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
+   
+    framePantalla = Frame(canvasGameboy, bg="gray26", bd= 10,relief="ridge",width=470, height=368)
+    framePantalla.pack_propagate(False)
+    framePantalla.place(x=67, y=80)
+
+    listaMejoresJugadores = []
+    for i in range(10):
+        contenido = []
+        for j in range(3):
+            contenido += ["vacio!"]
+        listaMejoresJugadores += [contenido]
+
+
+    Label(framePantalla, text="Puesto", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=24, pady=3)
+    Label(framePantalla, text="Jugador", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=1, padx=24, pady=3)
+    Label(framePantalla, text="Puntaje Total", font=("Arial", 15, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=2, padx=24, pady=3)
+
+
+    for i  in range(largoLista(listaMejoresJugadores)):
+        Label(framePantalla, text=listaMejoresJugadores[i][0], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=0, padx=10, pady=5)
+        Label(framePantalla, text=listaMejoresJugadores[i][1], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=1, padx=10, pady=5)
+        Label(framePantalla, text=listaMejoresJugadores[i][2], font=("Arial",10,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=2, padx=10, pady=5)
+
+
+
+
+
+    imagenVolver = Image.open("volver.png")
+    imagenVolver = ImageTk.PhotoImage(imagenVolver)
+
+    imagenVolverPresionado = Image.open("volverPresionado.png")
+    imagenVolverPresionado = ImageTk.PhotoImage(imagenVolverPresionado)
+
+    canvasVolver = Canvas(canvasGameboy, width=235, height=178)
+    canvasVolver.place(x=305, y=567)
+
+
+    botonVolver = canvasVolver.create_image(0, 0, anchor="nw", image=imagenVolver)
+
+    canvasVolver.tag_bind(botonVolver, "<Enter>", lambda evento: sobreBoton(canvasVolver, botonVolver, imagenVolverPresionado))
+    canvasVolver.tag_bind(botonVolver, "<Leave>", lambda evento: sobreBoton(canvasVolver, botonVolver, imagenVolver))
+    canvasVolver.tag_bind(botonVolver, "<Button-1>", lambda evento: volverInicio(consola))
+
+    consola.mainloop()
 
 """
 Nombre: volverInicio
