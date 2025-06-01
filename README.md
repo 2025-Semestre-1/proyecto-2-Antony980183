@@ -3,5 +3,5 @@
 ### 2024174749 Antony Campbell
 
 ### Estado del proyecto: [Malo]
-### Enlace del video:
-Recordar que el video debe ser público para ser visto por el profesor
+### Enlace del video: https://youtu.be/Ojq-zWeFfEU
+
