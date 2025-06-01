@@ -5,17 +5,6 @@ import os
 
 
 rotaciones = 1
-x1 = 0
-x2 = 0
-x3 = 0
-x4 = 0
-x5 = 0
-y1 = 0
-y2 = 0
-y3 = 0
-y4 = 0
-y5 = 0
-
 
 """
 Nombre: largoLista
@@ -198,6 +187,76 @@ def sobreBoton(canvas, identificador, nuevaImagen):
 
 
 """
+Nombre: guardarJuagdor
+Entrada: ventana
+Salida: guarda en un archivo de texto el nombre del usuario
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def guardarJugador(ventana, datos):
+    texto = datos.get()
+    if leerArchivo("jugadores.txt") == "":
+            if texto != "":
+                archivo = open("jugadores.txt", "a")
+                archivo.write(texto + "\n")             
+                archivo.close()
+                
+                ventana.destroy()
+                return ventanaInicio()
+    else:             
+        listaJugadores = archivoALista("jugadores.txt")
+        print(listaJugadores)
+        listaJugadores = eliminarSaltosDeLinea(listaJugadores) + [[texto]]
+        print(listaJugadores)
+        listaJugadores = listaATexto(listaJugadores)
+        if texto != "":
+            archivo = open("jugadores.txt", "w")
+            archivo.write(listaJugadores)
+            archivo.close()
+
+            ventana.destroy()
+            return ventanaInicio()
+
+
+def eliminarUsuario(ventana):
+    archivo = open("jugadores.txt","w")
+    archivo.write("")
+    archivo.close()
+    ventana.destroy()
+    
+
+
+"""
+Nombre: ventanaRegistroUsuario
+Entrada: ninguna
+Salida: El registro exitoso del usuraio
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def ventanaRegistroUsuario():
+    ventanaRegistro = Tk()   
+    ventanaRegistro.geometry("900x366")
+    ventanaRegistro.resizable(0,0)
+    centrarVentana(ventanaRegistro)  
+
+    imagenRegistro = Image.open("ingresarDatos.png")
+    imagenRegistro = ImageTk.PhotoImage(imagenRegistro)
+
+    canvasRegistro = Canvas(ventanaRegistro, width=900, height=366)
+    canvasRegistro.pack()
+    canvasRegistro.create_image(0, 0, anchor="nw", image=imagenRegistro)
+
+
+    frameRegistro = Frame(canvasRegistro, bg="gray26", bd= 15,relief="ridge",width=440, height=366)
+    frameRegistro.place(x=466, y=0)
+
+    datos = Entry(frameRegistro, width=30,font=("Arial", 18, "bold"), bd=10, relief="ridge",bg="gray52")
+    datos.place(x=0, y=50, height=70)  
+
+    confirmar = Button(frameRegistro, bd=5, bg="gray52", text="Confirmar", font=("Arial", 20, "bold"), activebackground="gray26", relief="ridge",
+                        command=lambda: guardarJugador(ventanaRegistro, datos) ).place(x=125, y=170)
+    ventanaRegistro.mainloop()
+
+
+"""
 Nombre: ventanaInicio
 Entraeda: Ninguna
 Salida: La ventana inicial, iniciara el juego o finalizara el programa
@@ -287,8 +346,8 @@ def ventanaInicio():
     canvasInicio.tag_bind(botonSalir, "<Leave>", lambda evento: sobreBoton(canvasInicio, botonSalir, imagenSalir))
     canvasInicio.tag_bind(botonSalir, "<Button-1>", lambda evento: salir(ventanaInicial))
     
-
-    ventanaInicial.mainloop() #                                 Agregar funcionalidades de botones restantes
+    ventanaInicial.protocol("WM_DELETE_WINDOW", lambda : eliminarUsuario(ventanaInicial))
+    ventanaInicial.mainloop()
 
 
 """
@@ -299,7 +358,7 @@ Restricciones: Las necesarias para el correcto funcionamiento
 """
 def borrarArchivo(nombreArchivo, ventana):
     os.remove(nombreArchivo)
-    ventana.destroy()
+    return eliminarUsuario(ventana)
 
 
 """
@@ -378,8 +437,6 @@ def ventanaInformacion(ventana):
     imagenComoGuardar = imagenComoGuardar.resize((900,430))
     imagenComoGuardar = ImageTk.PhotoImage(imagenComoGuardar)
     canvasImagenes.create_image(0, 366, anchor="nw", image=imagenComoGuardar)
-
-
 
     imagenVolver = Image.open("volver.png")
     imagenVolver = imagenVolver.resize((120,120))
@@ -523,7 +580,7 @@ def volverInicio(ventana):
     ventana.destroy()
     return ventanaInicio()
 
-#logiva # game
+
 """
 Nombre: seleccionDeObstaculos
 Entrada: canvasPantalla,imagenPared, imagenFondo, imagenFondoSeleccionado, nombreArchivo
@@ -770,7 +827,8 @@ Salida: El juego tetris de forma 'funcional'
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def ventanaTetris(ventana, nombreArchivo):
-    global tetromino, listaTetrominos, rotaciones
+    global tetromino, listaTetrominos, rotaciones,matrizIdentificadores
+    matrizIdentificadores = crearMatriz()
 
     ventana.destroy()
     consola = Tk()
@@ -843,7 +901,6 @@ def ventanaTetris(ventana, nombreArchivo):
         listaArchivo = archivoALista(nombreArchivo)
         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
         canvasPantalla.create_image(19, 16, anchor="nw", image=imagenFondoTetris)
-        print(coordenadas[0][0])
         for i in range(largoLista(listaArchivo)):
             for j in range(largoLista(listaArchivo[0])):
                 if listaArchivo[i][j] == "+": 
@@ -1035,9 +1092,32 @@ def ventanaTetris(ventana, nombreArchivo):
         posicionesX = [2, 1, 2, 3, 2]
         posicionesY = [4, 5, 5, 5, 6]
         tetromino = [posicionesX, posicionesY, bloque1, bloque2, bloque3, bloque4, bloque5]
+        escribirNuevaPosicionArchivo(tetromino)
         return tetromino
 
-    tetromino = crearTetromino()
+
+    """
+    Nombre: movimientoFinalizado
+    Entrada: niguna
+    Salida: guarda y refreasca todos lo eventos sucedidos
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def movimientoFinalizado():
+        global rotaciones,tetromino,listaTetrominos
+        escribirNuevaPosicionArchivo(tetromino)
+        modificarMatrizIdentificadores(tetromino)
+        eliminarFilaTetris()
+        eliminar = eliminarFilaMatrizIdentificadores()
+        if eliminar == True:
+            consola.after(500, refrescarPantallaTetris())
+        eliminarFilaArchivo()
+        
+        if listaTetrominos == []:
+            listaTetrominos = crearListaTetrominos()
+        else:   
+            listaTetrominos = listaTetrominos[1:]
+        tetromino = crearTetromino()
+        rotaciones = 1
 
 
     """
@@ -1048,31 +1128,13 @@ def ventanaTetris(ventana, nombreArchivo):
     """
     def moverAbajo():
         global tetromino, listaTetrominos
+        eliminarAntiguaPosicionArchivo(tetromino)
         posicionX = [tetromino[0][0] + 1, tetromino[0][1] + 1, tetromino[0][2] + 1, tetromino[0][3] + 1, tetromino[0][4] + 1]
-        tetromino = [posicionX] + tetromino[1:]
+        tetromino = [posicionX] + tetromino[1:] 
         if validarMovimiento(tetromino) == False:
             posicionX = [tetromino[0][0] - 1, tetromino[0][1] - 1, tetromino[0][2] - 1, tetromino[0][3] - 1, tetromino[0][4] - 1]
-            tetromino= [posicionX, tetromino [1:]]
-            listaTetrominos = listaTetrominos[1:]
-            # movimientoFinalizado()
-            # x1 -=1
-            # x2 -=1
-            # x3 -=1
-            # x4 -=1
-            # x5 -=1
-            # escribirNuevaPosicionArchivo(nombreArchivo, tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
-            # modificarMatrizIdentificadores(tetromino,x1,x2,x3,x4,x5,y1,y2,y3,y4,y5)
-            
-            # eliminarFilaTetris(canvasPantalla, nombreArchivo)
-            # eliminar = eliminarFilaMatrizIdentificadores(nombreArchivo)
-            # if eliminar == True:
-            #     consola.after(500, refrescarPantallaTetris(canvasPantalla))
-
-            # eliminarFilaArchivo(nombreArchivo)
-            
-            # listaTetrominos = listaTetrominos[1:]
-            # tetromino = crearTetromino(canvasPantalla, listaImagenesBloques, listaTetrominos[0])
-            # rotaciones = 1
+            tetromino = [posicionX] + tetromino [1:]
+            movimientoFinalizado()
         else:
             if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
                 imprimirMovimiento(tetromino)
@@ -1088,6 +1150,7 @@ def ventanaTetris(ventana, nombreArchivo):
     """           
     def moverDerecha(): 
         global tetromino, listaTetrominos
+        eliminarAntiguaPosicionArchivo(tetromino)
         posicionY= [tetromino[1][0] + 1, tetromino[1][1] + 1, tetromino[1][2] + 1, tetromino[1][3] + 1, tetromino[1][4] + 1]
         tetromino = tetromino[0:1] + [posicionY] + tetromino[2:]
         if validarMovimiento(tetromino) == False:
@@ -1108,6 +1171,7 @@ def ventanaTetris(ventana, nombreArchivo):
     """
     def moverIzquierda(): 
         global tetromino, listaTetrominos
+        eliminarAntiguaPosicionArchivo(tetromino)
         posicionY= [tetromino[1][0] - 1, tetromino[1][1] - 1, tetromino[1][2] - 1, tetromino[1][3] - 1, tetromino[1][4] - 1]
         tetromino = tetromino[0:1] + [posicionY] + tetromino[2:]
         if validarMovimiento(tetromino) == False:
@@ -1147,7 +1211,7 @@ def ventanaTetris(ventana, nombreArchivo):
     Salida: True si la nueva posicion indicada es valida, False caso contrario
     Restricciones: Las necesarias para el correcto funcionamiento
     """
-    def  validarMovimiento(tetromino):
+    def validarMovimiento(tetromino):
         listaArchivo = archivoALista(nombreArchivo)
         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
         if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
@@ -1167,10 +1231,12 @@ def ventanaTetris(ventana, nombreArchivo):
                             if  i == tetromino[0][3] and j == tetromino[1][3]:
                                 if verificarElementos(listaArchivo[i][j]):
                                     return False
+            escribirNuevaPosicionArchivo(tetromino)
             return True
         else:
             return validarMovimientoAux(tetromino)
     
+
     def validarMovimientoAux(tetromino):
         listaArchivo = archivoALista(nombreArchivo)
         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
@@ -1217,6 +1283,8 @@ def ventanaTetris(ventana, nombreArchivo):
     Restricciones: Las necesarias para el correcto funcionamiento
     """
     def rotar():
+        eliminarAntiguaPosicionArchivo(tetromino)
+
         if listaTetrominos[0] == 2:
             return rotarI()
         elif listaTetrominos[0] == 3:
@@ -1409,7 +1477,6 @@ def ventanaTetris(ventana, nombreArchivo):
             posicionY = [tetromino[1][0], tetromino[1][0], tetromino[1][0] + 1, tetromino[1][0] + 2, tetromino[1][0] + 2]
             rotaciones = 0
         verificador = [posicionX] + [posicionY] + tetromino[2:]
-        print(verificador)
         if validarMovimientoAux(verificador):
             tetromino = verificador
             rotaciones += 1
@@ -1418,293 +1485,385 @@ def ventanaTetris(ventana, nombreArchivo):
             rotaciones = 1
 
 
+    """
+    Nombre: retornarNumeroImagen 
+    Entrada: ninguna
+    Salida: Retorna un carcter segun el valor del tetromino
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def retornarNumeroImagen():
+        if listaTetrominos[0] == 1:
+            imagen = "1"
+        elif listaTetrominos[0] == 2:
+            imagen = "2"
+        elif listaTetrominos[0] == 3:
+            imagen = "3"
+        elif listaTetrominos[0] == 4:
+            imagen = "4"
+        elif listaTetrominos[0] == 5:
+            imagen = "5"
+        elif listaTetrominos[0] == 6:
+            imagen = "6"
+        elif listaTetrominos[0] == 7:
+            imagen = "7"
+        else:
+            imagen = "8"
+        return imagen
+
+
+    """
+    Nombre: escribitNuevaPosicionArchivo 
+    Entrada: tetromino
+    Salida: Escribe la ubicacion del tetromino en el archivo.txt creado
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def escribirNuevaPosicionArchivo(tetromino):
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        nuevoContenido = []
+        imagen = retornarNumeroImagen()
+        if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
+            print("holaaaaa")
+            for i in range(largoLista(listaArchivo)):
+                contenido = []
+                for j in range(largoLista(listaArchivo[0])):
+                    if i == tetromino[0][0] and j == tetromino[1][0]:
+                        contenido += [imagen]
+                    elif i == tetromino[0][1] and j == tetromino[1][1]:
+                        contenido += [imagen]
+                    elif i == tetromino[0][2] and j == tetromino[1][2]:
+                        contenido += [imagen]
+                    elif i == tetromino[0][3] and j == tetromino[1][3]:
+                        contenido += [imagen]
+                    else:
+                        contenido += [listaArchivo[i][j]]
+                nuevoContenido += [contenido]
+            modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+        else:
+            return escribirNuevaPosicionArchivoAux(tetromino)
+        
+    
+    def escribirNuevaPosicionArchivoAux(tetromino):
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        nuevoContenido = []
+        imagen = retornarNumeroImagen()
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == tetromino[0][0] and j == tetromino[1][0]:
+                    contenido += [imagen]
+                elif i == tetromino[0][1] and j == tetromino[1][1]:
+                    contenido += [imagen]
+                elif i == tetromino[0][2] and j == tetromino[1][2]:
+                    contenido += [imagen]
+                elif i == tetromino[0][3] and j == tetromino[1][3]:
+                    contenido += [imagen]
+                elif i == tetromino[0][4] and j == tetromino[1][4]:
+                    contenido += [imagen]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+        modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+
+
+    """
+    Nombre: eliminarAntiguaPosicionArchivo 
+    Entrada: tetromino
+    Salida: Elimina del archivo.txt creado la antigua posicion del tetromino
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def eliminarAntiguaPosicionArchivo(tetromino):
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        nuevoContenido = []
+        
+        if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
+            for i in range(largoLista(listaArchivo)):
+                contenido = []
+                for j in range(largoLista(listaArchivo[0])):
+                    if i == tetromino[0][0] and j == tetromino[1][0]:
+                        contenido += ["0"]
+                    elif i == tetromino[0][1] and j == tetromino[1][1]:
+                        contenido += ["0"]
+                    elif i == tetromino[0][2] and j == tetromino[1][2]:
+                        contenido += ["0"]
+                    elif i == tetromino[0][3] and j == tetromino[1][3]:
+                        contenido += ["0"]
+                    else:
+                        contenido += [listaArchivo[i][j]]
+                nuevoContenido += [contenido]
+            modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+        else:
+            return eliminarAntiguaPosicionArchivoAux(tetromino)
+    
+
+    def eliminarAntiguaPosicionArchivoAux(tetromino):
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        nuevoContenido = []
+        
+        for i in range(largoLista(listaArchivo)):
+            contenido = []
+            for j in range(largoLista(listaArchivo[0])):
+                if i == tetromino[0][0] and j == tetromino[1][0]:
+                    contenido += ["0"]
+                elif i == tetromino[0][1] and j == tetromino[1][1]:
+                    contenido += ["0"]
+                elif i == tetromino[0][2] and j == tetromino[1][2]:
+                    contenido += ["0"]
+                elif i == tetromino[0][3] and j == tetromino[1][3]:
+                    contenido += ["0"]
+                elif i == tetromino[0][4] and j == tetromino[1][4]:
+                    contenido += ["0"]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
+    
+        modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+
+
+    """
+    Nombre: eliminarFilaArchivo 
+    Entrada: ninguna
+    Salida: La fila del archivo.txt eliminada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def eliminarFilaArchivo():
+        fila = retornarFilaArchivoDescendente()
+        if fila != False:
+            listaArchivo = archivoALista(nombreArchivo)
+            listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+            nuevoContenido = []
+            for i in range(largoLista(listaArchivo)):
+                contenido = []
+                for j in range(largoLista(listaArchivo[0])):
+                    if i != fila:
+                        contenido += [listaArchivo[i][j]]
+                if contenido != []:
+                    nuevoContenido += [contenido]
+            modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+            fila = reubicarFila()
+            nuevoContenido = acomodarFilasArchivo(fila)
+            modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
+
+
+    """
+    Nombre: retornarFilaArchivoDescendente 
+    Entrada: niguna
+    Salida: Retorna la ultima fila distina a ceros del archivo
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def retornarFilaArchivoDescendente():
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        i = largoLista(listaArchivo) - 2
+        while i != 0:
+            contenido = []
+            j = largoLista(listaArchivo[0]) - 1
+            while j != 0:
+                if listaArchivo[i][j] != "0":
+                    verificarElementos
+                    contenido += [listaArchivo[i][j]]
+                if contenido != []:
+                    if largoLista(contenido) == 11:
+                        return i
+                j -= 1
+            i -= 1
+        return False
+
+
+    """
+    Nombre: reubicarFila
+    Entrada: ninguna
+    Salida: La fila donde se recolocara la fila de ceros
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def reubicarFila():
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        i = largoLista(listaArchivo) -1
+
+        while i != 0:
+            contenido = []
+            j = largoLista(listaArchivo[0]) - 1
+            while j != 0:
+                if verificarElementos(listaArchivo[i][j]) == False:
+                    contenido += [listaArchivo[i][j]]
+                if contenido != []:
+                    if largoLista(contenido) == 10:
+                        return i
+                j -= 1
+            i -= 1
+        return False
+
+
+    """
+    Nombre: acomodarFilaArchivo
+    Entrada: fila
+    Salida: Una lista reacomodada
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def acomodarFilasArchivo(fila):
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        nuevoContenido = []
+        for i in range(largoLista(listaArchivo)):
+            if i == fila:
+                nuevoContenido += [listaArchivo[i],listaArchivo[i]]
+            else:
+                nuevoContenido += [listaArchivo[i]]
+        return nuevoContenido
+
+
+    """
+    Nombre: modificarMatrizIdentificadores
+    Entrada: tetromino
+    Salida: La matriz modificada segun los valores indicados
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def modificarMatrizIdentificadores(tetromino):
+        global matrizIdentificadores
+        nuevaMatriz = []
+        for i in range(largoLista(matrizIdentificadores)):
+            vector = []
+            for j in range(largoLista(matrizIdentificadores[0])):
+                if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
+                    if i == tetromino[0][0] and j == tetromino[1][0]:
+                        vector += [tetromino[2]]
+                    elif i == tetromino[0][1] and j == tetromino[1][1]:
+                        vector += [tetromino[3]]
+                    elif i == tetromino[0][2] and j == tetromino[1][2]:
+                        vector += [tetromino[4]]
+                    elif i == tetromino[0][3] and j == tetromino[1][3]:
+                        vector += [tetromino[5]]
+                    else:
+                        vector += [matrizIdentificadores[i][j]]
+                else:
+                    if i == tetromino[0][0] and j == tetromino[1][0]:
+                        vector += [tetromino[2]]
+                    elif i == tetromino[0][1] and j == tetromino[1][1]:
+                        vector += [tetromino[3]]
+                    elif i == tetromino[0][2] and j == tetromino[1][2]:
+                        vector += [tetromino[4]]
+                    elif i == tetromino[0][3] and j == tetromino[1][3]:
+                        vector += [tetromino[5]]
+                    elif i == tetromino[0][4] and j == tetromino[1][4]:
+                        vector += [tetromino[6]]
+                    else:
+                        vector += [matrizIdentificadores[i][j]]
+                
+            nuevaMatriz += [vector]
+        matrizIdentificadores = nuevaMatriz
+
+
+    """
+    Nombre: eliminarFilaMatrizIdentificadores
+    Entrada: ninguna
+    Salida: La fila indicada eliminada de la matriz
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def eliminarFilaMatrizIdentificadores():
+        global matrizIdentificadores
+
+        fila = retornarFilaArchivoDescendente()
+        if fila != False:
+            nuevoContenido = []
+            for i in range(largoLista(matrizIdentificadores)):
+                contenido = []
+                for j in range(largoLista(matrizIdentificadores[0])):
+                    if i != fila:
+                        contenido += [matrizIdentificadores[i][j]]
+                if contenido != []:
+                    nuevoContenido += [contenido]
+            matrizIdentificadores = nuevoContenido
+            fila = reubicarFilaMatrizIdentificadores()
+            acomodarFilasMatrizIdentificadores(fila)
+            reubicarFilaMatrizIdentificadores()
+            return True    
+
+
+    """
+    Nombre: reubicarFFilaMatrizIdentificadores
+    Entrada: ninguna
+    Salida: La fila donde se reubicara en la matriz
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def reubicarFilaMatrizIdentificadores():
+        global matrizIdentificadores
+        i = largoLista(matrizIdentificadores) -1
+        while i != 0:
+            contenido = []
+            j = largoLista(matrizIdentificadores[0]) - 1
+            while j != 0:
+                if verificarElementos(matrizIdentificadores[i][j]) == False and not isinstance(matrizIdentificadores[i][j], int):
+                    contenido += [matrizIdentificadores[i][j]]
+                if contenido != []:
+                    if largoLista(contenido) == 10:
+                        return i
+                j -= 1
+            i -= 1
+        return False
+
+
+    """
+    Nombre: acomodarFilasMatrizIdentificadores
+    Entrada: fila
+    Salida: La matriz con sus filas reacomodadas
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """
+    def acomodarFilasMatrizIdentificadores(fila):
+        global matrizIdentificadores
+        filaCeros = matrizIdentificadores[fila]
+        nuevoContenido = []
+        for i in range(largoLista(matrizIdentificadores)):
+            if i == fila:
+                nuevoContenido += [matrizIdentificadores[i],matrizIdentificadores[i]]
+            else:
+                nuevoContenido += [matrizIdentificadores[i]]
+
+        matrizIdentificadores = nuevoContenido
+
+
+    """
+    Nombre: elimimarFilaTetris 
+    Entrada: ninguna
+    Salida: La fila eliminada en la interfaz
+    Restricciones:Las necesarias para el correcto funcionamiento
+    """
+    def eliminarFilaTetris():
+        global matrizIdentificadores
+        fila = retornarFilaArchivoDescendente()
+        for i in range(largoLista(matrizIdentificadores)):
+            for j in range(largoLista(matrizIdentificadores[0])):
+                if i == fila and j != 0 and j != 11:
+                    canvasPantalla.delete(matrizIdentificadores[i][j])
+        
+
+    """
+    Nombre: refrescarPantallaTetris 
+    Entrada: ninguna
+    Salida: Las filas reubicadas en la pantalla
+    Restricciones: Las necesarias para el correcto funcionamiento
+    """    
+    def refrescarPantallaTetris():
+        global matrizIdentificadores
+        for i in range(largoLista(matrizIdentificadores)):
+            for j in range(largoLista(matrizIdentificadores[0])):
+                if matrizIdentificadores[i][j] != "0" or matrizIdentificadores[i][j] != "+":
+                    canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0], coordenadas[i][j][1])
+    
+
+    tetromino = crearTetromino()
     consola.bind("<KeyPress-w>", lambda evento: rotar())
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo())
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha()) 
     consola.bind("<KeyPress-a>", lambda evento: moverIzquierda())
+    consola.bind("<Escape>", lambda evento: print("hola"))
 
+    escribirNuevaPosicionArchivo(tetromino)
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
     consola.mainloop()
-       
-
-    # def escribirNuevaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5):
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     nuevoContenido = []
-        
-    #     if tetrimino[0] == 1:
-    #         imagen = "1"
-    #     elif tetrimino[0] == 2:
-    #         imagen = "2"
-    #     elif tetrimino[0] == 3:
-    #         imagen = "3"
-    #     elif tetrimino[0] == 4:
-    #         imagen = "4"
-    #     elif tetrimino[0] == 5:
-    #         imagen = "5"
-    #     elif tetrimino[0] == 6:
-    #         imagen = "6"
-    #     elif tetrimino[0] == 7:
-    #         imagen = "7"
-    #     else:
-    #         imagen = "8"
-
-
-    #     if tetrimino[0] >= 1 and tetrimino[0] <= 6:
-    #         for i in range(largoLista(listaArchivo)):
-    #             contenido = []
-    #             for j in range(largoLista(listaArchivo[0])):
-    #                 if i == x1 and j == y1:
-    #                     contenido += [imagen]
-    #                 elif i == x2 and j == y2:
-    #                     contenido += [imagen]
-    #                 elif i == x3 and j == y3:
-    #                     contenido += [imagen]
-    #                 elif i == x4 and j == y4:
-    #                     contenido += [imagen]
-    #                 else:
-    #                     contenido += [listaArchivo[i][j]]
-    #             nuevoContenido += [contenido]
-    #     else:
-    #         for i in range(largoLista(listaArchivo)):
-    #             contenido = []
-    #             for j in range(largoLista(listaArchivo[0])):
-    #                 if i == x1 and j == y1:
-    #                     contenido += [imagen]
-    #                 elif i == x2 and j == y2:
-    #                     contenido += [imagen]
-    #                 elif i == x3 and j == y3:
-    #                     contenido += [imagen]
-    #                 elif i == x4 and j == y4:
-    #                     contenido += [imagen]
-    #                 elif i == x5 and j == y5:
-    #                     contenido += [imagen]
-    #                 else:
-    #                     contenido += [listaArchivo[i][j]]
-    #             nuevoContenido += [contenido]
-        
-        
-    #     modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
-
-
-
-    # def eliminarAntiguaPosicionArchivo(nombreArchivo, tetrimino, x1, x2,  x3, x4, x5, y1, y2, y3, y4, y5):
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     nuevoContenido = []
-        
-    #     if tetrimino[0] >= 1 and tetrimino[0] <= 6:
-    #         for i in range(largoLista(listaArchivo)):
-    #             contenido = []
-    #             for j in range(largoLista(listaArchivo[0])):
-    #                 if i == x1 and j == y1:
-    #                     contenido += ["0"]
-    #                 elif i == x2 and j == y2:
-    #                     contenido += ["0"]
-    #                 elif i == x3 and j == y3:
-    #                     contenido += ["0"]
-    #                 elif i == x4 and j == y4:
-    #                     contenido += ["0"]
-    #                 else:
-    #                     contenido += [listaArchivo[i][j]]
-    #             nuevoContenido += [contenido]
-    #     else:
-    #         for i in range(largoLista(listaArchivo)):
-    #             contenido = []
-    #             for j in range(largoLista(listaArchivo[0])):
-    #                 if i == x1 and j == y1:
-    #                     contenido += ["0"]
-    #                 elif i == x2 and j == y2:
-    #                     contenido += ["0"]
-    #                 elif i == x3 and j == y3:
-    #                     contenido += ["0"]
-    #                 elif i == x4 and j == y4:
-    #                     contenido += ["0"]
-    #                 elif i == x5 and j == y5:
-    #                     contenido += ["0"]
-    #                 else:
-    #                     contenido += [listaArchivo[i][j]]
-    #             nuevoContenido += [contenido]
-        
-    #     modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
-
-
-    # def eliminarFilaArchivo(nombreArchivo):
-    #     fila = retornarFilaArchivoDescendente(nombreArchivo)
-    #     if fila != False: # para la fubncion de validacion
-    #         listaArchivo = archivoALista(nombreArchivo)
-    #         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #         nuevoContenido = []
-    #         for i in range(largoLista(listaArchivo)):
-    #             contenido = []
-    #             for j in range(largoLista(listaArchivo[0])):
-    #                 if i != fila:
-    #                     contenido += [listaArchivo[i][j]]
-    #             if contenido != []:
-    #                 nuevoContenido += [contenido]
-    #         modificarArchivoJuegoXX(nombreArchivo,nuevoContenido)
-    #         fila = reubicarFila(nombreArchivo)
-    #         nuevoContenido = acomodarFilasArchivo(nombreArchivo, fila)
-    #         modificarArchivoJuegoXX(nombreArchivo, nuevoContenido)
-
-    # def retornarFilaArchivoDescendente(nombreArchivo):
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     i = largoLista(listaArchivo) - 2
-
-    #     while i != 0:
-    #         contenido = []
-    #         j = largoLista(listaArchivo[0]) - 1
-    #         while j != 0:
-    #             if listaArchivo[i][j] != "0":
-    #                 verificarElementos
-    #                 contenido += [listaArchivo[i][j]]
-    #             if contenido != []:
-    #                 if largoLista(contenido) == 11:
-    #                     return i
-    #             j -= 1
-    #         i -= 1
-    #     return False
-
-
-    # def reubicarFila(nombreArchivo):
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     i = largoLista(listaArchivo) -1
-
-    #     while i != 0:
-    #         contenido = []
-    #         j = largoLista(listaArchivo[0]) - 1
-    #         while j != 0:
-    #             if verificarElementos(listaArchivo[i][j]) == False:
-    #                 contenido += [listaArchivo[i][j]]
-    #             if contenido != []:
-    #                 if largoLista(contenido) == 10:
-    #                     return i
-    #             j -= 1
-    #         i -= 1
-    #     return False
-
-    # def acomodarFilasArchivo(nombreArchivo, fila):
-    #     listaArchivo = archivoALista(nombreArchivo)
-    #     listaArchivo = eliminarSaltosDeLinea(listaArchivo)
-    #     nuevoContenido = []
-    #     for i in range(largoLista(listaArchivo)):
-    #         if i == fila:
-    #             nuevoContenido += [listaArchivo[i],listaArchivo[i]]
-    #         else:
-    #             nuevoContenido += [listaArchivo[i]]
-    #     return nuevoContenido
-
-
-    # def modificarMatrizIdentificadores(tetromino, x1,x2,x3,x4,x5,y1,y2,y3,y4,y5):
-    #     global matrizIdentificadores
-    #     nuevaMatriz = []
-    #     for i in range(largoLista(matrizIdentificadores)):
-    #         vector = []
-    #         for j in range(largoLista(matrizIdentificadores[0])):
-    #             if tetromino[0] >= 1 and tetromino[0] <= 6:
-    #                 if i == x1 and j == y1:
-    #                     vector += [tetromino[1]]
-    #                 elif i == x2 and j == y2:
-    #                     vector += [tetromino[2]]
-    #                 elif i == x3 and j == y3:
-    #                     vector += [tetromino[3]]
-    #                 elif i == x4 and j == y4:
-    #                     vector += [tetromino[4]]
-    #                 else:
-    #                     vector += [matrizIdentificadores[i][j]]
-                
-    #             else:
-    #                 if i == x1 and j == y1:    
-    #                     vector += [tetromino[1]]
-    #                 elif i == x2 and j == y2:
-    #                     vector += [tetromino[2]]
-    #                 elif i == x3 and j == y3:
-    #                     vector += [tetromino[3]]
-    #                 elif i == x4 and j == y4:
-    #                     vector += [tetromino[4]]
-    #                 elif i == x5 and j == y5:
-    #                     vector += [tetromino[5]]
-    #                 else:
-    #                     vector += [matrizIdentificadores[i][j]]
-                
-    #         nuevaMatriz += [vector]
-    #     matrizIdentificadores = nuevaMatriz
-
-    # def eliminarFilaMatrizIdentificadores(nombreArchivo):
-    #     global matrizIdentificadores
-
-    #     fila = retornarFilaArchivoDescendente(nombreArchivo)
-    #     if fila != False: # para la fubncion de validacion
-    #         nuevoContenido = []
-    #         for i in range(largoLista(matrizIdentificadores)):
-    #             contenido = []
-    #             for j in range(largoLista(matrizIdentificadores[0])):
-    #                 if i != fila:
-    #                     contenido += [matrizIdentificadores[i][j]]
-    #             if contenido != []:
-    #                 nuevoContenido += [contenido]
-    #         matrizIdentificadores = nuevoContenido
-    #         fila = reubicarFilaMatrizIdentificadores()
-    #         acomodarFilasMatrizIdentificadores(fila)
-    #         reubicarFilaMatrizIdentificadores()
-    #         return True    
-
-    # def reubicarFilaMatrizIdentificadores():
-    #     global matrizIdentificadores
-    #     i = largoLista(matrizIdentificadores) -1
-
-    #     while i != 0:
-    #         contenido = []
-    #         j = largoLista(matrizIdentificadores[0]) - 1
-    #         while j != 0:
-    #             if verificarElementos(matrizIdentificadores[i][j]) == False and not isinstance(matrizIdentificadores[i][j], int):
-    #                 contenido += [matrizIdentificadores[i][j]]
-    #             if contenido != []:
-    #                 if largoLista(contenido) == 10:
-    #                     return i
-    #             j -= 1
-    #         i -= 1
-    #     return False
-
-
-
-    # def acomodarFilasMatrizIdentificadores(fila):
-    #     global matrizIdentificadores
-    #     filaCeros = matrizIdentificadores[fila]
-    #     nuevoContenido = []
-    #     for i in range(largoLista(matrizIdentificadores)):
-    #         if i == fila:
-    #             nuevoContenido += [matrizIdentificadores[i],matrizIdentificadores[i]]
-    #         else:
-    #             nuevoContenido += [matrizIdentificadores[i]]
-
-    #     matrizIdentificadores = nuevoContenido
-
-
-
-
-    # def eliminarFilaTetris(canvasPantalla, nombreArchivo):
-    #     global matrizIdentificadores
-    #     fila = retornarFilaArchivoDescendente(nombreArchivo)
-    #     for i in range(largoLista(matrizIdentificadores)):
-    #         for j in range(largoLista(matrizIdentificadores[0])):
-    #             if i == fila and j != 0 and j != 11:
-    #                 canvasPantalla.delete(matrizIdentificadores[i][j])
-        
-    # def refrescarPantallaTetris(canvasPantalla):
-    #     global matrizIdentificadores
-    #     coordenadas = posicionImagenes()
-    #     for i in range(largoLista(matrizIdentificadores)):
-    #         for j in range(largoLista(matrizIdentificadores[0])):
-    #             if matrizIdentificadores[i][j] != "0" or matrizIdentificadores[i][j] != "+":
-    #                 canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0] / 2, coordenadas[i][j][1] / 2)
-    
-    # consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
-    # consola.mainloop()
-
-
 
 
 """
@@ -1714,6 +1873,7 @@ Salida: Cierra (destruye) la ventana
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def salir(ventana):
-    ventana.destroy()
+    return eliminarUsuario(ventana)
 
-ventanaInicio()
+
+ventanaRegistroUsuario()
