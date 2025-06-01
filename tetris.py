@@ -5,7 +5,7 @@ import os
 
 
 rotaciones = 1
-
+cargar = False
 """
 Nombre: largoLista
 Entrada: lista
@@ -217,13 +217,18 @@ def guardarJugador(ventana, datos):
             return ventanaInicio()
 
 
+"""
+Nombre: eliminarUsuario
+Entrada: ventana
+Salida: Vacia el archivo de jugadores
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
 def eliminarUsuario(ventana):
     archivo = open("jugadores.txt","w")
     archivo.write("")
     archivo.close()
     ventana.destroy()
     
-
 
 """
 Nombre: ventanaRegistroUsuario
@@ -540,18 +545,25 @@ def ventanaJuegosGuardados(ventana):
     framePantalla.pack_propagate(False)
     framePantalla.place(x=67, y=80)
 
-    listaMejoresJugadores = []
+    listaJuegosGuardados = archivoALista("juegosGuardados.txt")
+    listaJuegosGuardados = eliminarSaltosDeLinea(listaJuegosGuardados)
+    listaJuegos = []
+    if largoLista(listaJuegosGuardados) > 21:
+        vaciarJuegos("juegosGuardados.txt")
+        listaJuegosGuardados = []
     for i in range(7):
         contenido = []
         for j in range(3):
-            contenido += ["vacio!"]
-        listaMejoresJugadores += [contenido]
-
+            try:
+                contenido += [listaJuegosGuardados[i][j]]
+            except:
+                contenido += ["vacio!"]
+        listaJuegos += [contenido]
     Label(framePantalla, text="Juegos Guardados", font=("Arial", 17, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=111, pady=3,columnspan=3)
 
-    for i  in range(largoLista(listaMejoresJugadores)):
-        for j in range(largoLista(listaMejoresJugadores[0])):
-            Button(framePantalla, text=listaMejoresJugadores[i][j], font=("Arial",13,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=j, padx=10, pady=6)
+    for i  in range(largoLista(listaJuegos)):
+        for j in range(largoLista(listaJuegos[0])):
+            Button(framePantalla, text=listaJuegos[i][j], font=("Arial",13,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=j, padx=10, pady=6)
 
     imagenVolver = Image.open("volver.png")
     imagenVolver = ImageTk.PhotoImage(imagenVolver)
@@ -567,6 +579,87 @@ def ventanaJuegosGuardados(ventana):
     canvasVolver.tag_bind(botonVolver, "<Enter>", lambda evento: sobreBoton(canvasVolver, botonVolver, imagenVolverPresionado))
     canvasVolver.tag_bind(botonVolver, "<Leave>", lambda evento: sobreBoton(canvasVolver, botonVolver, imagenVolver))
     canvasVolver.tag_bind(botonVolver, "<Button-1>", lambda evento: volverInicio(consola))
+
+    consola.mainloop()
+
+
+"""
+Nombre: gurdarJuego
+Entrada: nombreArchivo
+Salida: guarda el nombre del juego en el archivo juegosGuardados
+Restricciones: Las neecesarias para el correcto funcionamiento
+"""
+def guardarJuego(nombreArchivo, ventana):
+    archivo = open("juegosGuardados.txt", "a")
+    archivo.write(nombreArchivo + "\n")             
+    archivo.close()
+    ventana.destroy()
+    return ventanaInicio()
+
+
+"""
+Nombre: vaciarArchivo
+Entrada: nombreArchivo
+Salida: El archivo vaciado
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def vaciarArchivo(nombreArchivo):
+    archivo = open(nombreArchivo,"w")
+    archivo.write("")
+    archivo.close()
+
+
+
+def cargarJuego(nombreArchivo, objetoVentana):
+    global cargar
+    cargar = True
+    return ventanaTetris(objetoVentana, nombreArchivo)
+
+"""
+Nombre: ventanaPausa
+Entrada: nombreArchivo
+Salida: Guarda o vuelve al juego actual
+Restricciones: Las necesarias para el correcto funcionamiento
+"""
+def ventanaPausa(nombreArchivo):
+    #entana.destroy()
+
+    consola = Tk()
+    consola.geometry("600x800")
+    consola.resizable(0,0)
+    centrarVentana(consola)
+
+    imagenGameboy = Image.open("gameboyBase.png")
+    imagenGameboy = ImageTk.PhotoImage(imagenGameboy)
+
+    canvasGameboy = Canvas(consola, width=300, height=300)
+    canvasGameboy.pack(fill="both", expand=True)
+    canvasGameboy.create_image(0, 0, anchor="nw", image=imagenGameboy)
+
+    canvasPantalla = Canvas(canvasGameboy, width=465, height=366)
+    canvasPantalla.place(x=67, y=85)
+
+    imagenPausa = Image.open("imagenPausa.png")
+    imagenPausa = imagenPausa.resize((465,366))
+    imagenPausa = ImageTk.PhotoImage(imagenPausa)
+    canvasPantalla.create_image(0, 0, anchor="nw", image=imagenPausa)
+
+    imagenGuardar = Image.open("guardar.png")
+    imagenGuardar = ImageTk.PhotoImage(imagenGuardar)
+
+    imagenGuardarPresionado = Image.open("guardarPresionado.png")
+    imagenGuardarPresionado = ImageTk.PhotoImage(imagenGuardarPresionado)
+
+    canvasConfirmacion = Canvas(canvasGameboy, width=235, height=178)
+    canvasConfirmacion.place(x=305, y=567)
+
+    
+    botonGuardar = canvasConfirmacion.create_image(0, 0, anchor="nw", image=imagenGuardar)
+
+    consola.bind("<Escape>", lambda evento: cargarJuego())
+    canvasConfirmacion.tag_bind(botonGuardar, "<Enter>", lambda evento: sobreBoton(canvasConfirmacion, botonGuardar, imagenGuardarPresionado))
+    canvasConfirmacion.tag_bind(botonGuardar, "<Leave>", lambda evento: sobreBoton(canvasConfirmacion, botonGuardar, imagenGuardar))
+    canvasConfirmacion.tag_bind(botonGuardar, "<Button-1>", lambda evento: guardarJuego(nombreArchivo, consola))
 
     consola.mainloop()
 
@@ -827,7 +920,7 @@ Salida: El juego tetris de forma 'funcional'
 Restricciones: Las necesarias para el correcto funcionamiento
 """
 def ventanaTetris(ventana, nombreArchivo):
-    global tetromino, listaTetrominos, rotaciones,matrizIdentificadores
+    global tetromino, listaTetrominos, rotaciones,matrizIdentificadores,cargar
     matrizIdentificadores = crearMatriz()
 
     ventana.destroy()
@@ -863,7 +956,7 @@ def ventanaTetris(ventana, nombreArchivo):
     canvasDemostrativo.place(x=305, y=567)
 
     coordenadas = posicionImagenes()
-    listaTetrominos = crearListaTetrominos()
+    #listaTetrominos = crearListaTetrominos()
 
     """
     Nombre: crearListaImagenesBloque
@@ -1852,14 +1945,21 @@ def ventanaTetris(ventana, nombreArchivo):
             for j in range(largoLista(matrizIdentificadores[0])):
                 if matrizIdentificadores[i][j] != "0" or matrizIdentificadores[i][j] != "+":
                     canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0], coordenadas[i][j][1])
-    
 
+
+    def cargarPartifda()
+
+
+    if cargar == True:
+        cargarPartida()
+    else:   
+        listaTetrominos = crearListaTetrominos()
     tetromino = crearTetromino()
     consola.bind("<KeyPress-w>", lambda evento: rotar())
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo())
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha()) 
     consola.bind("<KeyPress-a>", lambda evento: moverIzquierda())
-    consola.bind("<Escape>", lambda evento: print("hola"))
+    consola.bind("<Escape>", lambda evento: ventanaPausa(nombreArchivo, consola))
 
     escribirNuevaPosicionArchivo(tetromino)
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
@@ -1877,3 +1977,4 @@ def salir(ventana):
 
 
 ventanaRegistroUsuario()
+#ventanaPausa("panmtene")
