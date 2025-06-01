@@ -549,7 +549,7 @@ def ventanaJuegosGuardados(ventana):
     listaJuegosGuardados = eliminarSaltosDeLinea(listaJuegosGuardados)
     listaJuegos = []
     if largoLista(listaJuegosGuardados) > 21:
-        vaciarJuegos("juegosGuardados.txt")
+        vaciarArchivo("juegosGuardados.txt")
         listaJuegosGuardados = []
     for i in range(7):
         contenido = []
@@ -589,7 +589,32 @@ Entrada: nombreArchivo
 Salida: guarda el nombre del juego en el archivo juegosGuardados
 Restricciones: Las neecesarias para el correcto funcionamiento
 """
-def guardarJuego(nombreArchivo, ventana):
+def guardarJuego(nombreArchivo, ventana, tetromino, listaTetrominos):
+    listaArchivo = archivoALista(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(nombreArchivo)
+    nuevoContenido = []
+    for i in range(22):
+        contenido = []
+        for j in range(12):
+            if i == tetromino[0][0] and j == tetromino[1][0]:
+                contenido += ["x" + listaTetrominos]
+            elif i == tetromino[0][1] and j == tetromino[1][1]:
+                contenido += ["x" + listaTetrominos]
+            elif i == tetromino[0][2] and j == tetromino[1][2]:
+                contenido += ["x" + listaTetrominos]
+            elif i == tetromino[0][3] and j == tetromino[1][3]:
+                contenido += ["x" + listaTetrominos]
+            elif i == tetromino[0][4] and j == tetromino[1][4]:
+                contenido += ["x" + listaTetrominos]
+            else:
+                contenido += [listaArchivo[i][j]]
+        nuevoContenido += [contenido]
+    nuevoContenido = listaATexto(nuevoContenido)
+    
+    archivo = open(nombreArchivo, "w")
+    archivo.write(nuevoContenido)             
+    archivo.close()
+
     archivo = open("juegosGuardados.txt", "a")
     archivo.write(nombreArchivo + "\n")             
     archivo.close()
@@ -621,8 +646,8 @@ Entrada: nombreArchivo
 Salida: Guarda o vuelve al juego actual
 Restricciones: Las necesarias para el correcto funcionamiento
 """
-def ventanaPausa(nombreArchivo):
-    #entana.destroy()
+def ventanaPausa(nombreArchivo, ventana, tetromino, listaTetrominos):
+    ventana.destroy()
 
     consola = Tk()
     consola.geometry("600x800")
@@ -659,7 +684,7 @@ def ventanaPausa(nombreArchivo):
     consola.bind("<Escape>", lambda evento: cargarJuego())
     canvasConfirmacion.tag_bind(botonGuardar, "<Enter>", lambda evento: sobreBoton(canvasConfirmacion, botonGuardar, imagenGuardarPresionado))
     canvasConfirmacion.tag_bind(botonGuardar, "<Leave>", lambda evento: sobreBoton(canvasConfirmacion, botonGuardar, imagenGuardar))
-    canvasConfirmacion.tag_bind(botonGuardar, "<Button-1>", lambda evento: guardarJuego(nombreArchivo, consola))
+    canvasConfirmacion.tag_bind(botonGuardar, "<Button-1>", lambda evento: guardarJuego(nombreArchivo, consola, tetromino, listaTetrominos))
 
     consola.mainloop()
 
@@ -956,7 +981,7 @@ def ventanaTetris(ventana, nombreArchivo):
     canvasDemostrativo.place(x=305, y=567)
 
     coordenadas = posicionImagenes()
-    #listaTetrominos = crearListaTetrominos()
+
 
     """
     Nombre: crearListaImagenesBloque
@@ -990,7 +1015,6 @@ def ventanaTetris(ventana, nombreArchivo):
     Restricciones: Las necesarias para el correcto funcionamiento
     """
     def imprimirArchivoTetris():
-        coordenadas = posicionImagenes()
         listaArchivo = archivoALista(nombreArchivo)
         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
         canvasPantalla.create_image(19, 16, anchor="nw", image=imagenFondoTetris)
@@ -1014,7 +1038,67 @@ def ventanaTetris(ventana, nombreArchivo):
                      canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[6])
                 elif listaArchivo[i][j] == "8": 
                      canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[7])
-    imprimirArchivoTetris()
+    
+    def imprimirArchivoTetrisAux():
+        global tetromino, listaTetrominos
+        listaArchivo = archivoALista(nombreArchivo)
+        listaArchivo = eliminarSaltosDeLinea(listaArchivo)
+        canvasPantalla.create_image(19, 16, anchor="nw", image=imagenFondoTetris)
+        imagen = ""
+        posicionesX = []
+        posicionesY = []
+        for i in range(largoLista(listaArchivo)):
+            for j in range(largoLista(listaArchivo[0])):
+                if listaArchivo[i][j] == "+": 
+                    canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=imagenPared)
+                elif listaArchivo[i][j] == "x1": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[0])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                elif listaArchivo[i][j] == "x2": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[1])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                elif listaArchivo[i][j] == "x3": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[2])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                elif listaArchivo[i][j] == "x4": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[3])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                elif listaArchivo[i][j] == "x5": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[4])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                elif listaArchivo[i][j] == "x6": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[5])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                elif listaArchivo[i][j] == "x7": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[6])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                    imagen = 7
+                elif listaArchivo[i][j] == "x8": 
+                    cargar += [canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[7])]
+                    posicionesX += [i]
+                    posicionesY += [j]
+                    imagen = 8
+        if imagen != 7 and imagen != 8:
+            tetromino = [posicionesX, posicionesY, cargar[0],cargar[1],cargar[2],cargar[3]]
+        else:
+            tetromino = [posicionesX, posicionesY, cargar[0],cargar[1],cargar[2],cargar[3],cargar[4]]
+        cargar = False
+        listaTetrominos = crearListaTetrominos()    
+                
+
+    
+    if cargar == False:
+        imprimirArchivoTetris()
+    else:
+        cargar = []
+        imprimirArchivoTetrisAux()
 
 
     """
@@ -1947,19 +2031,14 @@ def ventanaTetris(ventana, nombreArchivo):
                     canvasPantalla.coords(matrizIdentificadores[i][j], coordenadas[i][j][0], coordenadas[i][j][1])
 
 
-    def cargarPartifda()
-
-
-    if cargar == True:
-        cargarPartida()
-    else:   
+    if cargar == False:
         listaTetrominos = crearListaTetrominos()
-    tetromino = crearTetromino()
+        tetromino = crearTetromino()
     consola.bind("<KeyPress-w>", lambda evento: rotar())
     consola.bind("<KeyPress-s>", lambda evento: moverAbajo())
     consola.bind("<KeyPress-d>", lambda evento: moverDerecha()) 
     consola.bind("<KeyPress-a>", lambda evento: moverIzquierda())
-    consola.bind("<Escape>", lambda evento: ventanaPausa(nombreArchivo, consola))
+    consola.bind("<Escape>", lambda evento: ventanaPausa(nombreArchivo, consola, tetromino, listaTetrominos[0]))
 
     escribirNuevaPosicionArchivo(tetromino)
     consola.protocol("WM_DELETE_WINDOW", lambda : borrarArchivo(nombreArchivo, consola))
@@ -1977,4 +2056,3 @@ def salir(ventana):
 
 
 ventanaRegistroUsuario()
-#ventanaPausa("panmtene")
