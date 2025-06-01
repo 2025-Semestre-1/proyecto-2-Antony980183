@@ -204,9 +204,7 @@ def guardarJugador(ventana, datos):
                 return ventanaInicio()
     else:             
         listaJugadores = archivoALista("jugadores.txt")
-        print(listaJugadores)
         listaJugadores = eliminarSaltosDeLinea(listaJugadores) + [[texto]]
-        print(listaJugadores)
         listaJugadores = listaATexto(listaJugadores)
         if texto != "":
             archivo = open("jugadores.txt", "w")
@@ -545,12 +543,15 @@ def ventanaJuegosGuardados(ventana):
     framePantalla.pack_propagate(False)
     framePantalla.place(x=67, y=80)
 
-    listaJuegosGuardados = archivoALista("juegosGuardados.txt")
-    listaJuegosGuardados = eliminarSaltosDeLinea(listaJuegosGuardados)
     listaJuegos = []
-    if largoLista(listaJuegosGuardados) > 21:
-        vaciarArchivo("juegosGuardados.txt")
+    if leerArchivo("juegosGuardados.txt") == "":
         listaJuegosGuardados = []
+    else:
+        listaJuegosGuardados = archivoALista("juegosGuardados.txt")
+        listaJuegosGuardados = eliminarSaltosDeLinea(listaJuegosGuardados)
+        if largoLista(listaJuegosGuardados) > 21:
+            vaciarArchivo("juegosGuardados.txt")
+            listaJuegosGuardados = []
     for i in range(7):
         contenido = []
         for j in range(3):
@@ -561,9 +562,13 @@ def ventanaJuegosGuardados(ventana):
         listaJuegos += [contenido]
     Label(framePantalla, text="Juegos Guardados", font=("Arial", 17, "bold"),bg="gray42", bd=5 ,relief="ridge").grid(row=0,column=0, padx=111, pady=3,columnspan=3)
 
-    for i  in range(largoLista(listaJuegos)):
+    for i in range(largoLista(listaJuegos)):
         for j in range(largoLista(listaJuegos[0])):
-            Button(framePantalla, text=listaJuegos[i][j], font=("Arial",13,"bold"), bg="gray52", relief="ridge").grid(row=i+1, column=j, padx=10, pady=6)
+            textoBoton = listaJuegos[i][j]  
+            boton = Button(framePantalla, text=textoBoton, font=("Arial",13,"bold"),
+                        bg="gray52", relief="ridge",
+                        command=lambda texto=textoBoton: cargarJuego(texto, consola))
+            boton.grid(row=i+1, column=j, padx=10, pady=6)
 
     imagenVolver = Image.open("volver.png")
     imagenVolver = ImageTk.PhotoImage(imagenVolver)
@@ -591,24 +596,39 @@ Restricciones: Las neecesarias para el correcto funcionamiento
 """
 def guardarJuego(nombreArchivo, ventana, tetromino, listaTetrominos):
     listaArchivo = archivoALista(nombreArchivo)
-    listaArchivo = eliminarSaltosDeLinea(nombreArchivo)
+    listaArchivo = eliminarSaltosDeLinea(listaArchivo)
     nuevoContenido = []
-    for i in range(22):
-        contenido = []
-        for j in range(12):
-            if i == tetromino[0][0] and j == tetromino[1][0]:
-                contenido += ["x" + listaTetrominos]
-            elif i == tetromino[0][1] and j == tetromino[1][1]:
-                contenido += ["x" + listaTetrominos]
-            elif i == tetromino[0][2] and j == tetromino[1][2]:
-                contenido += ["x" + listaTetrominos]
-            elif i == tetromino[0][3] and j == tetromino[1][3]:
-                contenido += ["x" + listaTetrominos]
-            elif i == tetromino[0][4] and j == tetromino[1][4]:
-                contenido += ["x" + listaTetrominos]
-            else:
-                contenido += [listaArchivo[i][j]]
-        nuevoContenido += [contenido]
+    if listaTetrominos >= 1 and listaTetrominos <= 6:
+        for i in range(22):
+            contenido = []
+            for j in range(12):
+                if i == tetromino[0][0] and j == tetromino[1][0]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][1] and j == tetromino[1][1]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][2] and j == tetromino[1][2]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][3] and j == tetromino[1][3]:
+                    contenido += ["x" + str(listaTetrominos)]
+                else:
+                    contenido += [listaArchivo[i][j]]
+    else:
+        for i in range(22):
+            contenido = []
+            for j in range(12):
+                if i == tetromino[0][0] and j == tetromino[1][0]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][1] and j == tetromino[1][1]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][2] and j == tetromino[1][2]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][3] and j == tetromino[1][3]:
+                    contenido += ["x" + str(listaTetrominos)]
+                elif i == tetromino[0][4] and j == tetromino[1][4]:
+                    contenido += ["x" + str(listaTetrominos)]
+                else:
+                    contenido += [listaArchivo[i][j]]
+            nuevoContenido += [contenido]
     nuevoContenido = listaATexto(nuevoContenido)
     
     archivo = open(nombreArchivo, "w")
@@ -637,8 +657,11 @@ def vaciarArchivo(nombreArchivo):
 
 def cargarJuego(nombreArchivo, objetoVentana):
     global cargar
-    cargar = True
-    return ventanaTetris(objetoVentana, nombreArchivo)
+    print(nombreArchivo)
+    print(objetoVentana)
+    if nombreArchivo != "vacio!":
+        cargar = True
+        return ventanaTetris(objetoVentana, nombreArchivo)
 
 """
 Nombre: ventanaPausa
@@ -681,7 +704,7 @@ def ventanaPausa(nombreArchivo, ventana, tetromino, listaTetrominos):
     
     botonGuardar = canvasConfirmacion.create_image(0, 0, anchor="nw", image=imagenGuardar)
 
-    consola.bind("<Escape>", lambda evento: cargarJuego())
+    consola.bind("<Escape>", lambda evento: cargarJuego(nombreArchivo,consola))
     canvasConfirmacion.tag_bind(botonGuardar, "<Enter>", lambda evento: sobreBoton(canvasConfirmacion, botonGuardar, imagenGuardarPresionado))
     canvasConfirmacion.tag_bind(botonGuardar, "<Leave>", lambda evento: sobreBoton(canvasConfirmacion, botonGuardar, imagenGuardar))
     canvasConfirmacion.tag_bind(botonGuardar, "<Button-1>", lambda evento: guardarJuego(nombreArchivo, consola, tetromino, listaTetrominos))
@@ -1040,7 +1063,7 @@ def ventanaTetris(ventana, nombreArchivo):
                      canvasPantalla.create_image(coordenadas[i][j][0], coordenadas[i][j][1], anchor="center", image=listaImagenesBloques[7])
     
     def imprimirArchivoTetrisAux():
-        global tetromino, listaTetrominos
+        global tetromino, listaTetrominos,cargar
         listaArchivo = archivoALista(nombreArchivo)
         listaArchivo = eliminarSaltosDeLinea(listaArchivo)
         canvasPantalla.create_image(19, 16, anchor="nw", image=imagenFondoTetris)
@@ -1085,6 +1108,7 @@ def ventanaTetris(ventana, nombreArchivo):
                     posicionesX += [i]
                     posicionesY += [j]
                     imagen = 8
+        print(cargar)
         if imagen != 7 and imagen != 8:
             tetromino = [posicionesX, posicionesY, cargar[0],cargar[1],cargar[2],cargar[3]]
         else:
@@ -1700,7 +1724,6 @@ def ventanaTetris(ventana, nombreArchivo):
         nuevoContenido = []
         imagen = retornarNumeroImagen()
         if listaTetrominos[0] >= 1 and listaTetrominos[0] <= 6:
-            print("holaaaaa")
             for i in range(largoLista(listaArchivo)):
                 contenido = []
                 for j in range(largoLista(listaArchivo[0])):

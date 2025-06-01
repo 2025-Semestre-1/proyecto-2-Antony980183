@@ -1,4 +1,1 @@
-panmtene
-panmtene
-panmtene
-panmtene
+juego01.txt
